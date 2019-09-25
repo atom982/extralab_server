@@ -1,0 +1,435 @@
+const jwt = require("jsonwebtoken"),
+  config = require("../config/index");
+
+var mongoose = require("mongoose");
+var User = require("../models/User");
+var Audit = require("../models/Audit");
+var fs = require("fs");
+var User = mongoose.model("User");
+var Audit = mongoose.model("Audit_Login");
+
+var authController = {};
+
+// AuthController.js
+
+authController.login = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    User.findOne({ email: req.body.email }, (error, user) => {
+      if (error) throw error;
+      if (!user)
+        res.send({ success: false, message: "Korisnik nije pronađen." });
+      else {
+        Site.findOne({ _id: mongoose.Types.ObjectId(user.site) }).exec(function(
+          err,
+          site
+        ) {
+          if (err) {
+            console.log("Greška:", err);
+            res.json({
+              success: false,
+              message: err
+            });
+          } else {
+            user.comparePassword(req.body.password, (error, matches) => {
+              if (matches && !error) {
+                const payload = {
+                  user: user.email
+                };
+                const token = jwt.sign(payload, process.env.JWT_SECRET);
+                const data = {
+                  sidebar: site.sidebar,
+                  localId: user.email,
+                  idToken: token,
+                  expiresIn: 3600,
+                  site: user.site,
+                  language: user.postavke.language,
+                  idleTime: user.postavke.idleTime,
+                  pid_bcode: user.postavke.pid_bcode,
+
+                  access: user.postavke.access,
+                  display: user.postavke.display,
+                  reports: user.postavke.reports,
+                  sites: user.sites
+                };
+                user.token = token;
+                user.save();
+                var object = {};
+                object.user = user.email;
+                object.login_at = Date.now();
+                object.token = token;
+                object.site = user.site;
+                var audit_log = new Audit(object);
+                audit_log.save();
+                res.json({
+                  success: true,
+                  message: "Korisnik uspješno prijavljen.",
+                  data
+                });
+              } else {
+                res.send({ success: false, message: "Pogrešna šifra." });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+};
+
+authController.logout = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Audit.findOne(
+      {
+        email: req.body.email,
+        token: req.body.token,
+        site: mongoose.Types.ObjectId(req.body.site)
+      },
+      (error, user) => {
+        if (error) throw error;
+        if (!user)
+          res.send({ success: false, message: "Korisnik nije pronađen." });
+        else {
+          user.logout_at = Date.now();
+          user.type = req.body.type;
+          user.save();
+          res.json({ success: true, message: "Korisnik uspješno odjavljen." });
+        }
+      }
+    );
+  }
+};
+
+authController.getUsers = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    User.find({})
+      .populate("site")
+      .exec(function(err, users) {
+        if (err) {
+          console.log("Greška:", err);
+          res.json({
+            success: false,
+            message: err
+          });
+        } else {
+          if (users.length) {
+            Site.find({})
+              .lean()
+              .exec(function(err, sites) {
+                if (err) {
+                  console.log("Greška:", err);
+                  res.json({
+                    success: false,
+                    message: err
+                  });
+                } else {
+                  if (sites.length) {
+                    res.json({
+                      success: true,
+                      message: "Korisnici.",
+                      sites: sites,
+                      users: users
+                    });
+                  } else {
+                    res.json({
+                      success: true,
+                      message: "Nema validnih podataka."
+                    });
+                  }
+                }
+              });
+          } else {
+            res.json({
+              success: true,
+              message: "Nema validnih podataka.",
+              user
+            });
+          }
+        }
+      });
+  }
+};
+
+authController.korisnikDelete = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    User.findOne({ _id: req.body._id }).exec(function(err, user) {
+      if (err) {
+        console.log("Greška:", err);
+      } else {
+        if (!user) {
+          res.json({
+            success: false,
+            message: "Ne pronadjen korisnik za brisanje."
+          });
+        } else {
+          User.remove({ _id: req.body._id }, function(err) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: "Ne mogu izbrisati korisnika."
+              });
+            } else {
+              res.json({ success: true, message: "Korisnik izbrisan.", user });
+            }
+          });
+        }
+      }
+    });
+  }
+};
+
+authController.korisnikRole = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    User.findOne({ _id: req.body._id }).exec(function(err, user) {
+      if (err) {
+        console.log("Greška:", err);
+      } else {
+        if (user) {
+          user.role = req.body.role;
+          user.updated_by = req.body.decoded.user;
+          user.updated_at = Date.now();
+          user.save();
+          res.json({
+            success: true,
+            message: "Ok",
+            data: "Rola je uspješno izmjenjena."
+          });
+        } else {
+          res.json({ success: false, message: "Greška." });
+        }
+      }
+    });
+  }
+};
+
+authController.mySettings = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    User.findOne({ email: req.body.email }).exec(function(err, user) {
+      if (err) {
+        console.log("Greška:", err);
+      } else {
+        if (user) {
+          user.postavke.card_view = req.body.card_view;
+          user.postavke.language = req.body.language;
+          user.postavke.idleTime = req.body.idleTime;
+          user.updated_by = req.body.decoded.user;
+          user.updated_at = Date.now();
+          user.save();
+          res.json({
+            success: true,
+            message: "Ok",
+            data: "Postavka je uspješno izmjenjena."
+          });
+        } else {
+          res.json({ success: false, message: "Greška." });
+        }
+      }
+    });
+  }
+};
+
+authController.verify = headers => {
+  if (headers && headers.authorization) {
+    const split = headers.authorization.split(" ");
+    if (split.length === 2) return split[1];
+    else return null;
+  } else return null;
+};
+
+authController.imageUpload = function(req, res) {
+  var file = config.auth_path + req.body.name + ".jpeg";
+  var data = req.body.base64String.replace(/^data:image\/\w+;base64,/, "");
+  var buf = new Buffer(data, "base64");
+  fs.writeFile(file, buf, err => {});
+  res.json({ success: true, message: "Image uploaded." });
+};
+
+authController.signup = function(req, res) {
+  req.body.created_by = req.body.decoded.user;
+  if (!req.body.email || !req.body.password || !req.body.role)
+    res.json({
+      success: false,
+      message: "Please, pass a username, password and role."
+    });
+  else {
+    req.body.token = "TKTokenInit";
+    req.body.site = mongoose.Types.ObjectId(req.body.site);
+    var user = new User(req.body);
+    if (mongoose.connection.readyState != 1) {
+      res.json({
+        success: false,
+        message: "Greška prilikom konekcije na MongoDB."
+      });
+    } else {
+      user.save(error => {
+        if (error)
+          return res.json({
+            success: false,
+            message: "Username already exists."
+          });
+        res.json({ success: true, message: "Account created successfully" });
+      });
+    }
+  }
+};
+
+authController.initSignup = function(req, res) {
+  User.findOne({ email: req.body.email }, (error, user) => {
+    if (error) throw error;
+    if (!user) {
+      req.body.token = "TKTokenInit";
+      var user = new User(req.body);
+      if (mongoose.connection.readyState != 1) {
+        res.json({
+          success: false,
+          message: "Greška prilikom konekcije na MongoDB."
+        });
+      } else {
+        user.save(error => {
+          if (error)
+            return res.json({
+              success: false,
+              message: "Account NOT created."
+            });
+          res.json({ success: true, message: "Account created successfully." });
+        });
+      }
+    } else {
+      res.json({ success: false, message: "Korisnik postoji." });
+    }
+  });
+};
+
+authController.image = function(req, res) {
+  User.findOne({ email: req.body.email }, (error, user) => {
+    if (error) throw error;
+    if (!user)
+      res.status(401).send({ success: false, message: " User not found." });
+    else {
+      var data = {};
+      data.role = user.role;
+      var appRoot = process.cwd();
+      var path = config.auth_path + req.params.image + ".jpeg";
+
+      fs.readFile(path, "utf8", function(err, image) {
+        if (!err) {
+          data.link =
+            config.baseURL + "images/users/" + req.params.image + ".jpeg";
+          res.json({ success: true, message: "Using user image", data, user });
+        } else {
+          data.link = config.baseURL + "images/users/default.jpeg";
+          res.json({
+            success: true,
+            message: "Using default image",
+            data,
+            user
+          });
+        }
+      });
+    }
+  });
+};
+
+authController.sifra = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    User.findOne({ email: req.body.email }, (error, user) => {
+      if (error) throw error;
+      if (!user)
+        res.status(200).send({
+          success: false,
+          message: "Info",
+          data: "Greška prilikom promjene šifre."
+        });
+      else {
+        user.comparePassword(req.body.password, (error, matches) => {
+          if (matches && !error) {
+            const payload = {
+              user: user.email
+            };
+            user.password = req.body.novaSifra;
+            user.updated_by = req.body.decoded.user;
+            user.updated_at = Date.now();
+            user.save();
+            res.json({
+              success: true,
+              message: "Ok",
+              data: "Šifra je uspješno izmjenjena."
+            });
+          } else {
+            res.status(200).send({
+              success: false,
+              message: "Info",
+              data: "Trenutna šifra nije ispravna."
+            });
+          }
+        });
+      }
+    });
+  }
+};
+
+authController.imageUpload2 = function(req, res) {
+  const jwt = require("jsonwebtoken");
+  var writestream = fs.createWriteStream(
+    config.auth_path + req.body.user + ".jpeg"
+  );
+  var readstream = fs
+    .createReadStream(config.multer_temp + req.body.user + ".jpeg")
+    .pipe(writestream);
+
+  writestream.on("finish", function() {
+    var token = req.body.token || req.query.token;
+    jwt.verify(token, process.env.JWT_SECRET, function(err) {
+      if (err) {
+        res.json({
+          status: "error",
+          message: "Niste autorizirani",
+          data: null
+        });
+      } else {
+        fs.unlinkSync(config.multer_temp + req.body.user + ".jpeg");
+        res.json({
+          success: true,
+          message: "Slika sačuvana"
+        });
+      }
+    });
+  });
+};
+
+module.exports = authController;
