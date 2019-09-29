@@ -280,11 +280,11 @@ mikrobiologijaController.BakterijeRemove = function(req, res) {
       message: "Greška prilikom konekcije na MongoDB."
     });
   } else {
-    Bakterije.remove(
-      {
-        _id: mongoose.Types.ObjectId(req.body._id)
-      },
-      function(err) {
+    LabAssays.find({
+      tip: /.*Mikrobiologija.*/
+    })
+      .populate("bakterije")
+      .exec(function(err, analize) {
         if (err) {
           console.log("Greška:", err);
           res.json({
@@ -292,26 +292,62 @@ mikrobiologijaController.BakterijeRemove = function(req, res) {
             message: err
           });
         } else {
-          Bakterije.find({})
-            .populate("antibiogram")
-            .exec(function(err, bakterije) {
-              if (err) {
-                console.log("Greška:", err);
-                res.json({
-                  success: false,
-                  message: err
-                });
-              } else {
-                res.json({
-                  success: true,
-                  message: "Izmjena uspješno obavljena.",
-                  bakterije: bakterije
-                });
+          var dependency = false;
+          var Data = [];
+
+          analize.forEach(element => {
+            element.bakterije.forEach(bakterija => {
+              if (
+                JSON.stringify(bakterija._id) === JSON.stringify(req.body._id)
+              ) {
+                dependency = true;
+                Data.push(element);
               }
             });
+          });
+
+          if (!dependency) {
+            Bakterije.remove(
+              {
+                _id: mongoose.Types.ObjectId(req.body._id)
+              },
+              function(err) {
+                if (err) {
+                  console.log("Greška:", err);
+                  res.json({
+                    success: false,
+                    message: err
+                  });
+                } else {
+                  Bakterije.find({})
+                    .populate("antibiogram")
+                    .exec(function(err, bakterije) {
+                      if (err) {
+                        console.log("Greška:", err);
+                        res.json({
+                          success: false,
+                          message: err
+                        });
+                      } else {
+                        res.json({
+                          success: true,
+                          message: "Izmjena uspješno obavljena.",
+                          bakterije: bakterije
+                        });
+                      }
+                    });
+                }
+              }
+            );
+          } else {
+            res.json({
+              success: false,
+              message: "Dependency found.",
+              analize: Data
+            });
+          }
         }
-      }
-    );
+      });
   }
 };
 
@@ -437,11 +473,9 @@ mikrobiologijaController.AntibiogramiRemove = function(req, res) {
       message: "Greška prilikom konekcije na MongoDB."
     });
   } else {
-    Antibiogrami.remove(
-      {
-        _id: mongoose.Types.ObjectId(req.body._id)
-      },
-      function(err) {
+    Bakterije.find({})
+      .populate("antibiogram")
+      .exec(function(err, bakterije) {
         if (err) {
           console.log("Greška:", err);
           res.json({
@@ -449,26 +483,61 @@ mikrobiologijaController.AntibiogramiRemove = function(req, res) {
             message: err
           });
         } else {
-          Antibiogrami.find({})
-            .populate("antibiotici")
-            .exec(function(err, antibiogrami) {
-              if (err) {
-                console.log("Greška:", err);
-                res.json({
-                  success: false,
-                  message: err
-                });
-              } else {
-                res.json({
-                  success: true,
-                  message: "Brisanje uspješno obavljeno.",
-                  antibiogrami: antibiogrami
-                });
+          var dependency = false;
+          var Data = [];
+
+          bakterije.forEach(element => {
+            if (
+              JSON.stringify(element.antibiogram._id) ===
+              JSON.stringify(req.body._id)
+            ) {
+              dependency = true;
+              Data.push(element);
+            }
+          });
+
+          if (!dependency) {
+            Antibiogrami.remove(
+              {
+                _id: mongoose.Types.ObjectId(req.body._id)
+              },
+              function(err) {
+                if (err) {
+                  console.log("Greška:", err);
+                  res.json({
+                    success: false,
+                    message: err
+                  });
+                } else {
+                  Antibiogrami.find({})
+                    .populate("antibiotici")
+                    .exec(function(err, antibiogrami) {
+                      if (err) {
+                        console.log("Greška:", err);
+                        res.json({
+                          success: false,
+                          message: err
+                        });
+                      } else {
+                        res.json({
+                          success: true,
+                          message: "Brisanje uspješno obavljeno.",
+                          antibiogrami: antibiogrami
+                        });
+                      }
+                    });
+                }
               }
+            );
+          } else {
+            res.json({
+              success: false,
+              message: "Dependency found.",
+              bakterije: Data
             });
+          }
         }
-      }
-    );
+      });
   }
 };
 
@@ -588,11 +657,9 @@ mikrobiologijaController.AntibioticiRemove = function(req, res) {
       message: "Greška prilikom konekcije na MongoDB."
     });
   } else {
-    Antibiotici.remove(
-      {
-        _id: mongoose.Types.ObjectId(req.body._id)
-      },
-      function(err) {
+    Antibiogrami.find({})
+      .populate("antibiotici")
+      .exec(function(err, antibiogrami) {
         if (err) {
           console.log("Greška:", err);
           res.json({
@@ -600,24 +667,60 @@ mikrobiologijaController.AntibioticiRemove = function(req, res) {
             message: err
           });
         } else {
-          Antibiotici.find({}).exec(function(err, antibiotici) {
-            if (err) {
-              console.log("Greška:", err);
-              res.json({
-                success: false,
-                message: err
-              });
-            } else {
-              res.json({
-                success: true,
-                message: "Brisanje uspješno obavljeno.",
-                antibiotici: antibiotici
-              });
-            }
+          var dependency = false;
+          var Data = [];
+
+          antibiogrami.forEach(element => {
+            element.antibiotici.forEach(antibiotik => {
+              if (
+                JSON.stringify(antibiotik._id) === JSON.stringify(req.body._id)
+              ) {
+                dependency = true;
+                Data.push(element);
+              }
+            });
           });
+
+          if (!dependency) {
+            Antibiotici.remove(
+              {
+                _id: mongoose.Types.ObjectId(req.body._id)
+              },
+              function(err) {
+                if (err) {
+                  console.log("Greška:", err);
+                  res.json({
+                    success: false,
+                    message: err
+                  });
+                } else {
+                  Antibiotici.find({}).exec(function(err, antibiotici) {
+                    if (err) {
+                      console.log("Greška:", err);
+                      res.json({
+                        success: false,
+                        message: err
+                      });
+                    } else {
+                      res.json({
+                        success: true,
+                        message: "Brisanje uspješno obavljeno.",
+                        antibiotici: antibiotici
+                      });
+                    }
+                  });
+                }
+              }
+            );
+          } else {
+            res.json({
+              success: false,
+              message: "Dependency found.",
+              antibiogrami: Data
+            });
+          }
         }
-      }
-    );
+      });
   }
 };
 
