@@ -379,6 +379,7 @@ sampleController.ListBySectionP = function(req, res) {
       });
   }
 };
+
 sampleController.SaveP = function(req, res) {
   if (mongoose.connection.readyState != 1) {
     res.json({
@@ -751,6 +752,7 @@ sampleController.SaveP = function(req, res) {
       });
   }
 };
+
 sampleController.Save = function(req, res) {
   var age = null;
   var current = null;
@@ -4269,6 +4271,7 @@ sampleController.ListSve = function(req, res) {
       });
   }
 };
+
 sampleController.getKomentar = function(req, res) {
   if (mongoose.connection.readyState != 1) {
     res.json({
@@ -4300,6 +4303,7 @@ sampleController.getKomentar = function(req, res) {
       });
   }
 };
+
 sampleController.setKomentar = function(req, res) {
   if (mongoose.connection.readyState != 1) {
     res.json({
@@ -4727,7 +4731,7 @@ sampleController.sacuvajUzorke = function(req, res) {
               typeNrPlazma++;
             }
             if (uzorakFront.ime[0] === "B") {
-              uzorakFront.typeNrBris = 0;
+              uzorakFront.typeNrBris = typeNrBris;
               uzorakFront.all.push(
                 "B000" +
                   req.body.siteCode +
@@ -4735,6 +4739,7 @@ sampleController.sacuvajUzorke = function(req, res) {
                   datum.substring(5, 7) +
                   datum.substring(8, 10)
               );
+              typeNrBris++;
             }
             if (uzorakFront.ime[0] === "U") {
               uzorakFront.typeNrUrin = typeNrUrin;
@@ -4748,7 +4753,7 @@ sampleController.sacuvajUzorke = function(req, res) {
               typeNrUrin++;
             }
             if (uzorakFront.ime[0] === "F") {
-              uzorakFront.typeNrFeces = 0;
+              uzorakFront.typeNrFeces = typeNrFeces;
               uzorakFront.all.push(
                 "F000" +
                   req.body.siteCode +
@@ -4756,6 +4761,7 @@ sampleController.sacuvajUzorke = function(req, res) {
                   datum.substring(5, 7) +
                   datum.substring(8, 10)
               );
+              typeNrFeces++;
             }
             if (uzorakFront.ime[0] === "E") {
               uzorakFront.typeNrEjakulat = 0;
@@ -4910,6 +4916,34 @@ sampleController.sacuvajUzorke = function(req, res) {
                       ) +
                       uzorakFront.all[0].substring(4, 10);
                   }
+                } else if (uzorakFront.ime[0] === "B") {
+                  if (
+                    String(
+                      parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                        1 +
+                        uzorakFront.typeNrBris
+                    ).length > 1
+                  ) {
+                    uzorakFront.id =
+                      uzorakFront.ime[0] +
+                      "0" +
+                      String(
+                        parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                          1 +
+                          uzorakFront.typeNrBris
+                      ) +
+                      uzorakFront.all[0].substring(4, 10);
+                  } else {
+                    uzorakFront.id =
+                      uzorakFront.ime[0] +
+                      "00" +
+                      String(
+                        parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                          1 +
+                          uzorakFront.typeNrBris
+                      ) +
+                      uzorakFront.all[0].substring(4, 10);
+                  }
                 } else if (uzorakFront.ime[0] === "U") {
                   if (
                     String(
@@ -4935,6 +4969,34 @@ sampleController.sacuvajUzorke = function(req, res) {
                         parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
                           1 +
                           uzorakFront.typeNrUrin
+                      ) +
+                      uzorakFront.all[0].substring(4, 10);
+                  }
+                } else if (uzorakFront.ime[0] === "F") {
+                  if (
+                    String(
+                      parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                        1 +
+                        uzorakFront.typeNrFeces
+                    ).length > 1
+                  ) {
+                    uzorakFront.id =
+                      uzorakFront.ime[0] +
+                      "0" +
+                      String(
+                        parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                          1 +
+                          uzorakFront.typeNrFeces
+                      ) +
+                      uzorakFront.all[0].substring(4, 10);
+                  } else {
+                    uzorakFront.id =
+                      uzorakFront.ime[0] +
+                      "00" +
+                      String(
+                        parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                          1 +
+                          uzorakFront.typeNrFeces
                       ) +
                       uzorakFront.all[0].substring(4, 10);
                   }
@@ -5055,6 +5117,33 @@ sampleController.sacuvajUzorke = function(req, res) {
                       ) +
                       uzorakFront.all[0].substring(4, 10);
                   }
+                } else if (uzorakFront.ime[0] === "B") {
+                  if (
+                    String(
+                      parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                        1 +
+                        uzorakFront.typeNrBris
+                    ).length > 2
+                  ) {
+                    uzorakFront.id =
+                      uzorakFront.ime[0] +
+                      String(
+                        parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                          1 +
+                          uzorakFront.typeNrBris
+                      ) +
+                      uzorakFront.all[0].substring(4, 10);
+                  } else {
+                    uzorakFront.id =
+                      uzorakFront.ime[0] +
+                      "0" +
+                      String(
+                        parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                          1 +
+                          uzorakFront.typeNrBris
+                      ) +
+                      uzorakFront.all[0].substring(4, 10);
+                  }
                 } else if (uzorakFront.ime[0] === "U") {
                   if (
                     String(
@@ -5079,6 +5168,33 @@ sampleController.sacuvajUzorke = function(req, res) {
                         parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
                           1 +
                           uzorakFront.typeNrUrin
+                      ) +
+                      uzorakFront.all[0].substring(4, 10);
+                  }
+                } else if (uzorakFront.ime[0] === "F") {
+                  if (
+                    String(
+                      parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                        1 +
+                        uzorakFront.typeNrFeces
+                    ).length > 2
+                  ) {
+                    uzorakFront.id =
+                      uzorakFront.ime[0] +
+                      String(
+                        parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                          1 +
+                          uzorakFront.typeNrFeces
+                      ) +
+                      uzorakFront.all[0].substring(4, 10);
+                  } else {
+                    uzorakFront.id =
+                      uzorakFront.ime[0] +
+                      "0" +
+                      String(
+                        parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                          1 +
+                          uzorakFront.typeNrFeces
                       ) +
                       uzorakFront.all[0].substring(4, 10);
                   }
@@ -5127,6 +5243,15 @@ sampleController.sacuvajUzorke = function(req, res) {
                         uzorakFront.typeNrPlazma
                     ) +
                     uzorakFront.all[0].substring(4, 10);
+                } else if (uzorakFront.ime[0] === "B") {
+                  uzorakFront.id =
+                    uzorakFront.ime[0] +
+                    String(
+                      parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                        1 +
+                        uzorakFront.typeNrBris
+                    ) +
+                    uzorakFront.all[0].substring(4, 10);
                 } else if (uzorakFront.ime[0] === "U") {
                   uzorakFront.id =
                     uzorakFront.ime[0] +
@@ -5134,6 +5259,15 @@ sampleController.sacuvajUzorke = function(req, res) {
                       parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
                         1 +
                         uzorakFront.typeNrUrin
+                    ) +
+                    uzorakFront.all[0].substring(4, 10);
+                } else if (uzorakFront.ime[0] === "F") {
+                  uzorakFront.id =
+                    uzorakFront.ime[0] +
+                    String(
+                      parseFloat(uzorakFront.all[0].slice(1, 4), 10) +
+                        1 +
+                        uzorakFront.typeNrFeces
                     ) +
                     uzorakFront.all[0].substring(4, 10);
                 } else {
@@ -5716,4 +5850,5 @@ sampleController.sacuvajUzorke = function(req, res) {
       });
   }
 };
+
 module.exports = sampleController;
