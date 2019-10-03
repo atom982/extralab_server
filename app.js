@@ -136,7 +136,9 @@ app.use(validateUser, mikrobiologija);
 function validateUser(req, res, next) {
   if (
     req.originalUrl === "/login/users" ||
-    req.originalUrl.includes("acme-challenge")
+    req.originalUrl.includes("acme-challenge")||
+    req.originalUrl === "/post/api"||
+    req.originalUrl === "/get/api"
   ) {
     next();
   } else {
