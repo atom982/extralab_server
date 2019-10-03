@@ -27,5 +27,7 @@ router.post("/korisnik/private", auth.mySettings);
 router.post("/image/upload", auth.imageUpload);
 router.get("/users/list", auth.getUsers);
 router.post("/image/upload2", upload.single("file"), auth.imageUpload2);
+router.post("/post/api", auth.intPost);
+router.post("/get/api", auth.intGet);
 
 module.exports = router;
