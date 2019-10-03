@@ -81,10 +81,10 @@ module.exports = {
             var reagens_sn = "";
             var rezultat_i = "";
             var jedinice_p = "";
+            var jedinice_f = result[4];
 
             var vrijeme_rezultata = Date.now();
-            
-            jedinice_f = result[4];
+               
             var module_sn = "H7600";
 
             console.log("Rezultat: "+rezultat_f + " " + jedinice_f);
