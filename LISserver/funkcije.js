@@ -197,7 +197,7 @@ parsaj_rezultat: function(record,io){
       //-------------------------------------
 
       console.log("Parsam rezultat...");
-      console.log(record)
+      //console.log(record)
       var header= record[0].split("|");
       var sender=header[4].split("^");
       var sn = ""
@@ -220,9 +220,9 @@ parsaj_rezultat: function(record,io){
                             console.log('parsaj AIA-360')
                             immulite1000.parsaj_rezultat(record,io);
                             break; 
-        case '960855':  // Extralab Beckmann coulter hematologija
-                            console.log('parsaj ELITE 3')
-                            bcoulterAcT.parsaj_rezultat(record,io);
+        case 'RJ-1C110261':  // D Cell 60 Diagon hematologija
+                            console.log('parsaj D CELL 60')
+                            Dcell60.parsaj_rezultat(record,io);
                             break; 
                             default:
                 console.log("U LIS -u nije definisan aparat, sa serijskim brojem: "+sn);
