@@ -78,7 +78,14 @@ module.exports = {
                     rezultat_f:dRezultati.substring(26+index*22+5,26+index*22+13),
                     errorcode:dRezultati.substring(26+index*22+13,26+index*22+21)
                 })
-            }        
+            }      
+            fRezultati.forEach(element => {
+              element.rezultat_f =parseInt(element.rezultat_f.substring(0,5),10).toString()+'.'+ element.rezultat_f.substring(5,7)
+            });
+            // element.analit_rez =element.analit_rez.replace(/^0+/, '')
+            // if(element.analit_rez.substring(0, 1) == "."){
+            //     element.analit_rez ='0'+element.analit_rez
+            // }
             console.log('SID:'+sid)
             console.log(fRezultati)
             console.log('broj testova:'+nrTests)
