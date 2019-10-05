@@ -69,7 +69,7 @@ module.exports = {
             var nrTests = 0
             console.log(dRezultati)
             sid = dRezultati.substring(6,18)
-            nrTests =dRezultati.substring(21,23)
+            nrTests =dRezultati.substring(23,25)
 
             // 11 pozicija broj testova dRezultati[10]
             for (let index = 0; index < nrTests; index++) {
