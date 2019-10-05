@@ -154,7 +154,7 @@ module.exports = {
                                         analit_status:''
                                     }) 
                                     rezultati.forEach(element => {
-                                        element.analit_rez =parseInt(element.analit_rez, 10);
+                                        element.analit_rez =element.analit_rez.replace(/^0+/, '')
                                     });
                                     console.log(rezultati)
                                     break;
