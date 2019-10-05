@@ -37,7 +37,7 @@ module.exports = {
       var module_sn='';
       var mode = ''
       var unit_type = ''
-  
+            console.log(record)
           record.forEach(function(element) {
               record_type =element.charAt(0);
               switch (record_type) {
