@@ -75,8 +75,8 @@ module.exports = {
             for (let index = 0; index < nrTests; index++) {
                 fRezultati.push({
                     test:dRezultati.substring(26+index*22,26+index*22+3),
-                    rezultat_f:dRezultati.substring(26+index*22+6,26+index*22+14),
-                    errorcode:dRezultati.substring(26+index*22+14,26+index*22+22)
+                    rezultat_f:dRezultati.substring(26+index*22+5,26+index*22+13),
+                    errorcode:dRezultati.substring(26+index*22+13,26+index*22+21)
                 })
             }        
             console.log('SID:'+sid)
