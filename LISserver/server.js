@@ -76,7 +76,7 @@ class lisServer {
       var emerald = ''
       var eliteframe = ''
       socket.on('data', (data) => {
-        console.log(JSON.stringify(data))
+       
         //----------------------Emerald blok
         if (data.charCodeAt(data.length - 1) !== 10) { //podaci od aparata
           frame += data; //dodaj u buffer \u001a
@@ -97,7 +97,9 @@ class lisServer {
           if (data.charCodeAt(data.length - 1) === 3 ) {
                //------------END OF Dimension xpand BLOCK
                //lisserver.broadcast('\u0006', client)
-               socket.write('\u0006');
+               //socket.write('\u0006');
+               console.log('ETX')
+               console.log(frame)
             if(frame.indexOf("\u0002") >= 0 && !frame.includes('|')){
 
               if(frame.indexOf("\u0003") >= 0 ){
