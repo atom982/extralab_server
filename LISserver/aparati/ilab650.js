@@ -62,14 +62,14 @@ module.exports = {
             // <STX>M<FS>A<FS><FS>E2<ETX>
             // • Reject because computer is out of memory.
             // <STX>M<FS>R<FS>1<FS>24<ETX>
-            dRezultati = element.substring(element.indexOf("\u0002") + 1, element.indexOf("\u0003")).split('A ')
+            dRezultati = element.substring(element.indexOf("\u0002") + 1, element.indexOf("\u0003"))
             
             //var dRezultati = element.split("\u001c");
             var fRezultati  =[]
             var nrTests = 0
             console.log(dRezultati)
-            sid = dRezultati[3]
-            nrTests =dRezultati[10]
+            sid = dRezultati.substring(5,17)
+            nrTests =dRezultati.substring(20,22)
 
             // 11 pozicija broj testova dRezultati[10]
             for (let index = 0; index < nrTests; index++) {
