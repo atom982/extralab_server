@@ -68,8 +68,8 @@ module.exports = {
             var fRezultati  =[]
             var nrTests = 0
             console.log(dRezultati)
-            sid = dRezultati.substring(5,17)
-            nrTests =dRezultati.substring(20,22)
+            sid = dRezultati.substring(6,18)
+            nrTests =dRezultati.substring(22,24)
 
             // 11 pozicija broj testova dRezultati[10]
             for (let index = 0; index < nrTests; index++) {
