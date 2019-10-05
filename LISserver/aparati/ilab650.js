@@ -68,16 +68,15 @@ module.exports = {
             var fRezultati  =[]
             var nrTests = 0
             console.log(dRezultati)
-            sid = dRezultati.substring(6,18)
+            sid = dRezultati.substring(6,18).trim()
             nrTests =dRezultati.substring(23,25)
 
             // 11 pozicija broj testova dRezultati[10]
             for (let index = 0; index < nrTests; index++) {
                 fRezultati.push({
-                    test:dRezultati[11+index*4],
-                    rezultat_f:dRezultati[11+index*4+1],
-                    jedinica_f:dRezultati[11+index*4+2],
-                    errorcode:dRezultati[11+index*4+3]
+                    test:dRezultati.substring(26+index*22,26+index*22+3),
+                    rezultat_f:dRezultati.substring(26+index*22+6,26+index*22+14),
+                    errorcode:dRezultati.substring(26+index*22+14,26+index*22+22)
                 })
             }        
             console.log('SID:'+sid)
