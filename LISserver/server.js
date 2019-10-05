@@ -97,7 +97,7 @@ class lisServer {
           if (data.charCodeAt(data.length - 1) === 3 ) {
                //------------END OF Dimension xpand BLOCK
                //lisserver.broadcast('\u0006', client)
-               //socket.write('\u0006');
+               socket.write('\u0006');
                console.log('ETX')
                console.log(JSON.stringify(frame))
             if(frame.indexOf("\u0002") >= 0 && !frame.includes('|')){
