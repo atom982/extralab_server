@@ -62,8 +62,8 @@ module.exports = {
             // <STX>M<FS>A<FS><FS>E2<ETX>
             // • Reject because computer is out of memory.
             // <STX>M<FS>R<FS>1<FS>24<ETX>
-            dRezultati = element.substring(element.indexOf("\u0002") + 1, element.indexOf("\u0003"))
-            console.log(dRezultati)
+            dRezultati = element.substring(element.indexOf("\u0002") + 1, element.indexOf("\u0003")).split('A ')
+            
             //var dRezultati = element.split("\u001c");
             var fRezultati  =[]
             var nrTests = 0
