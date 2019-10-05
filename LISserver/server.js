@@ -89,7 +89,7 @@ class lisServer {
             console.log("KKS primljen: ");
             console.log(JSON.stringify(frame+data))
             lisserver.poruka.push("H|\\^&|||D-Cell60^1.00^RJ-1C110261^H1R1L1|||||||P|1|")
-            lisserver.poruka.push(JSON.stringify(frame+data))
+            lisserver.poruka.push(JSON.stringify('R|'+frame+data))
             funkcija.parsaj_rezultat(lisserver.poruka, io);
           }
           
