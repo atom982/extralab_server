@@ -479,7 +479,8 @@ var SchemaIntegrationRaw = mongoose.Schema({
   jmbg7:{ type: String, required: true },
   spolspol: { type: String },
   analize: {type: Array, default: []},  
-  site: { type: mongoose.Schema.ObjectId, ref: "Site" }
+  site: { type: mongoose.Schema.ObjectId, ref: "Site" },
+  created_at: { type: Date, default: Date.now },
 });
 var SchemaIntegration = mongoose.Schema({
   remote_id: { type: String,unique: true ,required: true },

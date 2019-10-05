@@ -1089,7 +1089,7 @@ postavkeController.labtestList = function (req, res) {
       } else {
         res.json({
           success: true,
-          message: 'Sve testovi',
+          message: 'Svi testovi',
           testovi
         })
       }
