@@ -59,10 +59,25 @@ module.exports = {
                                     console.log('SID: '+sid)
                                     console.log('WBC:'+element.substring(37,41))
                                     rezultati.push({
-                                    analit:'WBC',
-                                    analit_rez:element.substring(14,24),
-                                    analit_status:''
-                                    })    
+                                        analit:'WBC',
+                                        analit_rez:element.substring(37,40)+element.substring(40,41),
+                                        analit_status:''
+                                    })  
+                                    rezultati.push({
+                                        analit:'LYM',
+                                        analit_rez:element.substring(41,44)+element.substring(44,45),
+                                        analit_status:''
+                                        })    
+                                    rezultati.push({
+                                        analit:'MID',
+                                        analit_rez:element.substring(45,48)+element.substring(48,49),
+                                        analit_status:''
+                                        })  
+                                    rezultati.push({
+                                        analit:'GRA',
+                                        analit_rez:element.substring(49,52)+element.substring(52,53),
+                                        analit_status:''
+                                        })
                                     // var result = element.split("\r");
                                     // console.log(result)
                                     //  var datum = result[18].split('\t')[1]
