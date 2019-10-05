@@ -88,7 +88,9 @@ class lisServer {
           if (data.includes('\u001a')) { //ENQ primljen
             console.log("KKS primljen: ");
             console.log(JSON.stringify(frame))
-            funkcija.parsaj_rezultat(temp_rec, io);
+            lisserver.poruka.push("H|\\^&|||D-Cell60^1.00^2004070018^H1R1L1|||||||P|1|")
+            lisserver.poruka.push(JSON.stringify(frame))
+            funkcija.parsaj_rezultat(lisserver.poruka, io);
           }
           
           if (data.charCodeAt(data.length - 1) === 3 ) {
