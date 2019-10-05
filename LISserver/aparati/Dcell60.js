@@ -160,11 +160,6 @@ module.exports = {
                                         }
                                     });
                                     console.log(rezultati)
-                                    break;
-                          case 'C':
-                                    console.log("komentar");
-                                    break;
-                          case 'L':
                                     console.log("terminator"); 
                                     //console.log(rezultati)  
                                     Results.findOne({id:sid}).populate('aparat').exec(function (err, rezultat) {
