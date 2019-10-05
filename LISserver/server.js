@@ -86,14 +86,17 @@ class lisServer {
 
  
        }
-        if (data.charCodeAt(data.length - 1) !== 26) { //podaci od aparata
+        if (data.charCodeAt(data.length - 1) !== 10) { //podaci od aparata
           frame += data; //dodaj u buffer \u001a
 
           //console.log(frame.toString('hex'))
           //console.log(frame.toString())
           //console.log(JSON.stringify(data))
-
-
+         
+          if (data.includes(' \u001a')) { //ENQ primljen
+            console.log("KKS primljen: ");
+            
+          }
           
           if (data.charCodeAt(data.length - 1) === 3 ) {
                //------------END OF Dimension xpand BLOCK
