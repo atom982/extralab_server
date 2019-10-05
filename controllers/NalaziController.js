@@ -61,6 +61,7 @@ nalazController.Mail = function(req, res) {
             var logo_x = 45;
             var logo_y = 25;
             var logo_w = 200;
+            // var eddress = "-eddress";
 
             pageStr.forEach(str => {
               if (str == page) {
@@ -81,6 +82,7 @@ nalazController.Mail = function(req, res) {
                     height,
                     { width: 130, height: 60, keepAspectRatio: false }
                   )
+                  // .image(config.nalaz_footer + nalaz.site.sifra + eddress + ".jpg", 0, 745, { width: 615, keepAspectRatio: true })
                   // .text("Stranica " + str + " od " + page, 300, 790, { fontSize: 8, align: "center center" })
                   .endPage();
               } else {
@@ -91,6 +93,7 @@ nalazController.Mail = function(req, res) {
                 pdfDoc
                   .editPage(str)
                   // .image(config.nalaz_logo + nalaz.site.sifra + ".jpg", logo_x, logo_y, { width: logo_w, keepAspectRatio: true })
+                  // .image(config.nalaz_footer + nalaz.site.sifra + eddress + ".jpg", 0, 745, { width: 615, keepAspectRatio: true })
                   // .text("Stranica " + str + " od " + page, 300, 790, { fontSize: 8, align: "center center" })
                   .endPage();
               }
@@ -146,6 +149,7 @@ nalazController.Mail = function(req, res) {
                 var transporter = nodemailer.createTransport(smtpConfig);
 
                 var cc = nalaz.site.email;
+                // var cc = process.env.MAIL_USER;
 
                 var mailOptions = {
                   from:
@@ -621,7 +625,7 @@ nalazController.Nalaz = function(req, res) {
           var i = 0;
           var j = 0;
           var lokacija = "";
-          var site_data = results[0].site
+          var site_data = results[0].site;
 
           results.forEach(element => {
             req.body.samples.forEach(sample => {
@@ -642,8 +646,12 @@ nalazController.Nalaz = function(req, res) {
                     OGTT = true;
                   }
 
-                  if (r.interp == "insul") {                   
-                    // Inzulinemija
+                  if (
+                    r.interp == "insul" // ||
+                    // r.labassay._id == "5d0e27fd7cc013210929ec9c"
+                  ) {
+                    // 5d0e27fd7cc013210929ec9c, Inzulin (poslije 1 h)
+                    // Inzulinemija | Inzulinemija
                     Insulin = true;
                   }
 
@@ -664,7 +672,7 @@ nalazController.Nalaz = function(req, res) {
 
                 if (OGTT) {
                   element.rezultati = element.rezultati.filter(function(item) {
-                    return item.labassay._id != "5d6291171bf1521440380704"; // Glukoza (ExtraLab Tuzla)
+                    return item.labassay._id != "5d6291171bf1521440380704"; // Glukoza
                   });
                 }
 
@@ -672,7 +680,7 @@ nalazController.Nalaz = function(req, res) {
 
                 if (Insulin) {
                   element.rezultati = element.rezultati.filter(function(item) {
-                    return item.labassay._id != "5d63de20a255375c7bf6c4fb"; // Inzulin (ExtraLab Tuzla)
+                    return item.labassay._id != "5d63de20a255375c7bf6c4fb"; // Inzulin
                   });
                 }
 
@@ -892,6 +900,19 @@ nalazController.Nalaz = function(req, res) {
                         rezultat.rezultat.length - 1
                       ].rezultat_f.includes("-")
                     ) {
+                      // Mikrobiologija
+                      var mikrobiologija = false;
+
+                      if (
+                        rezultat.labassay.test_type === "mikrobiologija" ||
+                        rezultat.rezultat[rezultat.rezultat.length - 1]
+                          .rezultat_m.length > 0
+                      ) {
+                        mikrobiologija = true;
+                        // console.log(rezultat.labassay.analit)
+                      }
+                      // End of ...
+
                       if (element.site.postavke.nalazLegenda) {
                         if (
                           !legenda.filter(
@@ -1038,12 +1059,30 @@ nalazController.Nalaz = function(req, res) {
                         )[6]
                       });
 
-                      novirezultati.push({
-                        sekcija: rezultat.labassay.sekcija,
-                        grupa: rezultat.labassay.grupa,
-                        order: rezultat.labassay.grouporder,
-                        rezultat: temp
-                      });
+                      if (!mikrobiologija) {
+                        novirezultati.push({
+                          sekcija: rezultat.labassay.sekcija,
+                          grupa: rezultat.labassay.grupa,
+                          order: rezultat.labassay.grouporder,
+                          rezultat: temp,
+                          mikrobiologija: false,
+                          data:
+                            rezultat.rezultat[rezultat.rezultat.length - 1]
+                              .rezultat_m
+                        });
+                      } else {
+                        novirezultati.push({
+                          sekcija: rezultat.labassay.sekcija,
+                          grupa: rezultat.labassay.grupa,
+                          order: rezultat.labassay.grouporder,
+                          rezultat: temp,
+                          mikrobiologija: true,
+                          data:
+                            rezultat.rezultat[rezultat.rezultat.length - 1]
+                              .rezultat_m
+                        });
+                      }
+
                       test = {};
                       temp = [];
                     }
@@ -1107,21 +1146,30 @@ nalazController.Nalaz = function(req, res) {
           sekcijeniz = [];
           i = 0;
           novirezultati.forEach(element => {
+            // console.log(element.mikrobiologija)
             i++;
-            if (
-              tempniz.filter(e => e.sekcija === element.sekcija).length > 0 ||
-              !tempniz.length
-            ) {
-              tempniz.push(element);
-              if (i === novirezultati.length) {
+            if (!element.mikrobiologija) {
+              if (
+                tempniz.filter(e => e.sekcija === element.sekcija).length > 0 ||
+                !tempniz.length
+              ) {
+                tempniz.push(element);
+                if (i === novirezultati.length) {
+                  sekcijeniz.push(tempniz);
+                }
+              } else {
                 sekcijeniz.push(tempniz);
+                tempniz = [];
+                tempniz.push(element);
+                if (i === novirezultati.length) {
+                  sekcijeniz.push(tempniz);
+                }
               }
             } else {
-              sekcijeniz.push(tempniz);
-              tempniz = [];
-              tempniz.push(element);
-              if (i === novirezultati.length) {
-                sekcijeniz.push(tempniz);
+              if (element.rezultat[0].includes("[")) {
+                console.warn(element.rezultat[0].substring(4));
+              } else{
+                console.warn(element.rezultat[0]);
               }
             }
           });
@@ -1631,4 +1679,5 @@ nalazController.checkifComplete = function(req, res) {
       });
   }
 };
+
 module.exports = nalazController;

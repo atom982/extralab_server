@@ -14,12 +14,87 @@ apiUrlController.apiUrlPatients = function(req, res) {
       .slice(req.query.sort.indexOf("|") + 1, req.query.sort.length)
       .trim();
 
+    var limit = 50000;
+
     if (!req.query.filter) {
       req.query.filter = "";
+      limit = 100;
     }
 
-    Patients.find({ site: mongoose.Types.ObjectId(req.query.site) }).exec(
-      function(err, results) {
+    if (req.query.filter === "") {
+      req.query.filter = "";
+      limit = 100;
+    } else {
+      limit = 50000;
+    }
+
+    var uslov = { site: mongoose.Types.ObjectId(req.query.site) };
+
+    switch (parametar) {
+      case "ime":
+        uslov = {
+          site: mongoose.Types.ObjectId(req.query.site),
+          ime: { $regex: ".*" + req.query.filter.toUpperCase() + ".*" }
+        };
+        break;
+
+      case "prezime":
+        uslov = {
+          site: mongoose.Types.ObjectId(req.query.site),
+          prezime: {
+            $regex: ".*" + req.query.filter.toUpperCase() + ".*"
+          }
+        };
+
+        break;
+
+      case "jmbg":
+        uslov = {
+          site: mongoose.Types.ObjectId(req.query.site),
+          jmbg: { $regex: ".*" + req.query.filter.toUpperCase() + ".*" }
+        };
+
+        break;
+
+      default:
+        var imeiprezime = req.query.filter.toLowerCase().split(" ");
+        if (imeiprezime.length === 2) {
+          var name = imeiprezime[0];
+          var surname = imeiprezime[1];
+          uslov = {
+            site: mongoose.Types.ObjectId(req.query.site),
+            ime: {
+              $regex: ".*" + name.toUpperCase() + ".*"
+            },
+            prezime: {
+              $regex: ".*" + surname.toUpperCase() + ".*"
+            }
+          };
+        }
+
+        if (imeiprezime.length === 1) {
+          var name = imeiprezime[0];
+          uslov = {
+            site: mongoose.Types.ObjectId(req.query.site),
+
+            $or: [
+              {
+                ime: { $regex: ".*" + name.toUpperCase() + ".*" }
+              },
+              {
+                prezime: { $regex: ".*" + name.toUpperCase() + ".*" }
+              }
+            ]
+          };
+        }
+
+        break;
+    }
+
+    Patients.find(uslov)
+      .sort({ _id: -1 })
+      .limit(limit)
+      .exec(function(err, results) {
         if (err) {
           console.log("Greška:", err);
         } else {
@@ -207,8 +282,7 @@ apiUrlController.apiUrlPatients = function(req, res) {
           });
           res.json(json);
         }
-      }
-    );
+      });
   }
 };
 
@@ -238,6 +312,12 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
       break;
 
     case "Svi Rezultati":
+      from = new Date(datum14 + "T00:00:00");
+      to = new Date(datum + "T23:59:59");
+
+      break;
+
+    case "Mikrobiologija":
       from = new Date(datum14 + "T00:00:00");
       to = new Date(datum + "T23:59:59");
 
@@ -317,9 +397,9 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
                 ime: element.patient.ime,
                 prezime: element.patient.prezime,
                 jmbg: element.patient.jmbg,
+                micro: false,
                 barcodes: "",
                 racun: "",
-
                 _id: element.patient._id,
                 date: element.created_at,
 
@@ -347,6 +427,7 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
             var samples = "";
             var pac = "";
             var check = true;
+            var micro = false;
             var verificiran = true;
 
             rezultati.forEach(rez => {
@@ -376,6 +457,10 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
                   check = false;
                 }
 
+                if (rez.sample.tip.includes("Mikrobiologija")) {
+                  micro = true;
+                }
+
                 newrez.barcodes +=
                   "<button style='white-space: nowrap;' id='" +
                   rez.id +
@@ -391,6 +476,7 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
 
             samples = samples.replace(/(.+),$/, "$1");
             newrez.remove = check;
+            newrez.micro = micro;
 
             newrez.verificiran = verificiran;
 
@@ -417,6 +503,10 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
           } else if (req.query.datum === "NEDOVRŠENO") {
             rezultati = Rezultati.filter(function(rezultat) {
               return rezultat.verificiran === false;
+            });
+          } else if (req.query.datum === "Mikrobiologija") {
+            rezultati = Rezultati.filter(function(rezultat) {
+              return rezultat.micro === true && rezultat.verificiran === false;
             });
           } else {
             // console.log('Svi Rezultati')
@@ -1512,40 +1602,54 @@ apiUrlController.apiUrlAnaAssays = function(req, res) {
           switch (parametar) {
             case "kod":
               results = results.filter(function(result) {
-                return result.kod.includes(req.query.filter) && result.test.test_type === "default";
+                return (
+                  result.kod.includes(req.query.filter) &&
+                  result.test.test_type === "default"
+                );
               });
               break;
             case "naziv":
               results = results.filter(function(result) {
-                return result.test.naziv
-                  .toLowerCase()
-                  .includes(req.query.filter.toLowerCase()) && result.test.test_type === "default";
+                return (
+                  result.test.naziv
+                    .toLowerCase()
+                    .includes(req.query.filter.toLowerCase()) &&
+                  result.test.test_type === "default"
+                );
               });
               break;
             case "analit":
               results = results.filter(function(result) {
-                return result.test.analit
-                  .toLowerCase()
-                  .includes(req.query.filter.toLowerCase()) && result.test.test_type === "default";
+                return (
+                  result.test.analit
+                    .toLowerCase()
+                    .includes(req.query.filter.toLowerCase()) &&
+                  result.test.test_type === "default"
+                );
               });
               break;
             case "sekcija":
               results = results.filter(function(result) {
-                return result.sekcija
-                  .toLowerCase()
-                  .includes(req.query.filter.toLowerCase()) && result.test.test_type === "default";
+                return (
+                  result.sekcija
+                    .toLowerCase()
+                    .includes(req.query.filter.toLowerCase()) &&
+                  result.test.test_type === "default"
+                );
               });
               break;
 
             default:
-              results = results.filter(function(result) {                
+              results = results.filter(function(result) {
                 return (
-                  result.test.naziv
+                  (result.test.naziv
                     .toLowerCase()
-                    .includes(req.query.filter.toLowerCase()) && result.test.test_type === "default" ||
-                  result.test.analit
+                    .includes(req.query.filter.toLowerCase()) &&
+                    result.test.test_type === "default") ||
+                  (result.test.analit
                     .toLowerCase()
-                    .includes(req.query.filter.toLowerCase()) && result.test.test_type === "default"
+                    .includes(req.query.filter.toLowerCase()) &&
+                    result.test.test_type === "default")
                 );
               });
               break;

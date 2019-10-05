@@ -418,6 +418,7 @@ var SchemaSite = mongoose.Schema({
   lokal: { type: String, required: true, default: "Nema podataka" },
   email: { type: String, default: "" },
   mjesta: { type: Array, default: ["NEPOZNATO"] },
+  mikrobioloski: { type: Boolean, default: false },
   sidebar: { type: Array, default: [] },
   web: { type: String, default: "" },
   postavke: {
@@ -471,25 +472,7 @@ var SchemaUzorci = mongoose.Schema({
   time: { type: Date, default: null },
   komentar: { type: String, default: "" }
 });
-var SchemaIntegrationRaw = mongoose.Schema({
-  protokol: { type: String,unique: true ,required: true },
-  pime:{ type: String, required: true },
-  pprez:{ type: String, required: true },
-  imeo:{ type: String, required: true },
-  jmbg7:{ type: String, required: true },
-  spolspol: { type: String },
-  analize: {type: Array, default: []},  
-  site: { type: mongoose.Schema.ObjectId, ref: "Site" },
-  created_at: { type: Date, default: Date.now },
-});
-var SchemaIntegration = mongoose.Schema({
-  remote_id: { type: String,unique: true ,required: true },
-  local_id:  { type: mongoose.Schema.ObjectId, ref: "LabAssays" },
-  multiparam: {
-               type:{ Boolean, required: true, default: false},
-               id:{ type: mongoose.Schema.ObjectId }
-              }
-});
+
 const models = [
   (tipAparata = mongoose.model("tipAparata", SchemaTip)),
   (tehnologijaAparata = mongoose.model("tehnologijaAparata", SchemaTehno)),
@@ -513,9 +496,7 @@ const models = [
   (Site = mongoose.model("Site", SchemaSite)),
   (Outbox = mongoose.model("Outbox", SchemaOutbox)),
   (Settings = mongoose.model("Settings", SchemaSettings)),
-  (Uzorci = mongoose.model("Uzorci", SchemaUzorci)),
-  (IntegrationRaw = mongoose.model("IntegrationRaw", SchemaIntegrationRaw)),
-  (Integration = mongoose.model("Integration", SchemaIntegration)),
+  (Uzorci = mongoose.model("Uzorci", SchemaUzorci))
 ];
 
 module.exports = models;

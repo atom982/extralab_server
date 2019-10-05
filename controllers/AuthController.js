@@ -44,6 +44,7 @@ authController.login = function(req, res) {
                 const data = {
                   sidebar: site.sidebar,
                   localId: user.email,
+                  mikrobioloski: site.mikrobioloski,
                   idToken: token,
                   expiresIn: 3600,
                   site: user.site,
@@ -431,6 +432,7 @@ authController.imageUpload2 = function(req, res) {
     });
   });
 };
+
 authController.intPost = function(req, res) {
   User.findOne({ email: req.body.email }, (error, user) => {
     if (error) throw error;
