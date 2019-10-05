@@ -99,7 +99,7 @@ class lisServer {
                //lisserver.broadcast('\u0006', client)
                //socket.write('\u0006');
                console.log('ETX')
-               console.log(frame)
+               console.log(JSON.stringify(frame))
             if(frame.indexOf("\u0002") >= 0 && !frame.includes('|')){
 
               if(frame.indexOf("\u0003") >= 0 ){
