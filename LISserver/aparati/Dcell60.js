@@ -55,25 +55,33 @@ module.exports = {
                           case 'R':
 
                                     console.log("rezultat");
-                                    var result = element.split("\r");
-                                    console.log(result)
-                                     var datum = result[18].split('\t')[1]
-                                    var vrijeme = result[19].split('\t')[1]
-                                    vrijeme_rezultata=datum+vrijeme
-                                    console.log('vrijeme: '+vrijeme_rezultata)
-
-                                    sid = result[11].split('\t')[1]
+                                    sid = element.substring(14,24)
                                     console.log('SID: '+sid)
-                                    sifra_p='P007'
-                                    console.log('sifra testa pro:'+sifra_p)
-                                    var temps = result.slice(21,43)
-                                    temps.forEach(element => {
-                                     rezultati.push({
-                                      analit:element.split('\t')[0].substring(1,element.split('\t')[0].length),
-                                      analit_rez:element.split('\t')[2],
-                                      analit_status:''
+                                    console.log('WBC:'+element.substring(37,41))
+                                    rezultati.push({
+                                    analit:'WBC',
+                                    analit_rez:element.substring(14,24),
+                                    analit_status:''
                                     })    
-                                    });
+                                    // var result = element.split("\r");
+                                    // console.log(result)
+                                    //  var datum = result[18].split('\t')[1]
+                                    // var vrijeme = result[19].split('\t')[1]
+                                    // vrijeme_rezultata=datum+vrijeme
+                                    // console.log('vrijeme: '+vrijeme_rezultata)
+
+                                    // sid = result[11].split('\t')[1]
+                                    // console.log('SID: '+sid)
+                                    // sifra_p='P007'
+                                    // console.log('sifra testa pro:'+sifra_p)
+                                    // var temps = result.slice(21,43)
+                                    // temps.forEach(element => {
+                                    //  rezultati.push({
+                                    //   analit:element.split('\t')[0].substring(1,element.split('\t')[0].length),
+                                    //   analit_rez:element.split('\t')[2],
+                                    //   analit_status:''
+                                    // })    
+                                    // });
 
                                     
                                     console.log(rezultati)
