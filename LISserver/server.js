@@ -76,7 +76,7 @@ class lisServer {
       var emerald = ''
       var eliteframe = ''
       socket.on('data', (data) => {
-        console.log(JSON.stringify(data))
+        
         //----------------------Emerald blok
         if (data.charCodeAt(data.length - 1) !== 10) { //podaci od aparata
           frame += data; //dodaj u buffer \u001a
@@ -87,7 +87,7 @@ class lisServer {
          
           if (data.includes('\u001a')) { //ENQ primljen
             console.log("KKS primljen: ");
-
+            console.log(JSON.stringify(frame))
           }
           
           if (data.charCodeAt(data.length - 1) === 3 ) {
