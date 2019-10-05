@@ -93,27 +93,31 @@ module.exports = {
                                         analit_rez:element.substring(59,61)+'.'+element.substring(61,62),
                                         analit_status:''
                                     })
-                                    // var result = element.split("\r");
-                                    // console.log(result)
-                                    //  var datum = result[18].split('\t')[1]
-                                    // var vrijeme = result[19].split('\t')[1]
-                                    // vrijeme_rezultata=datum+vrijeme
-                                    // console.log('vrijeme: '+vrijeme_rezultata)
-
-                                    // sid = result[11].split('\t')[1]
-                                    // console.log('SID: '+sid)
-                                    // sifra_p='P007'
-                                    // console.log('sifra testa pro:'+sifra_p)
-                                    // var temps = result.slice(21,43)
-                                    // temps.forEach(element => {
-                                    //  rezultati.push({
-                                    //   analit:element.split('\t')[0].substring(1,element.split('\t')[0].length),
-                                    //   analit_rez:element.split('\t')[2],
-                                    //   analit_status:''
-                                    // })    
-                                    // });
-
-                                    
+                                    rezultati.push({
+                                        analit:'RBC',
+                                        analit_rez:element.substring(62,63)+'.'+element.substring(63,64),
+                                        analit_status:''
+                                    })
+                                    rezultati.push({
+                                        analit:'HGB',
+                                        analit_rez:element.substring(64,67),
+                                        analit_status:''
+                                    })
+                                    rezultati.push({
+                                        analit:'MCHC',
+                                        analit_rez:element.substring(67,71),
+                                        analit_status:''
+                                    })                                    
+                                    rezultati.push({
+                                        analit:'MCV',
+                                        analit_rez:element.substring(71,74)+'.'+element.substring(74,75),
+                                        analit_status:''
+                                    })
+                                    rezultati.push({
+                                        analit:'MCH',
+                                        analit_rez:element.substring(75,78)+'.'+element.substring(78,79),
+                                        analit_status:''
+                                    }) 
                                     console.log(rezultati)
                                     break;
                           case 'C':
