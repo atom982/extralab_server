@@ -98,51 +98,54 @@ class lisServer {
                //------------END OF Dimension xpand BLOCK
                //lisserver.broadcast('\u0006', client)
                socket.write('\u0006');
-               console.log('ETX')
-               console.log(JSON.stringify(frame))
+
             if(frame.indexOf("\u0002") >= 0 && !frame.includes('|')){
+              console.log('ETX')
+              console.log(JSON.stringify(frame))
 
               if(frame.indexOf("\u0003") >= 0 ){
                 console.log('Check if poll,message or query')
+                lisserver.poruka.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
+                lisserver.poruka.push("R|"+frame)
+                funkcija.parsaj_rezultat(lisserver.poruka, io);
                
-                console.log(JSON.stringify(data))
-                  if(frame.indexOf("P\u001c") >= 0){
-                    console.log('dimension poll')
-                    lisserver.broadcast('\u0002N\u001c6A\u0003', client)
-                    //socket.write('\u0002N\u001c6A\u0003');
-                    frame = '' 
-                  }else{
-                  if(frame.indexOf("\u0002I\u001c") >= 0){
-                    console.log('dimension query')
-                    //lisserver.broadcast('\u0006', client);
-                    lisserver.poruka.push("H|\\^&|||DimensionXpandplus^1.00^2004070018^H1R1L1|||||||P|1|")
-                    lisserver.poruka.push(frame.substring(frame.indexOf("\u0002")+1,frame.indexOf("\u0003")))
-                    //lisserver.poruka.push('I\u001cS003S90606\u001c45')
-                    funkcija.parsaj_query(lisserver.poruka, function (poruka) {
-                      lisserver.broadcast('\u0002'+poruka[0]+'\u0003', client)
-                    });
-                    frame = '' 
-                    lisserver.poruka = []  
-                  }
+                //   if(frame.indexOf("P\u001c") >= 0){
+                //     console.log('dimension poll')
+                //     lisserver.broadcast('\u0002N\u001c6A\u0003', client)
+                //     //socket.write('\u0002N\u001c6A\u0003');
+                //     frame = '' 
+                //   }else{
+                //   if(frame.indexOf("\u0002I\u001c") >= 0){
+                //     console.log('dimension query')
+                //     //lisserver.broadcast('\u0006', client);
+                //     lisserver.poruka.push("H|\\^&|||DimensionXpandplus^1.00^2004070018^H1R1L1|||||||P|1|")
+                //     lisserver.poruka.push(frame.substring(frame.indexOf("\u0002")+1,frame.indexOf("\u0003")))
+                //     //lisserver.poruka.push('I\u001cS003S90606\u001c45')
+                //     funkcija.parsaj_query(lisserver.poruka, function (poruka) {
+                //       lisserver.broadcast('\u0002'+poruka[0]+'\u0003', client)
+                //     });
+                //     frame = '' 
+                //     lisserver.poruka = []  
+                //   }
 
-                  if( frame.indexOf("\u0002R\u001c") >= 0){
-                    console.log('dimension message')
-                    lisserver.broadcast('\u0002M\u001cA\u001c\u001cE2\u0003', client)
-                    //socket.write('\u0002M\u001cA\u001c\u001cE2\u0003')
-                    //<STX>M<FS>A<FS><FS>E2<ETX>
-                    lisserver.poruka.push(frame.substring(frame.indexOf("\u0002")+1,frame.indexOf("\u0003")))
-                    lisserver.poruka.unshift("H|\\^&|||DimensionXpandplus^1.00^2004070018^H1R1L1|||||||P|1|")
-                    funkcija.parsaj_rezultat(lisserver.poruka, io) 
-                    frame = '' 
-                    lisserver.poruka = []   
-                  }
-                  if( frame.indexOf("\u0002C\u001c") >= 0){
-                    console.log('dimension calibration message')
-                    lisserver.broadcast('\u0002M\u001cA\u001c\u001cE2\u0003', client)
-                    frame = '' 
-                    lisserver.poruka = []   
-                  }//\u0002C\u001c
-                }
+                //   if( frame.indexOf("\u0002R\u001c") >= 0){
+                //     console.log('dimension message')
+                //     lisserver.broadcast('\u0002M\u001cA\u001c\u001cE2\u0003', client)
+                //     //socket.write('\u0002M\u001cA\u001c\u001cE2\u0003')
+                //     //<STX>M<FS>A<FS><FS>E2<ETX>
+                //     lisserver.poruka.push(frame.substring(frame.indexOf("\u0002")+1,frame.indexOf("\u0003")))
+                //     lisserver.poruka.unshift("H|\\^&|||DimensionXpandplus^1.00^2004070018^H1R1L1|||||||P|1|")
+                //     funkcija.parsaj_rezultat(lisserver.poruka, io) 
+                //     frame = '' 
+                //     lisserver.poruka = []   
+                //   }
+                //   if( frame.indexOf("\u0002C\u001c") >= 0){
+                //     console.log('dimension calibration message')
+                //     lisserver.broadcast('\u0002M\u001cA\u001c\u001cE2\u0003', client)
+                //     frame = '' 
+                //     lisserver.poruka = []   
+                //   }//\u0002C\u001c
+                // }
                 
               }
             } 
