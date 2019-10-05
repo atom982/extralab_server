@@ -118,11 +118,11 @@ module.exports = {
                                         analit_rez:element.substring(76,79)+'.'+element.substring(79,80),
                                         analit_status:''
                                     }) 
-                                    // rezultati.push({
-                                    //     analit:'RDW-CV',
-                                    //     analit_rez:element.substring(80,82)+'.'+element.substring(82,83),
-                                    //     analit_status:''
-                                    // }) 
+                                    rezultati.push({
+                                        analit:'RDW',
+                                        analit_rez:element.substring(80,82)+'.'+element.substring(82,83),
+                                        analit_status:''
+                                    }) 
                                     rezultati.push({
                                         analit:'HCT',
                                         analit_rez:element.substring(83,85)+'.'+element.substring(85,86),
