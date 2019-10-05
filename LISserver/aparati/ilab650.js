@@ -173,7 +173,7 @@ module.exports = {
                                             element.status = "NIJE ODOBREN"
                                             uzorak.save()
                                             var received = elementu.labassay.naziv
-                                            console.log(':: Dosao test sa AU480: ' + elementu.labassay.naziv)
+                                            console.log(':: Dosao test sa iLab 650: ' + elementu.labassay.naziv)
   
                                             result.save(function (err, novi) {
                                               if (err) {

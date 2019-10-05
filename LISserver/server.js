@@ -109,6 +109,8 @@ class lisServer {
                   lisserver.poruka.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
                   lisserver.poruka.push("R|"+frame)
                   funkcija.parsaj_rezultat(lisserver.poruka, io);
+                }else{
+                  lisserver.broadcast('\u0002E18\u0003', client)
                 }
 
                
