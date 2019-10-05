@@ -58,16 +58,12 @@ module.exports = {
 
           case 'R':
             console.log("Rezultati iLab650: ");
-            // • Accept.
-            // <STX>M<FS>A<FS><FS>E2<ETX>
-            // • Reject because computer is out of memory.
-            // <STX>M<FS>R<FS>1<FS>24<ETX>
+
             dRezultati = element.substring(element.indexOf("\u0002") + 1, element.indexOf("\u0003"))
             
             //var dRezultati = element.split("\u001c");
             var fRezultati  =[]
             var nrTests = 0
-            console.log(dRezultati)
             sid = dRezultati.substring(6,18).trim()
             nrTests =dRezultati.substring(23,25)
 
@@ -104,7 +100,7 @@ module.exports = {
                         fRezultati.forEach(rezRe => {
 
                       
-                        AnaAssays.findOne({ kod: rezRe.test,aparat:mongoose.Types.ObjectId(serijski) }).populate('test').lean().exec(function (err, test) {
+                        AnaAssays.findOne({ kod: rezRe.test}).populate('test').lean().exec(function (err, test) {
                           if (err) {
                             console.log("Greška:", err);
                           }
