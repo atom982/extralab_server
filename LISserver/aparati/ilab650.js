@@ -42,8 +42,8 @@ module.exports = {
       var tpsa = "";
       var fe = "";
 
-        console.log('usao u Dimension xPand Plus fajl')
-        console.log(record)
+        console.log('usao u iLab650 fajl')
+        //console.log(record)
       record.forEach(function (element) {
         record_type = element.charAt(0);
         switch (record_type) {
@@ -57,13 +57,14 @@ module.exports = {
             break;
 
           case 'R':
-            console.log("Rezultati Dimension: ");
+            console.log("Rezultati iLab650: ");
             // • Accept.
             // <STX>M<FS>A<FS><FS>E2<ETX>
             // • Reject because computer is out of memory.
             // <STX>M<FS>R<FS>1<FS>24<ETX>
-      
-            var dRezultati = element.split("\u001c");
+            dRezultati = element.substring(element.indexOf("\u0002") + 1, element.indexOf("\u0003"))
+            console.log(dRezultati)
+            //var dRezultati = element.split("\u001c");
             var fRezultati  =[]
             var nrTests = 0
             console.log(dRezultati)
