@@ -191,7 +191,7 @@ AnaAssays.find({
 parsaj_rezultat: function(record,io){
 
       //-------definicija protocola za aparat
-      var bcoulterAcT = require('./aparati/bcoulterAcT');
+      var Dcell60 = require('./aparati/Dcell60');
       var ilab650 = require('./aparati/ilab650');
       var immulite1000= require('./aparati/immulite1000');
       //-------------------------------------
