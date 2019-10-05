@@ -80,17 +80,17 @@ module.exports = {
                                         })
                                     rezultati.push({
                                         analit:'LYM%',
-                                        analit_rez:element.substring(53,56)+'.'+element.substring(56,57),
+                                        analit_rez:element.substring(53,55)+'.'+element.substring(55,56),
                                         analit_status:''
                                         })
                                     rezultati.push({
                                         analit:'MID%',
-                                        analit_rez:element.substring(57,60)+'.'+element.substring(60,61),
+                                        analit_rez:element.substring(56,58)+'.'+element.substring(58,59),
                                         analit_status:''
                                         })
                                     rezultati.push({
                                         analit:'GRA%',
-                                        analit_rez:element.substring(61,64)+'.'+element.substring(64,65),
+                                        analit_rez:element.substring(59,61)+'.'+element.substring(61,62),
                                         analit_status:''
                                     })
                                     // var result = element.split("\r");
