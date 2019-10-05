@@ -153,6 +153,9 @@ module.exports = {
                                         analit_rez:element.substring(99,102)+'.'+element.substring(102,103),
                                         analit_status:''
                                     }) 
+                                    rezultati.forEach(element => {
+                                        element.analit_rez =parseInt(element.analit_rez, 10);
+                                    });
                                     console.log(rezultati)
                                     break;
                           case 'C':
