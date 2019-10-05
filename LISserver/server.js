@@ -91,6 +91,7 @@ class lisServer {
             lisserver.poruka.push("H|\\^&|||D-Cell60^1.00^RJ-1C110261^H1R1L1|||||||P|1|")
             lisserver.poruka.push("R|"+frame)
             funkcija.parsaj_rezultat(lisserver.poruka, io);
+            frame = ''
           }
           
           if (data.charCodeAt(data.length - 1) === 3 ) {
