@@ -155,6 +155,9 @@ module.exports = {
                                     }) 
                                     rezultati.forEach(element => {
                                         element.analit_rez =element.analit_rez.replace(/^0+/, '')
+                                        if(element.analit_rez.substring(0, 1) == "."){
+                                            element.analit_rez ='0'+element.analit_rez
+                                        }
                                     });
                                     console.log(rezultati)
                                     break;
