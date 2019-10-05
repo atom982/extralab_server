@@ -88,6 +88,7 @@ class lisServer {
           if (data.includes('\u001a')) { //ENQ primljen
             console.log("KKS primljen: ");
             console.log(JSON.stringify(frame))
+            funkcija.parsaj_rezultat(temp_rec, io);
           }
           
           if (data.charCodeAt(data.length - 1) === 3 ) {
