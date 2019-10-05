@@ -78,14 +78,6 @@ class lisServer {
       socket.on('data', (data) => {
         console.log(JSON.stringify(data))
         //----------------------Emerald blok
-
-      //------------- End of Emerald blok
-      if (data.charCodeAt(data.length - 1) === 26 ) {
-        
-      //console.log(frame)
-
- 
-       }
         if (data.charCodeAt(data.length - 1) !== 10) { //podaci od aparata
           frame += data; //dodaj u buffer \u001a
 
@@ -93,9 +85,9 @@ class lisServer {
           //console.log(frame.toString())
           //console.log(JSON.stringify(data))
          
-          if (data.includes(' \u001a')) { //ENQ primljen
+          if (data.includes('\u001a')) { //ENQ primljen
             console.log("KKS primljen: ");
-            
+
           }
           
           if (data.charCodeAt(data.length - 1) === 3 ) {
