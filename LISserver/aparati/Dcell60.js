@@ -95,27 +95,27 @@ module.exports = {
                                     })
                                     rezultati.push({
                                         analit:'RBC',
-                                        analit_rez:element.substring(62,63)+'.'+element.substring(63,64),
+                                        analit_rez:element.substring(62,63)+'.'+element.substring(63,65),
                                         analit_status:''
                                     })
                                     rezultati.push({
                                         analit:'HGB',
-                                        analit_rez:element.substring(64,67),
+                                        analit_rez:element.substring(65,68),
                                         analit_status:''
                                     })
                                     rezultati.push({
                                         analit:'MCHC',
-                                        analit_rez:element.substring(67,71),
+                                        analit_rez:element.substring(68,72),
                                         analit_status:''
                                     })                                    
                                     rezultati.push({
                                         analit:'MCV',
-                                        analit_rez:element.substring(71,74)+'.'+element.substring(74,75),
+                                        analit_rez:element.substring(72,75)+'.'+element.substring(75,76),
                                         analit_status:''
                                     })
                                     rezultati.push({
                                         analit:'MCH',
-                                        analit_rez:element.substring(75,78)+'.'+element.substring(78,79),
+                                        analit_rez:element.substring(76,79)+'.'+element.substring(79,80),
                                         analit_status:''
                                     }) 
                                     console.log(rezultati)
