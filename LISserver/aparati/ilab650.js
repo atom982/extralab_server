@@ -386,7 +386,7 @@ module.exports = {
             //.sort({created_at: 1})//--- 1 for asc and -1 for desc
               
             
-            Samples.find(uslov).populate('tests.labassay').sort({created_at: 1}).exec(function (err, uzorci) {
+            Samples.find(uslov).populate('tests.labassay patient').sort({created_at: 1}).exec(function (err, uzorci) {
               if (err) {
                 console.log("Greška:", err);
               }
@@ -497,7 +497,8 @@ module.exports = {
                   }else{
                     nrTests = nrTests.toString()
                   }
-                  var order = uzorak.id+'     '+'T'+sampleType+'N'+cupPosition
+                  //                                                                                                scpos  stype   sex   cuptype    dil   rerun reflex   doctor   nrTests   (testtype+testno)
+                  var order = 'W11'+uzorak.id.substring(1,3)+uzorak.id+'0'+uzorak.id+"        "+'191006'+'1130'+'1'+'02'+   '1'+   '1'+  '1' +     '001'+ '0'+    '0'+   '001'+   '1'+      '1'   + '002'
                   order +=nrTests
                   order +=allTST
                     allTST = ''
