@@ -499,32 +499,32 @@ module.exports = {
                   }
                   //                                                                                                scpos  stype   sex   cuptype    dil   rerun reflex   doctor   nrTests   (testtype+testno)
                   var order = 'W11'+uzorak.id.substring(1,4)+uzorak.id+'0'+uzorak.id+"        "+'191006'+'1130'+'1'+'02'+   '1'+   '1'+  '1' +     '001'+ '0'+    '0'+   '001'+   '1'+      '1'   + '002'
-                  order +=nrTests
-                  order +=allTST
-                    allTST = ''
-                    tests = ''
-                         var checksum = 0
-                        for(var i=0;i<order.length;i++) {
-                          checksum += order.charCodeAt(i)
-                        }
-                        checksum =  checksum % 256
+                  // order +=nrTests
+                  // order +=allTST
+                  //   allTST = ''
+                  //   tests = ''
+                  //        var checksum = 0
+                  //       for(var i=0;i<order.length;i++) {
+                  //         checksum += order.charCodeAt(i)
+                  //       }
+                  //       checksum =  checksum % 256
 
-                        if(checksum < 100 && checksum > 9){
-                          checksum = ('0'+checksum).toString()
-                        }
+                  //       if(checksum < 100 && checksum > 9){
+                  //         checksum = ('0'+checksum).toString()
+                  //       }
 
-                        if(checksum < 10){
-                          checksum = ('\u0020' + '\u0020' +checksum).toString()
-                        }
-                        order += checksum
-                        if(parseInt(nrTests)){ 
+                  //       if(checksum < 10){
+                  //         checksum = ('\u0020' + '\u0020' +checksum).toString()
+                  //       }
+                  //       order += checksum
+                  //       if(parseInt(nrTests)){ 
                           
-                          recordret.push(order);
-                        }
+                  //         recordret.push(order);
+                  //       }
                         
-                        order  =''
-                        allTST = ''
-                        nrTests = 0
+                  //       order  =''
+                  //       allTST = ''
+                  //       nrTests = 0
                  
                     brojac++
                     uzorak.status = "U OBRADI"
