@@ -404,9 +404,9 @@ module.exports = {
                     goesIn = false
                     uzorak.tests.forEach(function (test) {
                       anaassays.forEach(function (anaassay) {
-                        if(anaassay.kod !='0000'){
-                          console.log(anaassay.kod)
-                        }
+                        // if(anaassay.kod !='0000'){
+                        //   console.log(anaassay.kod)
+                        // }
                         if ( (anaassay.test.sifra === test.labassay.sifra) && (anaassay.test.calculated)) {
                           if(definisaniTestovi.includes(anaassay.kod)){
                           test.status_t = "U OBRADI"
@@ -417,7 +417,7 @@ module.exports = {
                           goesIn = true
                         }
                         if (( (anaassay.test.sifra === test.labassay.sifra) && (test.status_r === true)) || ( (anaassay.test.sifra === test.labassay.sifra) && (test.status_t === "ZAPRIMLJEN") )) {
-                          
+                          console.log(anaassay.kod)
                           if(definisaniTestovi.includes(anaassay.kod)){
                             testovi.push(anaassay.kod)
                             test.status_t = "U OBRADI"
