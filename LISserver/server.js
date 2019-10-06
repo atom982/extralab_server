@@ -84,7 +84,7 @@ class lisServer {
 
           //console.log(frame.toString('hex'))
           //console.log(frame.toString())
-          console.log(JSON.stringify(data))
+          //console.log(JSON.stringify(data))
          
           if (data.includes('\u001a')) { //ENQ primljen
             console.log("KKS primljen: ");
@@ -107,10 +107,15 @@ class lisServer {
                 //console.log('Check if poll,message or query')
                 //console.log(JSON.stringify(frame))
                 if(frame !='\u0002R1\u0003'){
-                  lisserver.poruka.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
-                  lisserver.poruka.push("R|"+frame)
-                  funkcija.parsaj_rezultat(lisserver.poruka, io);
-                  lisserver.broadcast('\u0002E18\u0003', client)
+                  if (frame.includes('X')) { //ACK primljen
+                      console.log('odgovor analizatora:'+JSON.stringify(frame))
+                  } else{
+                    lisserver.poruka.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
+                    lisserver.poruka.push("R|"+frame)
+                    funkcija.parsaj_rezultat(lisserver.poruka, io);
+                    lisserver.broadcast('\u0002E18\u0003', client)
+                  }  
+
                 }else{
                   var temp_rec = [];
                   temp_rec.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
