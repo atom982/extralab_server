@@ -343,7 +343,8 @@ module.exports = {
         break;   
         
       default:
-      lokacija ="Nije definisana loakcija"
+      lokacija ="Extralab"
+      site='5c69f68c338fe912f99f833b'
       definisaniTestovi=defsTests.e_ilab650
         break;
     }
