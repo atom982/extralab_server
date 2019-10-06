@@ -344,6 +344,7 @@ module.exports = {
         
       default:
       lokacija ="Nije definisana loakcija"
+      definisaniTestovi=defsTests.e_ilab650
         break;
     }
     var brojac = 0
