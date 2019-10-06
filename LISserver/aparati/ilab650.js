@@ -386,7 +386,7 @@ module.exports = {
             console.log('uslov:'+uslov)
             //.sort({created_at: 1})//--- 1 for asc and -1 for desc
               
-            
+            console.log( definisaniTestovi)
             Samples.find(uslov).populate('tests.labassay patient').sort({created_at: 1}).exec(function (err, uzorci) {
               if (err) {
                 console.log("Greška:", err);
