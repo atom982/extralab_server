@@ -386,7 +386,7 @@ module.exports = {
           }
             var testovi = [];
             
-            //console.log('uslov:'+uslov)
+            console.log('uslov:'+uslov)
             //.sort({created_at: 1})//--- 1 for asc and -1 for desc
               
             
@@ -400,7 +400,7 @@ module.exports = {
                 } else {
                   uzorci.forEach(uzorak => {
                          
-                  AnaAssays.find({aparat:mongoose.Types.ObjectId(aparat)}).populate('aparat test').lean().exec(function (err, anaassays) {
+                  AnaAssays.find({}).populate('aparat test').lean().exec(function (err, anaassays) {
                     goesIn = false
                     uzorak.tests.forEach(function (test) {
                       anaassays.forEach(function (anaassay) {
