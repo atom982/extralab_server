@@ -429,83 +429,85 @@ module.exports = {
                       })
                     })
                     console.log(testovi)
+                    console.log(uzorak.id.substring(2,4))
                     var tests = '';
                     var sampleType = "S"
-                    var cupPosition = ''
+                    var cupPosition = uzorak.id.substring(2,4)
 
-                            if(uzorak.id.substring(0,1) ==="U"){
-                              sampleType = "U"
-                            }else{
-                              sampleType = "S"
-                            }
-                            switch (uzorak.id.substring(0,1)) {
-                                  case 'K':
-                                          cupPosition = (parseInt(uzorak.id.substring(2,4))+20).toString()
-                                          if(cupPosition.length ===1){cupPosition = '0'+cupPosition}
-                                    break; 
-                                  case 'P':
-                                          cupPosition = (parseInt(uzorak.id.substring(2,4))+55).toString()
-                                          if(cupPosition.length ===1){cupPosition = '0'+cupPosition}
-                                    break; 
-                                  case 'U':
-                                          cupPosition = (parseInt(uzorak.id.substring(2,4))+40).toString()
-                                          if(cupPosition.length ===1){cupPosition = '0'+cupPosition}
-                                    break;    
-                                  default:
-                                          cupPosition = (parseInt(uzorak.id.substring(2,4))).toString()
-                                          if(cupPosition.length ===1){cupPosition = '0'+cupPosition}
-                                    break;
-                                }
+                            // if(uzorak.id.substring(0,1) ==="U"){
+                            //   sampleType = "U"
+                            // }else{
+                            //   sampleType = "S"
+                            // }
+                            // switch (uzorak.id.substring(0,1)) {
+                            //       case 'K':
+                            //               cupPosition = (parseInt(uzorak.id.substring(2,4))+20).toString()
+                            //               if(cupPosition.length ===1){cupPosition = '0'+cupPosition}
+                            //         break; 
+                            //       case 'P':
+                            //               cupPosition = (parseInt(uzorak.id.substring(2,4))+55).toString()
+                            //               if(cupPosition.length ===1){cupPosition = '0'+cupPosition}
+                            //         break; 
+                            //       case 'U':
+                            //               cupPosition = (parseInt(uzorak.id.substring(2,4))+40).toString()
+                            //               if(cupPosition.length ===1){cupPosition = '0'+cupPosition}
+                            //         break;    
+                            //       default:
+                            //               cupPosition = (parseInt(uzorak.id.substring(2,4))).toString()
+                            //               if(cupPosition.length ===1){cupPosition = '0'+cupPosition}
+                            //         break;
+                            //     }
                     
-                    var nrTests = ''
+                    var nrTests = testovi.length
                     var allTST = ''
                     testovi.forEach(element => {
-                      switch (element.length) {
-                      case 4: 
-                            if(definisaniTestovi.includes(element.trim())){
-                            if(element.trim() === 'AURS' || element.trim() === 'AURU'){
-                              allTST += ' '+element.substring(0,3)
-                                nrTests++
-                            }else{
-                              allTST += element
-                                nrTests++
-                              }
-                            }  
-                        break;
-                      case 3: 
-                      //console.log('case 3')
-                      if(definisaniTestovi.includes(element)){
-                        allTST +=  '\u0020'+element
-                        nrTests++
-                        //console.log('case 3 continued')
-                      }
-                        break;   
-                      case 2: 
-                      if(definisaniTestovi.includes(element)){
-                        allTST += '\u0020' + '\u0020' +element
-                        nrTests++
-                      }
-                        break;      
-                      case 1: 
-                      if(definisaniTestovi.includes(element)){
-                        allTST += '\u0020' + '\u0020' + '\u0020'+element
-                        nrTests++
-                      }
-                        break;           
-                      default:
-                        break;
-                    }
+                      allTST +=  element
+                    //   switch (element.length) {
+                    //   case 4: 
+                    //         if(definisaniTestovi.includes(element.trim())){
+                    //         if(element.trim() === 'AURS' || element.trim() === 'AURU'){
+                    //           allTST += ' '+element.substring(0,3)
+                    //             nrTests++
+                    //         }else{
+                    //           allTST += element
+                    //             nrTests++
+                    //           }
+                    //         }  
+                    //     break;
+                    //   case 3: 
+                    //   //console.log('case 3')
+                    //   if(definisaniTestovi.includes(element)){
+                    //     allTST +=  '\u0020'+element
+                    //     nrTests++
+                    //     //console.log('case 3 continued')
+                    //   }
+                    //     break;   
+                    //   case 2: 
+                    //   if(definisaniTestovi.includes(element)){
+                    //     allTST += '\u0020' + '\u0020' +element
+                    //     nrTests++
+                    //   }
+                    //     break;      
+                    //   case 1: 
+                    //   if(definisaniTestovi.includes(element)){
+                    //     allTST += '\u0020' + '\u0020' + '\u0020'+element
+                    //     nrTests++
+                    //   }
+                    //     break;           
+                    //   default:
+                    //     break;
+                    // }
                       
                     });
                     //console.log('ALL TST:')
                     //console.log(allTST)
                     testovi = []
                    if(nrTests <10){
-                    nrTests = '0'+nrTests
-                  }else{
-                    nrTests = nrTests.toString()
+                    nrTests = '00'+nrTests
                   }
-
+                  if(nrTests  >= 10 ){
+                    nrTests = '0'+nrTests
+                  }
                   // W (Request code)
                   // 1 (Instrument No)
                   // 0000       (Request No)
@@ -527,7 +529,7 @@ module.exports = {
                   // 1 (test type 1 - biochemistry)
                   // 002 (test code)
                   //                                                                  yymmdd       time     diskno    scpos   stype   sex   cuptype    dil   rerun reflex   doctor   nrTests   (testtype+testno)
-                  var order ='\u0002'+ 'W10000'+uzorak.id+'  '+'0'+uzorak.id+"      "+'191006'+ '1130'+   '1'      +'50'+   '1'+   '1'+  '1' +     '001'+ '0'+    '0'+   '001'+   '001'+      '1'   + '002'+'\u0003'
+                  var order ='\u0002'+ 'W10000'+uzorak.id+'  '+'0'+uzorak.id+"      "+'191006'+ '1130'+   '1'      +'50'+   '1'+   '1'+  '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
                   // order +=nrTests
                   // order +=allTST
                   //   allTST = ''
