@@ -383,10 +383,6 @@ module.exports = {
           }
             var testovi = [];
             
-            console.log('uslov:'+uslov)
-            //.sort({created_at: 1})//--- 1 for asc and -1 for desc
-              
-            
             Samples.find(uslov).populate('tests.labassay patient').sort({created_at: 1}).exec(function (err, uzorci) {
               if (err) {
                 console.log("Greška:", err);
@@ -404,9 +400,6 @@ module.exports = {
                     goesIn = false
                     uzorak.tests.forEach(function (test) {
                       anaassays.forEach(function (anaassay) {
-                        // if(anaassay.kod !='0000'){
-                        //   console.log(anaassay.kod)
-                        // }
                         if ( (anaassay.test.sifra === test.labassay.sifra) && (anaassay.test.calculated)) {
                           if(definisaniTestovi.includes(anaassay.kod)){
                           test.status_t = "U OBRADI"
@@ -428,76 +421,20 @@ module.exports = {
                         }
                       })
                     })
-                    console.log(testovi)
-                    console.log(uzorak.id.substring(2,4))
                     var tests = '';
                     var sampleType = "S"
                     var cupPosition = uzorak.id.substring(2,4)
+                    var sex = uzorak.patient.spol
 
-                            // if(uzorak.id.substring(0,1) ==="U"){
-                            //   sampleType = "U"
-                            // }else{
-                            //   sampleType = "S"
-                            // }
-                            // switch (uzorak.id.substring(0,1)) {
-                            //       case 'K':
-                            //               cupPosition = (parseInt(uzorak.id.substring(2,4))+20).toString()
-                            //               if(cupPosition.length ===1){cupPosition = '0'+cupPosition}
-                            //         break; 
-                            //       case 'P':
-                            //               cupPosition = (parseInt(uzorak.id.substring(2,4))+55).toString()
-                            //               if(cupPosition.length ===1){cupPosition = '0'+cupPosition}
-                            //         break; 
-                            //       case 'U':
-                            //               cupPosition = (parseInt(uzorak.id.substring(2,4))+40).toString()
-                            //               if(cupPosition.length ===1){cupPosition = '0'+cupPosition}
-                            //         break;    
-                            //       default:
-                            //               cupPosition = (parseInt(uzorak.id.substring(2,4))).toString()
-                            //               if(cupPosition.length ===1){cupPosition = '0'+cupPosition}
-                            //         break;
-                            //     }
-                    
+                     if(uzorak.patient.spol ==="MUŠKI") {
+                       sex = 1
+                     }else{
+                      sex = 2
+                     }
                     var nrTests = testovi.length
                     var allTST = ''
                     testovi.forEach(element => {
-                      allTST +=  element
-                    //   switch (element.length) {
-                    //   case 4: 
-                    //         if(definisaniTestovi.includes(element.trim())){
-                    //         if(element.trim() === 'AURS' || element.trim() === 'AURU'){
-                    //           allTST += ' '+element.substring(0,3)
-                    //             nrTests++
-                    //         }else{
-                    //           allTST += element
-                    //             nrTests++
-                    //           }
-                    //         }  
-                    //     break;
-                    //   case 3: 
-                    //   //console.log('case 3')
-                    //   if(definisaniTestovi.includes(element)){
-                    //     allTST +=  '\u0020'+element
-                    //     nrTests++
-                    //     //console.log('case 3 continued')
-                    //   }
-                    //     break;   
-                    //   case 2: 
-                    //   if(definisaniTestovi.includes(element)){
-                    //     allTST += '\u0020' + '\u0020' +element
-                    //     nrTests++
-                    //   }
-                    //     break;      
-                    //   case 1: 
-                    //   if(definisaniTestovi.includes(element)){
-                    //     allTST += '\u0020' + '\u0020' + '\u0020'+element
-                    //     nrTests++
-                    //   }
-                    //     break;           
-                    //   default:
-                    //     break;
-                    // }
-                      
+                      allTST +=  element   
                     });
                     //console.log('ALL TST:')
                     //console.log(allTST)
@@ -529,7 +466,7 @@ module.exports = {
                   // 1 (test type 1 - biochemistry)
                   // 002 (test code)
                   //                                                                  yymmdd       time     diskno    scpos   stype   sex   cuptype    dil   rerun reflex   doctor   nrTests   (testtype+testno)
-                  var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +'50'+   '1'+   '1'+  '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
+                  var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +cupPosition+   sex+   '1'+  '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
                   // order +=nrTests
                   // order +=allTST
                   //   allTST = ''
