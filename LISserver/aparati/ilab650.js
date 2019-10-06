@@ -498,8 +498,8 @@ module.exports = {
                   }else{
                     nrTests = nrTests.toString()
                   }
-                  //                                                                                                              scpos  stype   sex   cuptype    dil   rerun reflex   doctor   nrTests   (testtype+testno)
-                  var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+uzorak.id+"      "+'191006'+'1130'+'1'+'50'+   '1'+   '1'+  '1' +     '001'+ '0'+    '0'+   '001'+   '1'+      '1'   + '002'+'\u0003'
+                  //                                                                  yymmdd       time     diskno    scpos   stype   sex   cuptype    dil   rerun reflex   doctor   nrTests   (testtype+testno)
+                  var order ='\u0002'+ 'W10000'+uzorak.id+'  '+'0'+uzorak.id+"      "+'191006'+ '1130'+   '1'      +'50'+   '1'+   '1'+  '1' +     '001'+ '0'+    '0'+   '001'+   '001'+      '1'   + '002'+'\u0003'
                   // order +=nrTests
                   // order +=allTST
                   //   allTST = ''
