@@ -419,7 +419,7 @@ module.exports = {
                         if (( (anaassay.test.sifra === test.labassay.sifra) && (test.status_r === true)) || ( (anaassay.test.sifra === test.labassay.sifra) && (test.status_t === "ZAPRIMLJEN") )) {
                           console.log(anaassay.kod)
                           if(definisaniTestovi.includes(anaassay.kod)){
-                            testovi.push(anaassay.kod)
+                            testovi.push('1'+anaassay.kod)
                             test.status_t = "U OBRADI"
                             test.status_r = false
                           }
