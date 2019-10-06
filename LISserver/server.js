@@ -129,7 +129,7 @@ class lisServer {
                   });
                   //lisserver.broadcast('\u0002E18\u0003', client)
                   
-                  lisserver.broadcast('\u0002W11001S001S91006    0S001S91006      19100611301041110010000111002\u0003', client)
+                  lisserver.broadcast('\u0002W11001S001S91006    0S001S91006      19100611301501110010000111002\u0003', client)
                 }
 
                
