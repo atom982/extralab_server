@@ -386,7 +386,7 @@ module.exports = {
             console.log('uslov:'+uslov)
             //.sort({created_at: 1})//--- 1 for asc and -1 for desc
               
-            console.log( definisaniTestovi)
+            
             Samples.find(uslov).populate('tests.labassay patient').sort({created_at: 1}).exec(function (err, uzorci) {
               if (err) {
                 console.log("Greška:", err);
@@ -404,6 +404,9 @@ module.exports = {
                     goesIn = false
                     uzorak.tests.forEach(function (test) {
                       anaassays.forEach(function (anaassay) {
+                        if(anaassay.kod !='0000'){
+                          console.log(anaassay.kod)
+                        }
                         if ( (anaassay.test.sifra === test.labassay.sifra) && (anaassay.test.calculated)) {
                           if(definisaniTestovi.includes(anaassay.kod)){
                           test.status_t = "U OBRADI"
