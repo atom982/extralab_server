@@ -117,19 +117,16 @@ class lisServer {
                   }  
 
                 }else{
-                  // var temp_rec = [];
-                  // temp_rec.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
-                  // temp_rec.push("L|1")
-                  // funkcija.parsaj_query(temp_rec, function (poruka) {
-                  //   lisserver.sendmessage = poruka;
-                  //   var enq = Buffer.from('\u0005');
-                  //   lisserver.broadcast('\u0005', client);
-                  //   console.log("Saljem ENQ za slanje ordera...");
-                  //   lisserver.counter = 0;
-                  // });
+                  var temp_rec = [];
+                  temp_rec.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
+                  temp_rec.push("L|1")
+                  funkcija.parsaj_query(temp_rec, function (poruka) {
+                    lisserver.broadcast(poruka, client)
+                    lisserver.counter = 0;
+                  });
                   //lisserver.broadcast('\u0002E18\u0003', client)
                   
-                  lisserver.broadcast('\u0002W10000S003S91006  0S003S91006      1910061130150111001000010011002\u0003', client)
+                  //lisserver.broadcast('\u0002W10000S003S91006  0S003S91006      1910061130150111001000010011002\u0003', client)
                 }
 
                

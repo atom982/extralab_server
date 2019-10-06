@@ -498,6 +498,27 @@ module.exports = {
                   }else{
                     nrTests = nrTests.toString()
                   }
+
+                  // W (Request code)
+                  // 1 (Instrument No)
+                  // 0000       (Request No)
+                  // S003S91006__  (Sample ID)
+                  // 0 (Request Type 0 routine) 
+                  // S003S91006______ (Sample Barcode )
+                  // 191006 (Request Date )
+                  // 1130 (Request Time )
+                  // 1 (Sample Disk No. )
+                  // 50 (Sample Position No.)
+                  // 1 (Sample Type)
+                  // 1 (sex)
+                  // 1 (cup type)
+                  // 001 (dilution)
+                  // 0 (rerun)
+                  // 0 (reflex)
+                  // 001 (doctor)
+                  // 001 (nr TESTS)
+                  // 1 (test type 1 - biochemistry)
+                  // 002 (test code)
                   //                                                                  yymmdd       time     diskno    scpos   stype   sex   cuptype    dil   rerun reflex   doctor   nrTests   (testtype+testno)
                   var order ='\u0002'+ 'W10000'+uzorak.id+'  '+'0'+uzorak.id+"      "+'191006'+ '1130'+   '1'      +'50'+   '1'+   '1'+  '1' +     '001'+ '0'+    '0'+   '001'+   '001'+      '1'   + '002'+'\u0003'
                   // order +=nrTests
