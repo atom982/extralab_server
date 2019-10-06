@@ -446,7 +446,7 @@ module.exports = {
                     if(ime.length > 18){
                       ime=ime.substring(0,18)
                     }else{
-                      for (let index = 0; index < (18-ime.length)+1; index++) {
+                      for (let index = 0; index <= (18-ime.length); index++) {
                         ime+=' '    
                       }
                        
