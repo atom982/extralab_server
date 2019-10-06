@@ -32,12 +32,16 @@ let t_bt1500 = ["ACP", "ALB", "ALP", "ALT", "AMM", "AMY", "ASO", "AST", "ASTS", 
 
 // Nije registrovano
 // "ASTS", "B2MI", "CHE", "FER", "FESB", "FR", "FRUR", "LDHD", "TRF", "UAD",
-  
+let e_ilab650 = ["001", "002", "003", "004", "005", "AMY", "ASO", "AST", "ASTS", "AUR", "B2MI", "BIC", "BID", "BIT", "C3", "C4", "CAL", "CARB",
+"CERU", "CHE", "CKMB", "CPK", "CRE", "CRP", "CRPD", "CU", "DDIM", "FE", "FER", "FESB", "FR", "FRU", "FRUR", "GGT", "GLU", "HAP", "HBA1", 
+"HBAI", "HCY", "HDL", "HLOR", "HOL", "IGA", "IGG", "IGM", "K", "LAK", "LDH", "LDHD", "LDL", "LIP", "LITH", "MAG", "NA", "PHO", "PRO", "PROU",
+"RF", "TIBC", "TRF", "TRG", "UAD", "UIBC", "URE", "VALP", "VPA", "ZN"]; 
 
 module.exports = {
   s_bt1500,
   s_liaison,
   c_bt1500,
   c_e170,
-  t_bt1500
+  t_bt1500,
+  e_ilab650
 };
