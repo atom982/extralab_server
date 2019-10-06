@@ -431,6 +431,26 @@ module.exports = {
                      }else{
                       sex = 2
                      }
+                    var ime = uzorak.patient.ime+ ' '+uzorak.patient.prezime
+                    ime = ime.replace(/Ć/g,'C')
+                    ime = ime.replace(/Č/g,'C')
+                    ime = ime.replace(/Š/g,'S')
+                    ime = ime.replace(/Đ/g,'D')
+                    ime = ime.replace(/Ž/g,'Z')
+                    ime = ime.replace(/č/g,'c')
+                    ime = ime.replace(/ć/g,'c')
+                    ime = ime.replace(/š/g,'s')
+                    ime = ime.replace(/đ/g,'d')
+                    ime = ime.replace(/ž/g,'z')
+
+                    if(ime.length > 18){
+                      ime=ime.substring(0,18)
+                    }else{
+                      for (let index = 0; index < (18-ime.length); index++) {
+                        ime+=' '    
+                      }
+                       
+                    }
                     var nrTests = testovi.length
                     var allTST = ''
                     testovi.forEach(element => {
