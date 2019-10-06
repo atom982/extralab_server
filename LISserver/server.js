@@ -84,7 +84,7 @@ class lisServer {
 
           //console.log(frame.toString('hex'))
           //console.log(frame.toString())
-          //console.log(JSON.stringify(data))
+          console.log(JSON.stringify(data))
          
           if (data.includes('\u001a')) { //ENQ primljen
             console.log("KKS primljen: ");
