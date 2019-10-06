@@ -14,7 +14,9 @@ mikrobiologijaController.AnalizeGet = function(req, res) {
     });
   } else {
     LabAssays.find({
-      tip: /.*Mikrobiologija.*/
+      tip: /.*Mikrobiologija.*/,
+      disabled: false,
+      active: true
     })
       .populate("bakterije")
       .exec(function(err, analize) {

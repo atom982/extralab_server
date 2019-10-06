@@ -297,6 +297,10 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
     new Date(new Date().setDate(new Date().getDate() - 14))
   ).substring(1, 11);
 
+  var datum7 = JSON.stringify(
+    new Date(new Date().setDate(new Date().getDate() - 7))
+  ).substring(1, 11);
+
   var from = new Date(datum + "T00:00:00Z");
   var to = new Date(datum + "T23:59:59Z");
 
@@ -318,7 +322,7 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
       break;
 
     case "Mikrobiologija":
-      from = new Date(datum14 + "T00:00:00");
+      from = new Date(datum7 + "T00:00:00");
       to = new Date(datum + "T23:59:59");
 
       break;

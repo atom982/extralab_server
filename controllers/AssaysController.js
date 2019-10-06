@@ -183,7 +183,9 @@ assaysController.AnaAssaySave = function(req, res) {
       message: "Greška prilikom konekcije na MongoDB."
     });
   } else {
-    anaassay.save(function(err) {
+    LabAssays.findOne({
+      _id: mongoose.Types.ObjectId(req.body.test)
+    }).exec(function(err, labassay) {
       if (err) {
         console.log("Greška:", err);
         res.json({
@@ -191,23 +193,49 @@ assaysController.AnaAssaySave = function(req, res) {
           message: err
         });
       } else {
-        AnaAssays.findOne({ _id: mongoose.Types.ObjectId(anaassay._id) })
-          .populate("aparat test site")
-          .exec(function(err, assay) {
-            if (err) {
-              console.log("Greška:", err);
-              res.json({
-                success: false,
-                message: err
-              });
-            } else {
-              res.json({
-                success: true,
-                message: "Analiza sačuvana.",
-                anaassay: assay
-              });
-            }
-          });
+        if (!labassay.calculated) {
+          labassay.manual = req.body.manual;
+        }
+
+        labassay.save(function(err) {
+          if (err) {
+            console.log("Greška:", err);
+            res.json({
+              success: false,
+              message: err
+            });
+          } else {
+            anaassay.save(function(err) {
+              if (err) {
+                console.log("Greška:", err);
+                res.json({
+                  success: false,
+                  message: err
+                });
+              } else {
+                AnaAssays.findOne({
+                  _id: mongoose.Types.ObjectId(anaassay._id)
+                })
+                  .populate("aparat test site")
+                  .exec(function(err, assay) {
+                    if (err) {
+                      console.log("Greška:", err);
+                      res.json({
+                        success: false,
+                        message: err
+                      });
+                    } else {
+                      res.json({
+                        success: true,
+                        message: "Analiza sačuvana.",
+                        anaassay: assay
+                      });
+                    }
+                  });
+              }
+            });
+          }
+        });
       }
     });
   }

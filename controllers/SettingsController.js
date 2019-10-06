@@ -51,6 +51,7 @@ settingsController.SitesEdit = function(req, res) {
         adresa: req.body.element.adresa,
         odgovornoLice: req.body.element.odgovornoLice,
         telefon: req.body.element.telefon,
+        mikrobioloski: req.body.element.mikrobioloski,
         email: req.body.element.email,
         mjesta: req.body.element.mjesta,
         web: req.body.element.web,
