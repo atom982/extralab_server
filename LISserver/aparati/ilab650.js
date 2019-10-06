@@ -306,7 +306,7 @@ module.exports = {
     });
   },
 
-  parsaj_query: function(record,site,aparat,callback){
+  parsaj_query: function(record,site,callback){
 
     var mongoose = require("mongoose");
     var Samples = require("../../models/Postavke");
@@ -333,10 +333,6 @@ module.exports = {
         definisaniTestovi=defsTests.c_bt1500
         lokacija ="Centar"
         break;
-        case '5c69f68c338fe912f99f833b':
-        definisaniTestovi=defsTests.s_bt1500
-        lokacija ="Stup"
-        break;   
         case '5c6b34d4c6543501079f488b':
         definisaniTestovi=defsTests.t_bt1500
         lokacija ="Travnik"
@@ -344,7 +340,6 @@ module.exports = {
         
       default:
       lokacija ="Extralab"
-      site='5c69f68c338fe912f99f833b'
       definisaniTestovi=defsTests.e_ilab650
         break;
     }
