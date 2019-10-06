@@ -1,3 +1,4 @@
+
 'use strict';
 const net = require('net');
 const Client = require('./client'); // importing Client class
@@ -110,6 +111,16 @@ class lisServer {
                   lisserver.poruka.push("R|"+frame)
                   funkcija.parsaj_rezultat(lisserver.poruka, io);
                 }else{
+                  var temp_rec = [];
+                  temp_rec.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
+                  temp_rec.push("L|1")
+                  funkcija.parsaj_query(temp_rec, function (poruka) {
+                    lisserver.sendmessage = poruka;
+                    var enq = Buffer.from('\u0005');
+                    lisserver.broadcast('\u0005', client);
+                    console.log("Saljem ENQ za slanje ordera...");
+                    lisserver.counter = 0;
+                  });
                   lisserver.broadcast('\u0002E18\u0003', client)
                 }
 

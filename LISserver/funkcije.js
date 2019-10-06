@@ -251,7 +251,7 @@ parsaj_query: function(record,callback){
   
   switch(sn){
 
-    case  '251025'://Extralab instrumentation laboratory ilab650 biohemija
+    case  'U10714300027'://Extralab instrumentation laboratory ilab650 biohemija
                         console.log('parsanje ILAB650 querija')
                         ilab650.parsaj_query(record,function(poruka){
                         console.log("Kreirano: ");
