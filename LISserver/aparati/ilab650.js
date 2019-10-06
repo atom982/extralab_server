@@ -377,7 +377,8 @@ module.exports = {
             created_at: {
               $gt: from,
               $lt: to
-            }
+            },
+            status:'n/a'
             //site: mongoose.Types.ObjectId(site)
           }
             var testovi = [];
@@ -393,6 +394,9 @@ module.exports = {
               else {
                 if (!uzorci.length) {
                   console.log("U LIS-u ne postoje uneseni uzorci za "+lokacija);
+                  
+                  recordret.push('\u0002E18\u0003')
+                  callback(recordret);
                 } else {
                   uzorci.forEach(uzorak => {
                          
@@ -421,6 +425,7 @@ module.exports = {
                         }
                       })
                     })
+                    console.log(testovi)
                     var tests = '';
                     var sampleType = "S"
                     var cupPosition = ''
