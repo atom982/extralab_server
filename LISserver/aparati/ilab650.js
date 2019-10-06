@@ -498,7 +498,7 @@ module.exports = {
                     nrTests = nrTests.toString()
                   }
                   //                                                                                                scpos  stype   sex   cuptype    dil   rerun reflex   doctor   nrTests   (testtype+testno)
-                  var order = 'W11'+uzorak.id.substring(1,4)+uzorak.id+'0'+uzorak.id+"        "+'191006'+'1130'+'1'+'02'+   '1'+   '1'+  '1' +     '001'+ '0'+    '0'+   '001'+   '1'+      '1'   + '002'
+                  var order ='\u0002'+ 'W11'+uzorak.id.substring(1,4)+uzorak.id+'0'+uzorak.id+"        "+'191006'+'1130'+'1'+'02'+   '1'+   '1'+  '1' +     '001'+ '0'+    '0'+   '001'+   '1'+      '1'   + '002'+'\u0003'
                   // order +=nrTests
                   // order +=allTST
                   //   allTST = ''
