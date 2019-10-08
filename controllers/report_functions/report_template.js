@@ -91,53 +91,184 @@ module.exports = {
     var reset = 0;
 
     sekcijeniz.forEach(element => {
-      i++;
-      analit = true;
-      rows = [];
-      multi = [];
+      if(!element[0].mikrobiologija){
+        i++;
+        analit = true;
+        rows = [];
+        multi = [];
 
-      if (doc.y > 630) {
-        doc.addPage();
-      }
+        if (doc.y > 630) {
+          doc.addPage();
+        }
 
-      if (element[0].multi === undefined) {
-        doc.fontSize(12).opacity(0.2).rect(50, doc.y, 511.5, 15).fill("#7B8186").fillColor("black").opacity(1).text(element[0].sekcija, 50);
-      }
+        if (element[0].multi === undefined) {
+          doc.fontSize(12).opacity(0.2).rect(50, doc.y, 511.5, 15).fill("#7B8186").fillColor("black").opacity(1).text(element[0].sekcija, 50);
+        }
 
-      element.forEach(test => {
-        if (test.hasOwnProperty("multi")) {
-          analit = false;
-          multi.push({
-            naslov: test.test,
-            headers: report.headersa,
-            rows: test.rezultat
+        element.forEach(test => {
+          if (test.hasOwnProperty("multi")) {
+            analit = false;
+            multi.push({
+              naslov: test.test,
+              headers: report.headersa,
+              rows: test.rezultat
+            });
+          } else {
+            rows.push(test.rezultat);
+            analit = true;
+          }
+        });
+
+        if (analit || rows.length) {
+          doc.table_default({ headers: report.headers, rows: rows }, { prepareHeader: () => doc.fontSize(8), prepareRow: (row, i) => doc.fontSize(10) }
+          );
+          multi.forEach(mul => {
+            doc.fontSize(12).text(mul.naslov, 50);
+            doc.table_default({ headers: mul.headers, rows: mul.rows }, { prepareHeader: () => doc.fontSize(8), prepareRow: (row, i) => doc.fontSize(10) });
           });
+          multi = [];
         } else {
+          if (multi.length) {
+            multi.forEach(mul => {
+              if (doc.y > 650) {
+                doc.addPage();
+              }
+
+              doc.fontSize(12).opacity(0.2).rect(50, doc.y, 511.5, 15).fill("#7B8186").fillColor("black").opacity(1).fontSize(8).fillColor("red").text(mul.naslov.slice(1, 2), 50).fontSize(12).fillColor("black").text(mul.naslov.slice(4), 57, doc.y - 11);
+              doc.table_default({ headers: mul.headers, rows: mul.rows }, { prepareHeader: () => doc.fontSize(8), prepareRow: (row, i) => doc.fontSize(10) });
+            });
+          }
+        }
+      }
+    });
+  
+    // Mikrobiologija
+
+    sekcijeniz.forEach(element => {
+      if(element[0].mikrobiologija){
+        i++;
+        analit = true;
+        rows = [];
+        multi = [];
+
+        if (doc.y > 630) {
+          doc.addPage();
+        }
+
+        if (element[0].multi === undefined) {
+          doc.fontSize(12).opacity(0.2).rect(50, doc.y, 511.5, 15).fill("#7B8186").fillColor("black").opacity(1).text(element[0].sekcija, 50);
+        }
+
+        element.forEach(test => {
+
           rows.push(test.rezultat);
           analit = true;
-        }
-      });
 
-      if (analit || rows.length) {
-        doc.table({ headers: report.headers, rows: rows }, { prepareHeader: () => doc.fontSize(8), prepareRow: (row, i) => doc.fontSize(10) }
-        );
-        multi.forEach(mul => {
-          doc.fontSize(12).text(mul.naslov, 50);
-          doc.table({ headers: mul.headers, rows: mul.rows }, { prepareHeader: () => doc.fontSize(8), prepareRow: (row, i) => doc.fontSize(10) });
+          if (test.hasOwnProperty("data") && test.data.length > 1) {
+
+            var obj = {}
+            var ant = []
+            var Bakterije = []
+            const bheader = ["Antibiotik", "Rezultat", ""]
+            let bnaslov = "Antibiogram za bakteriju: "  
+
+            test.data.forEach(bactery => {
+              if(bactery.bakterija){
+                obj.bakterija_naziv = bactery.naziv;
+                obj.bakterija_opis = bactery.opis;
+                obj.antibiogram_naziv = bactery.antibiogram.naziv;
+                obj.antibiogram_opis = bactery.antibiogram.opis;
+                obj.antibiotici = []
+
+                bactery.antibiogram.antibiotici.forEach(antibiotik => {
+                  if(antibiotik.rezultat != ""){
+
+                    ant.push(antibiotik.opis)
+                    
+                    ant.naziv = antibiotik.naziv;
+                    ant.opis = antibiotik.opis;
+                    switch (antibiotik.rezultat) {
+                      case "S":
+                        ant.push({
+                          rezultat: 'Senzitivan', 
+                          kontrola: 'No Class'
+                        })
+                        break;
+
+                      case "I":
+                        ant.push({
+                          rezultat: 'Intermedijaran', 
+                          kontrola: 'No Class'
+                        })
+                        break;
+                      case "R":
+                        ant.push({
+                          rezultat: 'Rezistentan', 
+                          kontrola: 'No Class'
+                        })
+                        break;
+                    
+                      default:
+                        break;
+                    }
+
+                    ant.push("")
+                    ant.push({ 
+                      reference: '/', 
+                      extend: '' 
+                    })
+                    
+                    obj.antibiotici.push(ant)
+                  }
+                  ant = []
+                });
+                Bakterije.push(obj)
+                obj = {}
+              }  
+            });
+
+            Bakterije.forEach(Bakt => {
+              analit = false;
+              multi.push({
+                naslov: bnaslov + Bakt.bakterija_opis,
+                headers: bheader,
+                rows: Bakt.antibiotici,
+                /* [
+                  [ 'Eritrociti', { rezultat: 'uu', kontrola: 'No Class'}, 'x10^12/L', { reference: '4.4 - 5.8', extend: '' }],
+                  [ 'Hematokrit', { rezultat: 'uu', kontrola: 'No Class'}, '%', { reference: '42 - 52', extend: '' } ],
+                  [ 'Volumen Erc (MCV)', { rezultat: 'uu', kontrola: 'No Class'}, 'fL', { reference: '80 - 94', extend: '' } ] 
+                ] */
+              });
+            });
+          } 
         });
-        multi = [];
-      } else {
-        if (multi.length) {
+
+        if (analit || rows.length) {
+          doc.table_mikrobiologija({ headers: report.headers, rows: rows }, { prepareHeader: () => doc.fontSize(8), prepareRow: (row, i) => doc.fontSize(10) }
+          );
+          multi.forEach(mul => {
+            if (doc.y > 630) {
+              doc.addPage();
+            }
+            doc.fontSize(11).fillColor("#7B8186").text(mul.naslov.slice(0, 25), 50).fontSize(12).fillColor("black").text(mul.naslov.slice(25), 170, doc.y - 15);
+            doc.fillColor("black")
+            doc.moveDown(0.2);
+            doc.table_antibiotici({ headers: mul.headers, rows: mul.rows }, { prepareHeader: () => doc.fontSize(8), prepareRow: (row, i) => doc.fontSize(10) });
+            doc.moveDown(0.5);
+          });
+          multi = [];
+        } 
+        
+        /* if (multi.length) {
           multi.forEach(mul => {
             if (doc.y > 650) {
               doc.addPage();
             }
-
             doc.fontSize(12).opacity(0.2).rect(50, doc.y, 511.5, 15).fill("#7B8186").fillColor("black").opacity(1).fontSize(8).fillColor("red").text(mul.naslov.slice(1, 2), 50).fontSize(12).fillColor("black").text(mul.naslov.slice(4), 57, doc.y - 11);
-            doc.table({ headers: mul.headers, rows: mul.rows }, { prepareHeader: () => doc.fontSize(8), prepareRow: (row, i) => doc.fontSize(10) });
+            doc.table_antibiotici({ headers: mul.headers, rows: mul.rows }, { prepareHeader: () => doc.fontSize(8), prepareRow: (row, i) => doc.fontSize(10) });
           });
-        }
-      }
+        } */
+      }  
     });
 
     var leg = "";

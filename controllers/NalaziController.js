@@ -1071,6 +1071,16 @@ nalazController.Nalaz = function(req, res) {
                               .rezultat_m
                         });
                       } else {
+
+                        var kontrola = "No Class"
+                        if(rezultat.rezultat[rezultat.rezultat.length - 1].rezultat_m[0].pozitivan){
+                          kontrola = "Red"
+                        } else if(rezultat.rezultat[rezultat.rezultat.length - 1].rezultat_m[0].negativan){
+                          kontrola = "Green"
+                        }
+                       
+                        temp[1].kontrola = kontrola
+
                         novirezultati.push({
                           sekcija: rezultat.labassay.sekcija,
                           grupa: rezultat.labassay.grupa,
@@ -1166,11 +1176,29 @@ nalazController.Nalaz = function(req, res) {
                 }
               }
             } else {
-              if (element.rezultat[0].includes("[")) {
+              /* if (element.rezultat[0].includes("[")) {
                 console.warn(element.rezultat[0].substring(4));
               } else{
                 console.warn(element.rezultat[0]);
+              } */
+
+              if (
+                tempniz.filter(e => e.sekcija === element.sekcija).length > 0 ||
+                !tempniz.length
+              ) {
+                tempniz.push(element);
+                if (i === novirezultati.length) {
+                  sekcijeniz.push(tempniz);
+                }
+              } else {
+                sekcijeniz.push(tempniz);
+                tempniz = [];
+                tempniz.push(element);
+                if (i === novirezultati.length) {
+                  sekcijeniz.push(tempniz);
+                }
               }
+              
             }
           });
 
