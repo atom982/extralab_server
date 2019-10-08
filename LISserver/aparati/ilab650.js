@@ -443,7 +443,7 @@ module.exports = {
                     ime = ime.replace(/đ/g,'d')
                     ime = ime.replace(/ž/g,'z')
 
-                    if(ime.length > 18){
+                    if(ime.length >= 18){
                       ime=ime.substring(0,18)
                     }else{
                       for (let index = 0; index < (18-ime.length); index++) {

@@ -58,6 +58,7 @@ var dashboard = require("./routes/dashboard");
 var odobravanje = require("./routes/odobravanje");
 var loger =  require("./routes/loger");
 var mikrobiologija =  require("./routes/mikrobiologija");
+var integration =  require("./routes/integration");
 
 var app = express();
 
@@ -132,6 +133,8 @@ app.use(validateUser, dashboard);
 app.use(validateUser, odobravanje);
 app.use(validateUser, loger);
 app.use(validateUser, mikrobiologija);
+app.use(validateUser, integration);
+
 
 function validateUser(req, res, next) {
   if (
