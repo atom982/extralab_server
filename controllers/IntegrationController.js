@@ -96,7 +96,7 @@ IntegrationController.Post = function(req, res) {
                   var temp =""
                   req.body.analize.forEach(remote => {
                     console.log(remote)
-                    temp = remote.trim()
+                    temp = remote.toString().trim()
                     Integration.findOne({remote_id:temp}).populate('local_id').exec(function (err, local) {
                       counter++
                       if(local){
