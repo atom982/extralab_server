@@ -129,6 +129,7 @@ IntegrationController.Post = function(req, res) {
                       order.uzorci=complete
                       order.decoded={user:req.body.email}
                       req.body=order
+                      console.log(order)
                       if(order.uzorci.length){
                         prijem.sacuvajUzorke(req,res)
                       }else{
