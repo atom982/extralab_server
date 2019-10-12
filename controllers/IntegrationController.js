@@ -93,8 +93,10 @@ IntegrationController.Post = function(req, res) {
                   order.anticoag = 'NE'
                   order.protokol = req.body.protokol
                   var counter = 0
+                  var temp =""
                   req.body.analize.forEach(remote => {
-                    Integration.findOne({remote_id:remote.trim()}).populate('local_id').exec(function (err, local) {
+                    temp = remote.trim()
+                    Integration.findOne({remote_id:temp}).populate('local_id').exec(function (err, local) {
                       counter++
                       if(local){
 
