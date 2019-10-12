@@ -7,6 +7,7 @@ var Audit = require("../models/Audit");
 var fs = require("fs");
 var User = mongoose.model("User");
 var Audit = mongoose.model("Audit_Login");
+var prijem = require("../controllers/SampleController.js");
 
 var IntegrationController = {};
 
