@@ -4791,7 +4791,7 @@ sampleController.sacuvajUzorke = function(req, res) {
 
             // console.log("PID: " + req.body.pid)
 
-            if (req.body.pid != "") {
+/*             if (req.body.pid != "") {
               uzorakFront.pid = req.body.pid;
 
               req.body.complete.forEach(element => {
@@ -4799,7 +4799,7 @@ sampleController.sacuvajUzorke = function(req, res) {
                   uzorakFront.timestamp = element.timestamp;
                 }
               });
-            }
+            } */
 
             switch (
               String(parseFloat(uzorakFront.all[0].slice(1, 4), 10) + 1).length
