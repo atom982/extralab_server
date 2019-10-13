@@ -4780,7 +4780,8 @@ sampleController.sacuvajUzorke = function(req, res) {
               }
             });
           });
-
+          console.log(req.body.uzorci)
+          console.log('KRAJ')
           req.body.uzorci.forEach(uzorakFront => {
             uzorakFront.all.sort(function(a, b) {
               return a == b ? 0 : +(a < b) || -1;
