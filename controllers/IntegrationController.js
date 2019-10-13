@@ -130,7 +130,7 @@ IntegrationController.Post = function(req, res) {
                       order.decoded={user:req.body.email}
                       req.body=order
                       console.log('BEFORE SACUVAJ')
-                      console.log(req.body)
+                      console.log(req.body.uzorci)
                       if(order.uzorci.length){
                         prijem.sacuvajUzorke(req,res)
                       }else{
