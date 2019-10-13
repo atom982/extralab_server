@@ -11,7 +11,6 @@ var prijem = require("../controllers/SampleController.js");
 
 var IntegrationController = {};
 IntegrationController.apiUrlPregled = function(req, res) {
-  console.log('api rules')
   if (mongoose.connection.readyState != 1) {
     res.json({
       success: false,
@@ -106,8 +105,6 @@ IntegrationController.apiUrlPregled = function(req, res) {
         if (err) {
           console.log("Greška:", err);
         } else {
-          console.log(limit)
-          console.log(results)
           switch (parametar) {
             case "ime":
               results = results.filter(function(result) {
@@ -344,7 +341,6 @@ IntegrationController.Post = function(req, res) {
         req.body.site = user.site
         req.body.pime = req.body.pime.toUpperCase()
         req.body.pprez =  req.body.pprez.toUpperCase()
-        console.log( req.body)
         var protokol = new IntegrationRaw(req.body)
         protokol.save(function (err, protokol) {
           if (err) {
@@ -541,50 +537,79 @@ IntegrationController.Retry = function(req, res) {
   IntegrationRaw.findOne({ _id:mongoose.Types.ObjectId(req.body.id)  }, (error, slog) => {
     if (error) throw error;
     if(slog){
-      console.log()
       Results.find({protokol:slog.protokol}).populate('patient').exec(function (err, results) {
         if(results.length){
-          console.log('Broj uzoraka:'+results.length)
-          results.forEach(result => {
-            temp.forEach(element => {
-              if(!element.multi){
-            result.rezultati.forEach(rezultat => {
-                if(rezultat.labassay.equals(mongoose.Types.ObjectId(element.local_id))){//
-                  if(result.verificiran && rezultat.rezultat[rezultat.rezultat.length-1].rezultat_f!=""){
-                    element.rezultat=rezultat.rezultat[rezultat.rezultat.length-1].rezultat_f
-                    element.refd=rezultat.refd
-                    element.refg=rezultat.refg
-                    element.jedinica=rezultat.rezultat[rezultat.rezultat.length-1].jedinice_f
-                  }
-                }   
-              });
-             }else{
-              result.multi.forEach(multi => {
-                 multi.forEach(analit => {                 
-                   if(analit.rezultat[0].anaassay.equals(element.multi_id)){
-                    if(result.verificiran && analit.rezultat[0].rezultat_f!=""){
-                      element.rezultat=analit.rezultat[0].rezultat_f
-                      element.refd=analit.refd
-                      element.refg=analit.refg
-                      element.jedinica=analit.rezultat[0].jedinice_f
-                    }
-                   }
-                 });
-               });
-             }
-            });
-          });
+          console.log( "Sample and Result su za protokol:"+slog.protokol+"  vec kreirani")
           res.json({
             success: true,
-            message: "Rezultati za protokol:"+slog.protokol,
-            rezultati:temp
+            message: "Sample and Result su za protokol:"+slog.protokol+"  vec kreirani",
           });              
         }else{
-          console.log('Iniciraj kreiranje uzoraka:'+results.length)
-          res.json({
-            success: true,
-            message: "Rezultati za protokol nisu pronadjeni"
-          });
+          console.log('Iniciraj kreiranje uzoraka za protokol:'+slog.protokol)
+          Patients.findOne({ime:slog.pime,prezime:slog.pprez}).exec(function (err, patient) {
+            if (error) throw error;
+            if(patient){
+          //---------------------------------
+          var order={}
+          order.site=slog.site
+          order.timestamp= Date.now()
+          order.siteCode= 'S'        
+          order.uzorci=[ {tip: 'Serum 1',testovi:[]}, {tip: 'Serum 2',testovi:[]}, {tip: 'Serum 3',testovi:[]},{tip: 'Serum 4',testovi:[]},{tip: 'kapilarna krv',testovi:[]},{tip: 'Krv 1',testovi:[]},{tip: 'Krv 2',testovi:[]},{tip: 'Krv EDTA',testovi:[]},{tip: 'Plazma 1',testovi:[]},{tip: 'Plazma ABO',testovi:[]},{tip: 'Plazma EDTA',testovi:[]},{tip: 'Plazma Citrat',testovi:[]},{tip: 'Plazma Heparin',testovi:[]}, {tip: 'Plazma NaF',testovi:[]},{tip: 'Urin 1',testovi:[]},{tip: 'Urin 24h',testovi:[]},{tip: 'Feces 1',testovi:[]},{tip: 'Bris 1',testovi:[]},{tip: 'Ejakulat',testovi:[]}]
+          order.lokacija ='5c713f63cfe109792dfbdc9b'
+          order.drstanje = 'NE'
+          order.anticoag = 'NE'
+          order.protokol = slog.protokol
+          var counter = 0
+          var temp =""
+          slog.analize.forEach(remote => {
+            console.log(remote)
+            temp = remote.toString().trim()
+            Integration.findOne({remote_id:temp}).populate('local_id').exec(function (err, local) {
+              counter++
+              if(local){
+
+              order.uzorci.forEach(uzorak => {
+                 if(uzorak.tip === local.local_id.tip){
+                   uzorak.ime=uzorak.tip.split(' ')[0]
+                   uzorak.code = []
+                   uzorak.patient = patient
+                  if(!uzorak.testovi.filter(e => e._id.equals(local.local_id._id)).length > 0){
+                    uzorak.testovi.push({itemName: local.local_id.naziv,opis:local.local_id.analit,uzorak:local.local_id.tip,cijena:local.local_id.price,klasa:"primary",_id:local.local_id._id})
+                  }
+                 
+                   uzorak.hitno= false
+                   uzorak.time=new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -8).replace("T", " ")
+                   uzorak.komentar=''
+                  }
+              });
+            }else{
+              console.log('analiza nije pronadjena')
+            }
+            if(slog.analize.length === counter){
+              var complete = []
+              order.uzorci.forEach(uzorak => {
+                if(uzorak.testovi.length){
+                  complete.push(uzorak)
+                }
+              });
+              order.uzorci=complete
+              order.decoded={user:req.body.email}
+              req.body=order
+              req.body.complete=[]
+              
+              if(order.uzorci.length){
+                prijem.sacuvajUzorke(req,res)
+              }else{
+               res.json({ success: true, message: 'Sifre testova nisu definisane u LIS-u', protokol:req.body.protokol })
+              }
+            }
+            })
+          }); 
+           }else{
+             console.log('pacijent nije pronadjen')
+           }
+          //----------------------------------
+         })
         }   
       })
     }
