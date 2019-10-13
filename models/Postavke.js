@@ -268,6 +268,7 @@ var SchemaResults = mongoose.Schema({
   status: { type: String },
   odobren: { type: Boolean, default: false },
   isPrinted: { type: Boolean, default: false },
+  protokol: { type: String, default: '' },
   rezultati: [
     {
       labassay: { type: mongoose.Schema.ObjectId, ref: "LabAssays" }, // link na kks

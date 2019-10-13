@@ -10,7 +10,290 @@ var Audit = mongoose.model("Audit_Login");
 var prijem = require("../controllers/SampleController.js");
 
 var IntegrationController = {};
+IntegrationController.apiUrlPregled = function(req, res) {
+  console.log('api rules')
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: err
+    });
+  } else {
+    var parametar = req.query.sort.slice(0, req.query.sort.indexOf("|")).trim();
+    var order = req.query.sort
+      .slice(req.query.sort.indexOf("|") + 1, req.query.sort.length)
+      .trim();
 
+    var limit = 50000;
+
+    if (!req.query.filter) {
+      req.query.filter = "";
+      limit = 100;
+    }
+
+    if (req.query.filter === "") {
+      req.query.filter = "";
+      limit = 100;
+    } else {
+      limit = 50000;
+    }
+   
+    var uslov = { site: mongoose.Types.ObjectId(req.query.site) };
+
+    switch (parametar) {
+      case "ime":
+        uslov = {
+          site: mongoose.Types.ObjectId(req.query.site),
+          pime: { $regex: ".*" + req.query.filter.toUpperCase() + ".*" }
+        };
+        break;
+
+      case "prezime":
+        uslov = {
+          site: mongoose.Types.ObjectId(req.query.site),
+          pprez: {
+            $regex: ".*" + req.query.filter.toUpperCase() + ".*"
+          }
+        };
+
+        break;
+
+      case "jmbg":
+        uslov = {
+          site: mongoose.Types.ObjectId(req.query.site),
+          jmbg7: { $regex: ".*" + req.query.filter.toUpperCase() + ".*" }
+        };
+
+        break;
+
+      default:
+        var imeiprezime = req.query.filter.toLowerCase().split(" ");
+        if (imeiprezime.length === 2) {
+          var name = imeiprezime[0];
+          var surname = imeiprezime[1];
+          uslov = {
+            site: mongoose.Types.ObjectId(req.query.site),
+            pime: {
+              $regex: ".*" + name.toUpperCase() + ".*"
+            },
+            pprez: {
+              $regex: ".*" + surname.toUpperCase() + ".*"
+            }
+          };
+        }
+
+        if (imeiprezime.length === 1) {
+          var name = imeiprezime[0];
+          uslov = {
+            site: mongoose.Types.ObjectId(req.query.site),
+
+            $or: [
+              {
+                pime: { $regex: ".*" + name.toUpperCase() + ".*" }
+              },
+              {
+                pprez: { $regex: ".*" + name.toUpperCase() + ".*" }
+              }
+            ]
+          };
+        }
+
+        break;
+    }
+    IntegrationRaw.find(uslov)
+      .sort({ _id: -1 })
+      .limit(limit)
+      .exec(function(err, results) {
+        if (err) {
+          console.log("Greška:", err);
+        } else {
+          console.log(limit)
+          console.log(results)
+          switch (parametar) {
+            case "ime":
+              results = results.filter(function(result) {
+                return result.pime
+                  .toLowerCase()
+                  .includes(req.query.filter.toLowerCase());
+              });
+              break;
+            case "prezime":
+              results = results.filter(function(result) {
+                return result.pprez
+                  .toLowerCase()
+                  .includes(req.query.filter.toLowerCase());
+              });
+              break;
+            case "jmbg":
+              results = results.filter(function(result) {
+                return result.jmbg7
+                  .toLowerCase()
+                  .includes(req.query.filter.toLowerCase());
+              });
+              break;
+            default:
+              var pacijent = req.query.filter.toLowerCase().split(" ");
+              if (pacijent.length === 2) {
+                var name = pacijent[0];
+                var surname = pacijent[1];
+                results = results.filter(function(result) {
+                  return (
+                    (result.pime.toLowerCase().includes(name) &&
+                      result.pprez.toLowerCase().includes(surname)) ||
+                    (result.pime.toLowerCase().includes(surname) &&
+                      result.pprez.toLowerCase().includes(name))
+                  );
+                });
+              }
+              if (pacijent.length === 1) {
+                var name = pacijent[0];
+                results = results.filter(function(result) {
+                  return (
+                    result.pime.toLowerCase().includes(name) ||
+                    result.pprez.toLowerCase().includes(name)
+                  );
+                });
+              }
+              break;
+          }
+
+          var json = {};
+          json.total = results.length;
+          json.per_page = req.query.per_page;
+          json.current_page = req.query.page;
+          json.last_page = Math.ceil(json.total / json.per_page);
+          json.next_page_url =
+            config.baseURL +
+            "prijem/pacijenti?sort=" +
+            req.query.sort +
+            "&page=" +
+            (req.query.page + 1) +
+            "&per_page=" +
+            req.query.per_page;
+          var prev_page = null;
+          if (json.current_page - 1 !== 0) {
+            prev_page = json.current_page - 1;
+          }
+          json.prev_page_url =
+            config.baseURL +
+            "prijem/pacijenti?sort=" +
+            req.query.sort +
+            "&page=" +
+            prev_page +
+            "&per_page=" +
+            req.query.per_page;
+          json.from = (json.current_page - 1) * 10 + 1;
+          json.to = (json.current_page - 1) * 10 + 10;
+          json.data = [];
+
+          switch (parametar) {
+            case "ime":
+              if (order === "asc") {
+                results.sort(function(a, b) {
+                  return a.pime == b.pime ? 0 : +(a.pime > b.pime) || -1;
+                });
+              }
+              if (order === "desc") {
+                results.sort(function(a, b) {
+                  return a.pime == b.pime ? 0 : +(a.pime < b.pime) || -1;
+                });
+              }
+              break;
+            case "prezime":
+              if (order === "asc") {
+                results.sort(function(a, b) {
+                  return a.prezime == b.pprez
+                    ? 0
+                    : +(a.prezime > b.pprez) || -1;
+                });
+              }
+              if (order === "desc") {
+                results.sort(function(a, b) {
+                  return a.pprez == b.pprez
+                    ? 0
+                    : +(a.pprez < b.pprez) || -1;
+                });
+              }
+              break;
+            case "jmbg":
+              if (order === "asc") {
+                results.sort(function(a, b) {
+                  return a.jmbg7 == b.jmbg7 ? 0 : +(a.jmbg7 > b.jmbg7) || -1;
+                });
+              }
+              if (order === "desc") {
+                results.sort(function(a, b) {
+                  return a.jmbg7 == b.jmbg7 ? 0 : +(a.jmbg7 < b.jmbg7) || -1;
+                });
+              }
+              break;
+            default:
+              results.sort(function(a, b) {
+                return Date.parse(a.created_at) == Date.parse(b.created_at)
+                  ? 0
+                  : +(Date.parse(a.created_at) < Date.parse(b.created_at)) ||
+                      -1;
+              });
+              break;
+          }
+
+          var niz = results.slice(json.from - 1, json.to);
+
+          niz.forEach(patient => {
+            switch (patient.spol) {
+              case "MUŠKI":
+                var icon =
+                  '<span style="font-size: 12px; color:#4ab2e3;" class="fa fa-mars"></span>';
+                break;
+              case "ŽENSKI":
+                var icon =
+                  '<span style="font-size: 12px; color:#db76df;" class="fa fa-venus"></span>';
+                break;
+              default:
+                var icon =
+                  '<span style="font-size: 12px; color:#f7cc36;" class="fa fa-genderless"></span>';
+                break;
+            }
+
+            var prijem =
+              "<button style='white-space: nowrap;' title='' id='" +
+              patient.jmbg7 +
+              "' style='font-size: 11px;' class='btn btn-secondary-info btn-micro'><span id='" +
+              patient.jmbg7 +
+              "' style='font-size: 12px;' class='fa fa-flask'></span> <span style='text-transform: none; font-size: 12px;'>Prijem</span></button>";
+
+            var jmbg = "<span>" + patient.jmbg7 + "</span>";
+
+            if (patient.jmbg7.includes("P")) {
+              jmbg =
+                "<span>" +
+                patient.jmbg7.slice(0, -1) +
+                "<span style='color: #e34a4a;'>" +
+                patient.jmbg7.slice(-1) +
+                "</span></span>";
+            }
+
+            var detalji =
+              "<button style='white-space: nowrap;' title='' id='" +
+              patient._id +
+              "' style='text-transform: none; font-size: 12px;' class='btn btn-primary btn-micro'><span id='" +
+              patient._id +
+              "' class='fa fa-edit'></span> Ponovi</button>";
+
+            json.data.push({
+              protokol: patient.protokol,
+              integracija: detalji,
+              ime: patient.pime,
+              prezime: patient.pprez,
+              jmbg: jmbg,
+              izmjena: patient._id,
+              id: patient._id
+            });
+          });
+          res.json(json);
+        }
+      });
+  }
+};
 // AuthController.js
 IntegrationController.Bind = function(req, res) {
     console.log(req.body.integration)
@@ -58,7 +341,10 @@ IntegrationController.Post = function(req, res) {
   IntegrationRaw.findOne({ protokol: req.body.protokol }, (error, slog) => {
     if (error) throw error;
     if (!slog){
-
+        req.body.site = user.site
+        req.body.pime = req.body.pime.toUpperCase()
+        req.body.pprez =  req.body.pprez.toUpperCase()
+        console.log( req.body)
         var protokol = new IntegrationRaw(req.body)
         protokol.save(function (err, protokol) {
           if (err) {
@@ -76,7 +362,7 @@ IntegrationController.Post = function(req, res) {
             req.body.jmbg=req.body.jmbg7.trim()+String(Math.random()*100000).substring(0,5)+'P'
             req.body.ime_oca= req.body.imeo.toUpperCase()
             req.body.spol = req.body.spol.toUpperCase()
-            req.body.site= '5c69f68c338fe912f99f833b'
+            req.body.site= user.site
             var pacijent = new Patients(req.body)
             pacijent.save(function (err, pacijent) {
                 if (err) {
@@ -84,7 +370,7 @@ IntegrationController.Post = function(req, res) {
                 } else {
                   console.log(req.body.analize)
                   var order={}
-                  order.site='5c69f68c338fe912f99f833b'
+                  order.site=user.site
                   order.timestamp= Date.now()
                   order.siteCode= 'S'
                   
@@ -249,4 +535,59 @@ IntegrationController.Get = function(req, res) {
     }
   });
 };
+IntegrationController.Retry = function(req, res) {
+ 
+
+  IntegrationRaw.findOne({ _id:mongoose.Types.ObjectId(req.body.id)  }, (error, slog) => {
+    if (error) throw error;
+    if(slog){
+      console.log()
+      Results.find({protokol:slog.protokol}).populate('patient').exec(function (err, results) {
+        if(results.length){
+          console.log('Broj uzoraka:'+results.length)
+          results.forEach(result => {
+            temp.forEach(element => {
+              if(!element.multi){
+            result.rezultati.forEach(rezultat => {
+                if(rezultat.labassay.equals(mongoose.Types.ObjectId(element.local_id))){//
+                  if(result.verificiran && rezultat.rezultat[rezultat.rezultat.length-1].rezultat_f!=""){
+                    element.rezultat=rezultat.rezultat[rezultat.rezultat.length-1].rezultat_f
+                    element.refd=rezultat.refd
+                    element.refg=rezultat.refg
+                    element.jedinica=rezultat.rezultat[rezultat.rezultat.length-1].jedinice_f
+                  }
+                }   
+              });
+             }else{
+              result.multi.forEach(multi => {
+                 multi.forEach(analit => {                 
+                   if(analit.rezultat[0].anaassay.equals(element.multi_id)){
+                    if(result.verificiran && analit.rezultat[0].rezultat_f!=""){
+                      element.rezultat=analit.rezultat[0].rezultat_f
+                      element.refd=analit.refd
+                      element.refg=analit.refg
+                      element.jedinica=analit.rezultat[0].jedinice_f
+                    }
+                   }
+                 });
+               });
+             }
+            });
+          });
+          res.json({
+            success: true,
+            message: "Rezultati za protokol:"+slog.protokol,
+            rezultati:temp
+          });              
+        }else{
+          console.log('Iniciraj kreiranje uzoraka:'+results.length)
+          res.json({
+            success: true,
+            message: "Rezultati za protokol nisu pronadjeni"
+          });
+        }   
+      })
+    }
+  })
+},
 module.exports = IntegrationController;

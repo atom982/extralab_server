@@ -5771,6 +5771,11 @@ sampleController.sacuvajUzorke = function(req, res) {
                                         );
                                         rezultat.sample = sample;
                                         rezultat.id = sample.id;
+                                        if (req.body.protokol !== undefined && req.body.protokol !== null) { 
+                                          rezultat.protokol = req.body.protokol
+                                         }else{
+                                          rezultat.protokol =  uzorakFront.pid
+                                         }
                                         rezultat.patient = sample.patient;
                                         rezultat.status = "U OBRADI";
 
