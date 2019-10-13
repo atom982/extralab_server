@@ -4791,7 +4791,7 @@ sampleController.sacuvajUzorke = function(req, res) {
 
             // console.log("PID: " + req.body.pid)
 
-            if (req.body.pid != "") {
+            if (req.body.pid != "" && req.body.complete.length) {
               uzorakFront.pid = req.body.pid;
 
               req.body.complete.forEach(element => {
