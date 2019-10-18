@@ -93,6 +93,7 @@ class lisServer {
             lisserver.poruka.push("R|"+frame)
             funkcija.parsaj_rezultat(lisserver.poruka, io);
             frame = ''
+            lisserver.poruka = [] 
           }
           
           if (data.charCodeAt(data.length - 1) === 3 ) {
