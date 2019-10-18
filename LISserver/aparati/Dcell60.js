@@ -55,7 +55,7 @@ module.exports = {
                           case 'R':
 
                                     console.log("rezultat");
-                                    sid = element.substring(14,24)
+                                    sid = element.substring(14,24).toUpperCase()
                                     console.log('SID: '+sid)
                                     console.log('WBC:'+element.substring(37,41))
                                     rezultati.push({
