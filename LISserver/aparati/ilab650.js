@@ -444,10 +444,19 @@ module.exports = {
                     ime = ime.replace(/ž/g,'z')
                     console.log('PODACI IME')
                     console.log('ime length before:'+ime.length)
+                    switch (ime.length) {
+                      case 2:
+                        
+                        break;
+                    
+                      default:
+                        break;
+                    }
                     if(ime.length >= 18){
                       ime=ime.substring(0,18)
                     }else{
-                      for (let index = 0; index < (18-ime.length); index++) {
+                      var duzina = ime.length
+                      for (let index = 0; index < (18-duzina); index++) {
                         ime+=' '    
                       }
                       ime+=' ' 
