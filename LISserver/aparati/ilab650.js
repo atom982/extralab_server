@@ -389,7 +389,7 @@ module.exports = {
               }
               else {
                 if (!uzorci.length) {
-                  console.log("U LIS-u ne postoje uneseni uzorci za "+lokacija);
+                  //console.log("U LIS-u ne postoje uneseni uzorci za "+lokacija);
                   
                   recordret.push('\u0002E18\u0003')
                   callback(recordret);

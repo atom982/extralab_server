@@ -248,8 +248,8 @@ parsaj_query: function(record,callback){
   if(record[0].includes('E 1394-97')){
     sn='251025'
   }
-  console.log('functions query fajl')
-  console.log(sn)
+  //console.log('functions query fajl')
+  //console.log(sn)
   switch(sn){
 
     case  'U10714300027'://Extralab instrumentation laboratory ilab650 biohemija
