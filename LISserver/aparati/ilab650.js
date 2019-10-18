@@ -442,7 +442,8 @@ module.exports = {
                     ime = ime.replace(/š/g,'s')
                     ime = ime.replace(/đ/g,'d')
                     ime = ime.replace(/ž/g,'z')
-
+                    console.log('PODACI IME')
+                    console.log('ime length before:'+ime.length)
                     if(ime.length >= 18){
                       ime=ime.substring(0,18)
                     }else{
@@ -451,6 +452,7 @@ module.exports = {
                       }
                       ime+=' ' 
                     }
+                    console.log('ime length after:'+ime.length)
                     var nrTests = testovi.length
                     var allTST = ''
                     testovi.forEach(element => {
