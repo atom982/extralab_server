@@ -462,6 +462,7 @@ module.exports = {
                       allTST +=  element.toString()   
                     });
                     allTST = allTST +'\u0003'
+                    allTST=allTST.trim()
                     console.log(allTST)
                     //console.log('ALL TST:')
                     //console.log(allTST)
