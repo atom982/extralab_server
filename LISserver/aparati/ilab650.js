@@ -528,7 +528,7 @@ module.exports = {
                       if(recordret.length){
                         console.log('Order za slanje na lokaciju:'+lokacija)
                         recordret.forEach(element => {
-                          console.log(element)
+                          console.log(JSON.stringify(element))
                         });
                         
                         callback(recordret);
