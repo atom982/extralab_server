@@ -456,7 +456,7 @@ module.exports = {
                     console.log('sifre testova:'+testovi)
                     
                     var nrTests = testovi.length
-                    var allTST = ''
+                    var allTST = ' '
                     console.log('broj testova:'+nrTests)
                     testovi.forEach(element => {
                       allTST +=  element.toString()   
