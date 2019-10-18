@@ -527,7 +527,10 @@ module.exports = {
                     if(brojac===uzorci.length){
                       if(recordret.length){
                         console.log('Order za slanje na lokaciju:'+lokacija)
-                        console.log(recordret)
+                        recordret.forEach(element => {
+                          console.log(element)
+                        });
+                        
                         callback(recordret);
                       }
                     }
