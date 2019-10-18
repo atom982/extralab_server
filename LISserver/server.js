@@ -115,6 +115,7 @@ class lisServer {
                     lisserver.poruka.push("R|"+frame)
                     funkcija.parsaj_rezultat(lisserver.poruka, io);
                     lisserver.broadcast('\u0002E18\u0003', client)
+                    lisserver.poruka = [] 
                   }  
 
                 }else{
