@@ -520,7 +520,7 @@ module.exports = {
                   //       order  =''
                   //       allTST = ''
                   //       nrTests = 0
-                    recordret.push(order);
+                    recordret.push(JSON.stringify(order));
                     brojac++
                     uzorak.status = "U OBRADI"
                     uzorak.save()  
