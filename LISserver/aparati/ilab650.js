@@ -454,11 +454,14 @@ module.exports = {
                     }
                     console.log('ime length after:'+ime.length)
                     console.log('sifre testova:'+testovi)
+                    
                     var nrTests = testovi.length
                     var allTST = ''
+                    console.log('broj testova:'+nrTests)
                     testovi.forEach(element => {
                       allTST +=  element   
                     });
+                    console.log(allTST)
                     //console.log('ALL TST:')
                     //console.log(allTST)
                     testovi = []
