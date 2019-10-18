@@ -253,11 +253,11 @@ parsaj_query: function(record,callback){
   switch(sn){
 
     case  'U10714300027'://Extralab instrumentation laboratory ilab650 biohemija
-                        console.log('parsanje ILAB650 querija')
+                        ///console.log('parsanje ILAB650 querija')
                         var site = '5c69f68c338fe912f99f833b'
                         ilab650.parsaj_query(record,site,function(poruka){
-                        console.log("Kreirano: ");
-                        console.log(poruka);
+                        //console.log("Kreirano: ");
+                        //console.log(poruka);
                         callback(poruka);
                         });
                         break;
