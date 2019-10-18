@@ -40,8 +40,8 @@ class lisServer {
     this.clients.forEach((client) => {
       if (client === clientSender) {
         client.sendMessage(message);
-        console.log('Šaljem na adresu: ' + client.address + ', port: ' + client.port);
-        console.log(JSON.stringify(message))
+        //console.log('Šaljem na adresu: ' + client.address + ', port: ' + client.port);
+        //console.log(JSON.stringify(message))
       }
       if (client.sn === "frontClient") {
         client.sendMessage(message);
