@@ -453,7 +453,7 @@ module.exports = {
                       }
                     }
                     console.log('ime length after:'+ime.length)
-
+                    console.log('sifre testova:'+testovi)
                     var nrTests = testovi.length
                     var allTST = ''
                     testovi.forEach(element => {
