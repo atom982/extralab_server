@@ -504,7 +504,7 @@ module.exports = {
                   var buffer1 = new Buffer('W10000'+uzorak.id+'    '+'0'+ime+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001');
                   var buffer3 = Buffer.concat([buffer1,buffer2]); 
                   console.log(buffer3)
-                  console.log(JSON.stringify(buffer3))
+                  console.log(buffer3.toLocaleString())
                   // order +=nrTests
                   // order +=allTST
                   //   allTST = ''
@@ -540,9 +540,6 @@ module.exports = {
                         console.log('Order za slanje na lokaciju:'+lokacija)
                         recordret.forEach(element => {
                           console.log(element.toLocaleString('fullwide', {useGrouping:false}))
-                          for (var i = 0; i < element.length; i++) {
-                            console.log(element.charAt(i));
-                          }
                           element = '\u0002'+ element+'\u0003'
                         });
                         
