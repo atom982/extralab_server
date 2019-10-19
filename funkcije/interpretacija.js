@@ -75,7 +75,7 @@ module.exports = {
     } else if (rezultat.includes("graničan")) {
       return [" ", "Yellow"];
     } else {
-      return [" ", "No Class"];
+      return [" ", "Red"];
     }
   },
 
