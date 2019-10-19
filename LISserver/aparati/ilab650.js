@@ -457,20 +457,27 @@ module.exports = {
                     
                     var nrTests = testovi.length
                     var allTST = ''
+
                     console.log('broj testova:'+nrTests)
                     testovi.forEach(element => {
-                      allTST +=  element   
+                      allTST +=  element  
                     });
                     console.log(allTST)
                     //console.log('ALL TST:')
                     //console.log(allTST) 
-                    testovi = []
+                    
                    if(nrTests <10){
                     nrTests = '00'+nrTests
                   }
                   if(nrTests  >= 10 ){
                     nrTests = '0'+nrTests
                   }
+                  var buffer2 = new Buffer(nrTests);
+                  testovi.forEach(element => {
+                    buffer2 = Buffer.concat([buffer2,new Buffer(element)]);  
+                  });
+                  console.log(buffer2)
+                  testovi = []
                   // W (Request code)
                   // 1 (Instrument No)
                   // 0000       (Request No)
@@ -494,6 +501,9 @@ module.exports = {
                   //                                                                        yymmdd   time    diskno         scpos      stype   sex     cuptype     dil   rerun   reflex   doctor    nrTests   (testtype+testno)
                   //var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
                   var order ='W10000'+uzorak.id+'    '+'0'+ime+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})
+                  var buffer1 = new Buffer('W10000'+uzorak.id+'    '+'0'+ime+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString());
+
+                  
                   // order +=nrTests
                   // order +=allTST
                   //   allTST = ''
