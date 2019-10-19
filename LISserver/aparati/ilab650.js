@@ -422,10 +422,10 @@ module.exports = {
                       })
                     })
                     var tests = '';
-                    var sampleType = "S"
+                    var sampleType = uzorak.id.substring(0,1)
                     var cupPosition = uzorak.id.substring(2,4)
                     var sex = uzorak.patient.spol
-
+                    console.log(datum)
                      if(uzorak.patient.spol ==="MUŠKI") {
                        sex = 1
                      }else{
@@ -505,32 +505,6 @@ module.exports = {
                   var buffer3 = Buffer.concat([buffer1,buffer2]); 
                   console.log(buffer3)
                   console.log(buffer3.toLocaleString())
-                  // order +=nrTests
-                  // order +=allTST
-                  //   allTST = ''
-                  //   tests = ''
-                  //        var checksum = 0
-                  //       for(var i=0;i<order.length;i++) {
-                  //         checksum += order.charCodeAt(i)
-                  //       }
-                  //       checksum =  checksum % 256
-
-                  //       if(checksum < 100 && checksum > 9){
-                  //         checksum = ('0'+checksum).toString()
-                  //       }
-
-                  //       if(checksum < 10){
-                  //         checksum = ('\u0020' + '\u0020' +checksum).toString()
-                  //       }
-                  //       order += checksum
-                  //       if(parseInt(nrTests)){ 
-                          
-                  //         recordret.push(order);
-                  //       }
-                        
-                  //       order  =''
-                  //       allTST = ''
-                  //       nrTests = 0
                     recordret.push(order);
                     brojac++
                     uzorak.status = "U OBRADI"
