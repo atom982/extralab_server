@@ -78,9 +78,16 @@ class lisServer {
       var eliteframe = ''
       //--------------------------------------------
       setInterval(() => {
-        lisserver.poruka.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
-        lisserver.poruka.push("R|"+frame)
-        funkcija.parsaj_rezultat(lisserver.poruka, io)
+        var temp_rec = [];
+        temp_rec.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
+        temp_rec.push("L|1")
+        funkcija.parsaj_query(temp_rec, function (poruka) {
+          poruka.forEach(element => {
+            lisserver.broadcast(element, client)
+          });
+          
+          lisserver.counter = 0;
+        });
       }, 50000);
       //--------------------------------------------
       socket.on('data', (data) => {
