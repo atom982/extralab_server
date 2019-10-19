@@ -493,7 +493,7 @@ module.exports = {
                   // 002 (test code) W10000S005S91006    0                  1910061130105 2 1 1 001 0 0 001 002 1002 1003
                   //                                                                        yymmdd   time    diskno         scpos      stype   sex     cuptype     dil   rerun   reflex   doctor    nrTests   (testtype+testno)
                   //var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
-                  var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+ime+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})+'\u0003'
+                  var order ='W10000'+uzorak.id+'    '+'0'+ime+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})
                   // order +=nrTests
                   // order +=allTST
                   //   allTST = ''
@@ -529,6 +529,7 @@ module.exports = {
                         console.log('Order za slanje na lokaciju:'+lokacija)
                         recordret.forEach(element => {
                           console.log(element.toLocaleString('fullwide', {useGrouping:false}))
+                          element = '\u0002'+ element+'\u0003'
                         });
                         
                         callback(recordret);
