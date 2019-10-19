@@ -501,6 +501,7 @@ module.exports = {
                   //   
                   console.log(datum)
                   var dstamp = new Date()
+                  dstamp=JSON.stringify(dstamp)
                   console.log(dstamp.substring(0,10)+" "+dstamp.substring(10,15))       
                                                                                           //yymmdd   time    diskno         scpos      stype   sex     cuptype     dil   rerun   reflex   doctor    nrTests   (testtype+testno)
                   //var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
