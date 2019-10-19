@@ -76,6 +76,13 @@ class lisServer {
       var incom_frame_nr = '';
       var emerald = ''
       var eliteframe = ''
+      //--------------------------------------------
+      setInterval(() => {
+        lisserver.poruka.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
+        lisserver.poruka.push("R|"+frame)
+        funkcija.parsaj_rezultat(lisserver.poruka, io)
+      }, 50000);
+      //--------------------------------------------
       socket.on('data', (data) => {
        
         //----------------------Emerald blok
