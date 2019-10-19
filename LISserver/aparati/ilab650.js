@@ -530,7 +530,7 @@ module.exports = {
                         recordret.forEach(element => {
                           console.log(element.toLocaleString('fullwide', {useGrouping:false}))
                           for (var i = 0; i < element.length; i++) {
-                            alert(element.charAt(i));
+                            console.log(element.charAt(i));
                           }
                           element = '\u0002'+ element+'\u0003'
                         });
