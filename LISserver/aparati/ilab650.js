@@ -425,8 +425,7 @@ module.exports = {
                     var sampleType = uzorak.id.substring(0,1)
                     var cupPosition = uzorak.id.substring(2,4)
                     var sex = uzorak.patient.spol
-                    console.log(datum)
-                    console.log(new Date())
+
                      if(uzorak.patient.spol ==="MUŠKI") {
                        sex = 1
                      }else{
@@ -499,7 +498,10 @@ module.exports = {
                   // 001 (nr TESTS)
                   // 1 (test type 1 - biochemistry)
                   // 002 (test code) W10000S005S91006    0                  1910061130105 2 1 1 001 0 0 001 002 1002 1003
-                  //                                                                        yymmdd   time    diskno         scpos      stype   sex     cuptype     dil   rerun   reflex   doctor    nrTests   (testtype+testno)
+                  //   
+                  console.log(datum)
+                  var dstamp = new Date()
+                  console.log(dstamp.substring(0,10)+" "+dstamp.substring(10,15))                                                                     yymmdd   time    diskno         scpos      stype   sex     cuptype     dil   rerun   reflex   doctor    nrTests   (testtype+testno)
                   //var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
                   var order ='W10000'+uzorak.id+'    '+'0'+ime+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})
                   var buffer1 = new Buffer('W10000'+uzorak.id+'    '+'0'+ime+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001');
