@@ -463,7 +463,7 @@ module.exports = {
                     });
                     console.log(allTST)
                     //console.log('ALL TST:')
-                    //console.log(allTST)
+                    //console.log(allTST) 
                     testovi = []
                    if(nrTests <10){
                     nrTests = '00'+nrTests
@@ -493,7 +493,7 @@ module.exports = {
                   // 002 (test code) W10000S005S91006    0                  1910061130105 2 1 1 001 0 0 001 002 1002 1003
                   //                                                                        yymmdd   time    diskno         scpos      stype   sex     cuptype     dil   rerun   reflex   doctor    nrTests   (testtype+testno)
                   //var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
-                  var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+ime+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toString()+'\u0003'
+                  var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+ime+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})+'\u0003'
                   // order +=nrTests
                   // order +=allTST
                   //   allTST = ''
