@@ -502,7 +502,8 @@ module.exports = {
                   console.log(datum)
                   var dstamp = new Date()
                   dstamp=JSON.stringify(dstamp)
-                  console.log(dstamp.substring(2,4)+dstamp.substring(6,8)+dstamp.substring(10,12)+" "+dstamp.substring(13,17))       
+                  console.log(dstamp)
+                  console.log(dstamp.substring(3,5)+dstamp.substring(6,8)+dstamp.substring(9,11)+" "+dstamp.substring(13,17))       
                                                                                           //yymmdd   time    diskno         scpos      stype   sex     cuptype     dil   rerun   reflex   doctor    nrTests   (testtype+testno)
                   //var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
                   var order ='W10000'+uzorak.id+'    '+'0'+ime+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})
