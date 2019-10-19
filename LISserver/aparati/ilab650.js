@@ -426,6 +426,7 @@ module.exports = {
                     var cupPosition = uzorak.id.substring(2,4)
                     var sex = uzorak.patient.spol
                     console.log(datum)
+                    console.log(new Date())
                      if(uzorak.patient.spol ==="MUŠKI") {
                        sex = 1
                      }else{
