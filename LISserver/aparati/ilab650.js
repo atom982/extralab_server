@@ -430,9 +430,11 @@ module.exports = {
                     switch (sampleType) {
                       case "U":
                           stype = 2
+                          //cupPosition = parseInt(cupPosition)+70
                         break;
                         case "K":
                           stype = 3
+                          //cupPosition = parseInt(cupPosition)+50
                           break;                   
                       default:
                           stype = 1
@@ -489,7 +491,7 @@ module.exports = {
                   testovi.forEach(element => {
                     buffer2 = Buffer.concat([buffer2,new Buffer(element)]);  
                   });
-                  console.log(buffer2)
+                  buffer2 = Buffer.concat([buffer2,new Buffer('\u0003')]);
                   testovi = []
                   // W (Request code)
                   // 1 (Instrument No)
@@ -527,23 +529,21 @@ module.exports = {
                        
                                                                                           //yymmdd   time    diskno         scpos      stype   sex     cuptype     dil   rerun   reflex   doctor    nrTests   (testtype+testno)
                   //var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
-                  var order ='W10000'+uzorak.id+'    '+'0'+ime+ dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})
-                  var buffer1 = new Buffer('W10000'+uzorak.id+'    '+'0'+ime+dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'+ '0'+    '0'+   '001');
+                  var order ='\u0002W10000'+uzorak.id+'    '+'0'+ime+ dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})+'\u0003'
+                  //                                     Request Type 0 routine    Sample Disk No.                             cup type   (dilution) (rerun)  (reflex) (doctor code)
+                  var buffer1 = new Buffer('\u0002W10000'+uzorak.id+'    '+'0'+ime+dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'   +  '0'+    '0'+   '001');
                   var buffer3 = Buffer.concat([buffer1,buffer2]); 
+                  console.log(order)
                   console.log(buffer3)
                   console.log(buffer3.toLocaleString())
-                    recordret.push(order);
+                    recordret.push(buffer3);
                     brojac++
                     uzorak.status = "U OBRADI"
                     uzorak.save()  
                     if(brojac===uzorci.length){
                       if(recordret.length){
-                        console.log('Order za slanje na lokaciju:'+lokacija)
-                        recordret.forEach(element => {
-                          console.log(element.toLocaleString('fullwide', {useGrouping:false}))
-                          element = '\u0002'+ element+'\u0003'
-                        });
-                        
+                        console.log('Order za slanje na lokaciju:'+lokacija) 
+                        console.log(recordret)
                         callback(recordret);
                       }
                     }
