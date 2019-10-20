@@ -500,7 +500,7 @@ module.exports = {
                   // 002 (test code) W10000S005S91006    0                  1910061130105 2 1 1 001 0 0 001 002 1002 1003
                   //   
                   console.log(datum)
-                  var dstamp = new Date().getTimezoneOffset() * 60000
+                  var dstamp = new Date()
                   dstamp=JSON.stringify(dstamp)
                   console.log(dstamp)
                   console.log(dstamp.substring(3,5)+dstamp.substring(6,8)+dstamp.substring(9,11)+" "+dstamp.substring(12,14)+dstamp.substring(15,17))       
