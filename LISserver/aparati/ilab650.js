@@ -493,25 +493,32 @@ module.exports = {
                   testovi = []
                   // W (Request code)
                   // 1 (Instrument No)
-                  // 0000       (Request No)
-                  // S003S91006__  (Sample ID)
-                  // 0 (Request Type 0 routine) 
-                  // S003S91006______ (Sample Barcode )
+                  // 0000       (Request No) 
+                  // S003S91006__  (Sample ID) total 14
+                  // 0 (Request Type 0 routine)  0 routine, 1 stat
+                  // S003S91006______ (Sample Barcode ) total 18
                   // 191006 (Request Date )
                   // 1130 (Request Time )
-                  // 1 (Sample Disk No. )
-                  // 50 (Sample Position No.)
-                  // 1 (Sample Type)
-                  // 1 (sex)
+                  // 1 (Sample Disk No. )  1
+                  // 50 (Sample Position No.)  01 do 75
+                  // 1 (Sample Type) --- 1 serum, 2 urin, 3 other
+                  // 1 (sex)  --- 1 male , 2 female , 3 other
                   // 1 (cup type)
-                  // 001 (dilution)
-                  // 0 (rerun)
-                  // 0 (reflex)
-                  // 001 (doctor)
-                  // 001 (nr TESTS)
-                  // 1 (test type 1 - biochemistry)
-                  // 002 (test code) W10000S005S91006    0                  1910061130105 2 1 1 001 0 0 001 002 1002 1003
-                  //   
+                              //Standard Cup :         “1”
+                              //Micro Cup :            “2”
+                              //Tube :                 “3”
+                              //Standard Cup in Tube : “4”
+                              //Micro Cup in Tube :    “5”
+                  // 001 (dilution) od 001 do 999
+                  // 0 (automatic rerun) 0 off, 1 on
+                  // 0 (reflex) 0 off, 1 on
+                  // 001 (doctor code) 001 do 100
+                  // 001 (nr TESTS)  001 do 100
+                  // REPEAT
+                  // 1 (test type ) 1 - biochemistry, 2 - ise, 3- calculated, 4 -serum index
+                  // Test NO
+
+    
                   console.log(datum)
                   var dstamp = new Date()
                   dstamp=JSON.stringify(dstamp)
@@ -520,8 +527,8 @@ module.exports = {
                        
                                                                                           //yymmdd   time    diskno         scpos      stype   sex     cuptype     dil   rerun   reflex   doctor    nrTests   (testtype+testno)
                   //var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
-                  var order ='W10000'+uzorak.id+'    '+'0'+ime+ dstamp+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})
-                  var buffer1 = new Buffer('W10000'+uzorak.id+'    '+'0'+ime+dstamp+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001');
+                  var order ='W10000'+uzorak.id+'    '+'0'+ime+ dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})
+                  var buffer1 = new Buffer('W10000'+uzorak.id+'    '+'0'+ime+dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'+ '0'+    '0'+   '001');
                   var buffer3 = Buffer.concat([buffer1,buffer2]); 
                   console.log(buffer3)
                   console.log(buffer3.toLocaleString())
