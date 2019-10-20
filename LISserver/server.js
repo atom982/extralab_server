@@ -77,18 +77,18 @@ class lisServer {
       var emerald = ''
       var eliteframe = ''
       //--------------------------------------------
-      setInterval(() => {
-        var temp_rec = [];
-        temp_rec.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
-        temp_rec.push("L|1")
-        funkcija.parsaj_query(temp_rec, function (poruka) {
-          poruka.forEach(element => {
-            lisserver.broadcast(element, client)
-          });
+      // setInterval(() => {
+      //   var temp_rec = [];
+      //   temp_rec.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
+      //   temp_rec.push("L|1")
+      //   funkcija.parsaj_query(temp_rec, function (poruka) {
+      //     poruka.forEach(element => {
+      //       lisserver.broadcast(element, client)
+      //     });
           
-          lisserver.counter = 0;
-        });
-      }, 50000);
+      //     lisserver.counter = 0;
+      //   });
+      // }, 50000);
       //--------------------------------------------
       socket.on('data', (data) => {
        
