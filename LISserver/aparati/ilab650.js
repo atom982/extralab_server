@@ -423,9 +423,22 @@ module.exports = {
                     })
                     var tests = '';
                     var sampleType = uzorak.id.substring(0,1)
+                    var stype = 1
                     var cupPosition = uzorak.id.substring(2,4)
                     var sex = uzorak.patient.spol
 
+                    switch (sampleType) {
+                      case "U":
+                          stype = 2
+                        break;
+                        case "K":
+                          stype = 3
+                          break;                   
+                      default:
+                          stype = 1
+                        break;
+                    }
+                    console.log("tip uzorka:"+stype)
                      if(uzorak.patient.spol ==="MUŠKI") {
                        sex = 1
                      }else{
@@ -502,11 +515,12 @@ module.exports = {
                   console.log(datum)
                   var dstamp = new Date()
                   dstamp=JSON.stringify(dstamp)
+                  dstamp=dstamp.substring(3,5)+dstamp.substring(6,8)+dstamp.substring(9,11)+dstamp.substring(12,14)+dstamp.substring(15,17)
                   console.log(dstamp)
-                  console.log(dstamp.substring(3,5)+dstamp.substring(6,8)+dstamp.substring(9,11)+" "+dstamp.substring(12,14)+dstamp.substring(15,17))       
+                       
                                                                                           //yymmdd   time    diskno         scpos      stype   sex     cuptype     dil   rerun   reflex   doctor    nrTests   (testtype+testno)
                   //var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
-                  var order ='W10000'+uzorak.id+'    '+'0'+ime+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})
+                  var order ='W10000'+uzorak.id+'    '+'0'+ime+ dstamp+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})
                   var buffer1 = new Buffer('W10000'+uzorak.id+'    '+'0'+ime+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001');
                   var buffer3 = Buffer.concat([buffer1,buffer2]); 
                   console.log(buffer3)
