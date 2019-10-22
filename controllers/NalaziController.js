@@ -146,8 +146,6 @@ nalazController.Mail = function(req, res) {
                   }
                 };
 
-                console.log(smtpConfig)
-
                 var transporter = nodemailer.createTransport(smtpConfig);
 
                 var cc = nalaz.site.email;
