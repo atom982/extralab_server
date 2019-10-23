@@ -113,9 +113,9 @@ nalazController.Mail = function(req, res) {
 
                 var naslov = postovani + " " + nalaz.patient.ime + ",";
                 var text =
-                  "U prilogu se nalaze rezultati laboratorijskih analiza. <br> Hvala Vam na povjerenju.<br><br>U slučaju da imate pitanja u vezi Vaših nalaza, možete nas kontaktirati na broj " +
-                  nalaz.site.telefon +
-                  ".<br><br> Srdačan pozdrav, <br>"; // +
+                  "U prilogu se nalaze rezultati laboratorijskih analiza. <br> Hvala Vam na povjerenju." // <br><br>U slučaju da imate pitanja u vezi Vaših nalaza, možete nas kontaktirati na broj " +
+                // nalaz.site.telefon +
+                "<br><br> Srdačan pozdrav,"; //  ".<br><br> Srdačan pozdrav, <br>"; // +
                 // nalaz.site.odgovornoLice;
 
                 var html = require("../mailtemplate/mail_template");
