@@ -82,7 +82,7 @@ module.exports = {
       '<td bgcolor="#ffffff" align="center" style="padding: 20px 0px;">' +
       '<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 500px;" class="responsive-table">' +
       "<tr>" +
-      '<td align="center" style="font-size: 12px; line-height: 8px; font-family: Helvetica, Arial, sans-serif; color:#666666;">' +
+      '<td align="center" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666;">' +
       opis +     
       "<br>" +
       adresa +
