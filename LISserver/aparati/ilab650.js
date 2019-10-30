@@ -307,7 +307,7 @@ module.exports = {
   },
 
   parsaj_query: function(record,site,callback){
-    record = []
+
     var mongoose = require("mongoose");
     var Samples = require("../../models/Postavke");
     var Samples = mongoose.model("Samples");
@@ -366,7 +366,6 @@ module.exports = {
           break;
         case 'L':
           //console.log("Terminator: ");
-          console.log(record)
           var datum = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().substring(0, 10)
           var to = new Date(datum + "T23:59:59")
           var from = new Date(datum + "T00:00:00")
@@ -401,11 +400,6 @@ module.exports = {
                     goesIn = false
                     uzorak.tests.forEach(function (test) {
                       anaassays.forEach(function (anaassay) {
-                        console.log('----------------test-----------------')
-                        console.log(test)
-                        console.log('----------------anaassay-------------------')
-                        console.log(anaassay)
-                        console.log('----------------END-------------------')
                         if ( (anaassay.test.sifra === test.labassay.sifra) && (anaassay.test.calculated)) {
                           if(definisaniTestovi.includes(anaassay.kod)){
                           test.status_t = "U OBRADI"
