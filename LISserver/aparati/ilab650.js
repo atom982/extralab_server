@@ -307,7 +307,7 @@ module.exports = {
   },
 
   parsaj_query: function(record,site,callback){
-
+    record = []
     var mongoose = require("mongoose");
     var Samples = require("../../models/Postavke");
     var Samples = mongoose.model("Samples");
@@ -401,8 +401,11 @@ module.exports = {
                     goesIn = false
                     uzorak.tests.forEach(function (test) {
                       anaassays.forEach(function (anaassay) {
+                        console.log('----------------test-----------------')
                         console.log(test)
-                        console.log('-----------------------------------')
+                        console.log('----------------anaassay-------------------')
+                        console.log(anaassay)
+                        console.log('----------------END-------------------')
                         if ( (anaassay.test.sifra === test.labassay.sifra) && (anaassay.test.calculated)) {
                           if(definisaniTestovi.includes(anaassay.kod)){
                           test.status_t = "U OBRADI"
