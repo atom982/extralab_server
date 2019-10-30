@@ -1,0 +1,555 @@
+var mongoose = require("mongoose");
+
+var Inventar = require("../models/Inventar");
+
+var OJ = mongoose.model("OJ");
+var Dobavljac = mongoose.model("Dobavljac");
+var VrstaUgovora = mongoose.model("VrstaUgovora");
+var Produkt = mongoose.model("Produkt");
+var Ugovor = mongoose.model("Ugovor");
+
+var inventarController = {};
+
+inventarController.CreateOJ = function(req, res) {
+  var lokacija = new OJ(req.body.lokacija);
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    lokacija.save(function(err) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        OJ.find({})
+          .populate("site")
+          .exec(function(err, lokacije) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              lokacije.forEach(element => {
+                element.site_code = element.site.sifra;
+              });
+
+              lokacije = lokacije.sort(function(a, b) {
+                return a.site_code.localeCompare(b.site_code, undefined, {
+                  numeric: true,
+                  sensitivity: "base"
+                });
+              });
+
+              res.json({
+                success: true,
+                message: "Unos uspješno obavljen.",
+                lokacije: lokacije
+              });
+            }
+          });
+      }
+    });
+  }
+};
+
+inventarController.ListOJ = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    OJ.find({site:mongoose.Types.ObjectId(req.query.site)}).populate('site').exec(function (err, lista) {
+      res.json({
+        success: true,
+        message: "Lista organizacionih jedinica",
+        list: lista
+      })
+    }) 
+  }
+};
+
+inventarController.EditOJ = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    OJ.replaceOne(
+      { _id: mongoose.Types.ObjectId(req.body.lokacija._id) },
+
+      {
+        naziv: req.body.lokacija.naziv,
+        site: mongoose.Types.ObjectId(req.body.lokacija.site._id),
+        __v: req.body.lokacija.__v
+      },
+
+      { upsert: false }
+    ).exec(function(err, lokacija) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        Lokacija.find({})
+          .populate("site")
+          .exec(function(err, lokacije) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              lokacije.forEach(element => {
+                element.site_code = element.site.sifra;
+              });
+
+              lokacije = lokacije.sort(function(a, b) {
+                return a.site_code.localeCompare(b.site_code, undefined, {
+                  numeric: true,
+                  sensitivity: "base"
+                });
+              });
+
+              res.json({
+                success: true,
+                message: "Izmjena uspješno obavljena.",
+                lokacija: lokacija
+              });
+            }
+          });
+      }
+    });
+  }
+};
+
+inventarController.DeleteOJ = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    OJ.remove(
+      {
+        _id: mongoose.Types.ObjectId(req.body.lokacija._id)
+      },
+      function(err) {
+        if (err) {
+          console.log("Greška:", err);
+          res.json({
+            success: false,
+            message: err
+          });
+        } else {
+          OJ.find({})
+            .populate("site")
+            .exec(function(err, lokacije) {
+              if (err) {
+                console.log("Greška:", err);
+                res.json({
+                  success: false,
+                  message: err
+                });
+              } else {
+                lokacije.forEach(element => {
+                  element.site_code = element.site.sifra;
+                });
+
+                lokacije = lokacije.sort(function(a, b) {
+                  return a.site_code.localeCompare(b.site_code, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+
+                res.json({
+                  success: true,
+                  message: "Brisanje uspješno obavljeno.",
+                  lokacije: lokacije
+                });
+              }
+            });
+        }
+      }
+    );
+  }
+};
+
+inventarController.CreateDob = function(req, res) {
+  var dobavljac = new Dobavljac(req.body.dobavljac);
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    dobavljac.save(function(err) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        Dobavljac.find({})
+          .populate("site")
+          .exec(function(err, dobavljaci) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              if(dobavljaci.length){
+                dobavljaci.forEach(element => {
+                  element.site_code = element.site.sifra;
+                });
+  
+                dobavljaci = dobavljaci.sort(function(a, b) {
+                  return a.site_code.localeCompare(b.site_code, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+  
+                res.json({
+                  success: true,
+                  message: "Unos uspješno obavljen.",
+                  dobavljaci: dobavljaci
+                });
+              }else{
+                res.json({
+                  success: true,
+                  message: "Unos uspješno obavljen.",
+                  dobavljaci: []
+                });
+              }
+            }
+          });
+      }
+    });
+  }
+};
+inventarController.ListDob = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Dobavljac.find({site:mongoose.Types.ObjectId(req.query.site)}).populate('site').exec(function (err, lista) {
+      res.json({
+        success: true,
+        message: "Lista organizacionih jedinica",
+        dobavljaci: lista
+      })
+    }) 
+  }
+};
+inventarController.EditDob = function(req, res) {
+
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Dobavljac.replaceOne(
+      { _id: mongoose.Types.ObjectId(req.body.dobavljac._id) },
+
+      {
+        naziv: req.body.dobavljac.naziv,
+        idbroj: req.body.dobavljac.idbroj,
+        adresa: req.body.dobavljac.adresa,
+        tel: req.body.dobavljac.tel,
+        email: req.body.dobavljac.email,
+        site: mongoose.Types.ObjectId(req.body.dobavljac.site._id),
+        __v: req.body.dobavljac.__v
+      },
+      { upsert: false }
+    ).exec(function(err, dobavljac) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        Dobavljac.find({})
+          .populate("site")
+          .exec(function(err, dobavljaci) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              dobavljaci.forEach(element => {
+                element.site_code = element.site.sifra;
+              });
+
+              dobavljaci =  dobavljaci.sort(function(a, b) {
+                return a.site_code.localeCompare(b.site_code, undefined, {
+                  numeric: true,
+                  sensitivity: "base"
+                });
+              });
+              res.json({
+                success: true,
+                message: "Izmjena uspješno obavljena.",
+                dobavljaci: dobavljaci
+              });
+            }
+          });
+      }
+    });
+  }
+};
+
+inventarController.DeleteDob = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Dobavljac.remove(
+      {
+        _id: mongoose.Types.ObjectId(req.body.dobavljac._id)
+      },
+      function(err) {
+        if (err) {
+          console.log("Greška:", err);
+          res.json({
+            success: false,
+            message: err
+          });
+        } else {
+          Dobavljac.find({})
+            .populate("site")
+            .exec(function(err, dobavljaci) {
+              if (err) {
+                console.log("Greška:", err);
+                res.json({
+                  success: false,
+                  message: err
+                });
+              } else {
+                dobavljaci.forEach(element => {
+                  element.site_code = element.site.sifra;
+                });
+
+                dobavljaci = dobavljaci.sort(function(a, b) {
+                  return a.site_code.localeCompare(b.site_code, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+
+                res.json({
+                  success: true,
+                  message: "Brisanje uspješno obavljeno.",
+                  dobavljaci: dobavljaci
+                });
+              }
+            });
+        }
+      }
+    );
+  }
+};
+inventarController.CreateVrsta = function(req, res) {
+  var vrstaugovora = new VrstaUgovora(req.body.vrsta);
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    vrstaugovora.save(function(err) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        VrstaUgovora.find({})
+          .populate("site")
+          .exec(function(err, vrsteugovora) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              if(vrsteugovora.length){
+                vrsteugovora.forEach(element => {
+                  element.site_code = element.site.sifra;
+                });
+  
+                vrsteugovora = vrsteugovora.sort(function(a, b) {
+                  return a.site_code.localeCompare(b.site_code, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+  
+                res.json({
+                  success: true,
+                  message: "Unos uspješno obavljen.",
+                  vrsteugovora: vrsteugovora
+                });
+              }else{
+                res.json({
+                  success: true,
+                  message: "Unos uspješno obavljen.",
+                  vrsteugovora: []
+                });
+              }
+            }
+          });
+      }
+    });
+  }
+};
+inventarController.ListVrsta = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    VrstaUgovora.find({site:mongoose.Types.ObjectId(req.query.site)}).populate('site').exec(function (err, vrsteugovora) {
+      res.json({
+        success: true,
+        message: "Lista vrsta ugovora",
+        vrsteugovora: vrsteugovora
+      })
+    }) 
+  }
+};
+inventarController.EditVrsta = function(req, res) {
+  console.log(req.body)
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    VrstaUgovora.replaceOne(
+      { _id: mongoose.Types.ObjectId(req.body.vrsta._id) },
+
+      {
+        naziv: req.body.vrsta.naziv,
+        site: mongoose.Types.ObjectId(req.body.vrsta.site._id),
+        __v: req.body.vrsta.__v
+      },
+      { upsert: false }
+    ).exec(function(err, vrsta) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        VrstaUgovora.find({})
+          .populate("site")
+          .exec(function(err, vrsteugovora) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              vrsteugovora.forEach(element => {
+                element.site_code = element.site.sifra;
+              });
+
+              vrsteugovora =  vrsteugovora.sort(function(a, b) {
+                return a.site_code.localeCompare(b.site_code, undefined, {
+                  numeric: true,
+                  sensitivity: "base"
+                });
+              });
+              res.json({
+                success: true,
+                message: "Izmjena uspješno obavljena.",
+                vrsteugovora: vrsteugovora
+              });
+            }
+          });
+      }
+    });
+  }
+};
+inventarController.DeleteVrsta = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    VrstaUgovora.remove(
+      {
+        _id: mongoose.Types.ObjectId(req.body.vrsta._id)
+      },
+      function(err) {
+        if (err) {
+          console.log("Greška:", err);
+          res.json({
+            success: false,
+            message: err
+          });
+        } else {
+          VrstaUgovora.find({})
+            .populate("site")
+            .exec(function(err, vrsteugovora) {
+              if (err) {
+                console.log("Greška:", err);
+                res.json({
+                  success: false,
+                  message: err
+                });
+              } else {
+                vrsteugovora.forEach(element => {
+                  element.site_code = element.site.sifra;
+                });
+
+                vrsteugovora = vrsteugovora.sort(function(a, b) {
+                  return a.site_code.localeCompare(b.site_code, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+
+                res.json({
+                  success: true,
+                  message: "Brisanje uspješno obavljeno.",
+                  vrsteugovora: vrsteugovora
+                });
+              }
+            });
+        }
+      }
+    );
+  }
+};
+module.exports = inventarController;
