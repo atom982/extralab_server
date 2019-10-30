@@ -366,6 +366,7 @@ module.exports = {
           break;
         case 'L':
           //console.log("Terminator: ");
+          console.log(record)
           var datum = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().substring(0, 10)
           var to = new Date(datum + "T23:59:59")
           var from = new Date(datum + "T00:00:00")
