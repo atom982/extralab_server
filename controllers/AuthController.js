@@ -49,6 +49,7 @@ authController.login = function(req, res) {
                   expiresIn: 3600,
                   site: user.site,
                   language: user.postavke.language,
+                  customer: user.postavke.customer,
                   idleTime: user.postavke.idleTime,
                   pid_bcode: user.postavke.pid_bcode,
 

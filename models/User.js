@@ -12,6 +12,7 @@ const Schema = mongoose.Schema({
   sites: [{ type: mongoose.Schema.ObjectId, ref: "Site" }],
   postavke: {
     card_view: { type: Boolean, default: false },
+    customer: { type: Boolean, default: false },
     pid_bcode: { type: Boolean, default: false },
     language: { type: String, default: "ba" },
     idleTime: { type: Number, default: 28800000 },
