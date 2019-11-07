@@ -1694,4 +1694,426 @@ reportController.FPodanuGraph = function(req, res) {
       });
   }
 };
+
+// Pacijenti po lokaciji, PDFDocument
+
+class PDFDocumentWithTablesPPoLokaciji extends PDFDocument {
+  constructor(options) {
+    super(options);
+  }
+
+  table(table, arg0, arg1, arg2) {
+    let startX = this.page.margins.left,
+      startY = this.y;
+    let options = {};
+
+    if (typeof arg0 === "number" && typeof arg1 === "number") {
+      startX = arg0;
+      startY = arg1;
+
+      if (typeof arg2 === "object") options = arg2;
+    } else if (typeof arg0 === "object") {
+      options = arg0;
+    }
+
+    const columnCount = table.headers.length;
+    const columnSpacing = options.columnSpacing || 2;
+    const rowSpacing = options.rowSpacing || 2;
+    const usableWidth =
+      options.width ||
+      this.page.width - this.page.margins.left - this.page.margins.right;
+    const prepareHeader = options.prepareHeader || (() => {});
+    const prepareRow = options.prepareRow || (() => {});
+    const computeRowHeight = row => {
+      let result = 0;
+
+      row.forEach(cell => {
+        const cellHeight = this.heightOfString(cell, {
+          width: columnWidth,
+          align: "left"
+        });
+        result = Math.max(result, cellHeight);
+      });
+      return result + rowSpacing;
+    };
+
+    const columnContainerWidth = usableWidth / columnCount;
+    const columnWidth = columnContainerWidth - columnSpacing;
+    const maxY = this.page.height - this.page.margins.bottom;
+
+    let rowBottomY = 0;
+
+    this.on("pageAdded", () => {
+      startY = this.page.margins.top + 20;
+      rowBottomY = 0;
+    });
+    // Allow the user to override style for headers
+    prepareHeader();
+    // Check to have enough room for header and first rows
+    if (startY + 3 * computeRowHeight(table.headers) > maxY) this.addPage();
+    // Print all headers
+    table.headers.forEach((header, i) => {
+      if (i === 0) {
+        this.text(header, startX + i * columnContainerWidth, startY, {
+          width: columnWidth,
+          align: "left"
+        });
+      }
+      if (i === 1) {
+        this.text(header, startX + i * columnContainerWidth, startY, {
+          width: columnWidth + 100,
+          align: "left"
+        });
+      }
+      if (i === 2) {
+        this.text(header, startX + 100 + i * columnContainerWidth, startY, {
+          width: columnWidth - 100,
+          align: "left"
+        });
+      }
+    });
+    // Refresh the y coordinate of the bottom of the headers row
+    rowBottomY = Math.max(startY + computeRowHeight(table.headers), rowBottomY);
+    // Separation line between headers and rows
+    this.moveTo(startX, rowBottomY - rowSpacing * 0.5)
+      .lineTo(startX + usableWidth, rowBottomY - rowSpacing * 0.5)
+      .lineWidth(2)
+      .stroke();
+    table.rows.forEach((row, i) => {
+      const rowHeight = 15; // computeRowHeight(row)
+      var pageAdded = false;
+      var correction = 0;
+      // Switch to next page if we cannot go any further because the space is ove
+      // For safety, consider 3 rows margin instead of just one
+      if (startY + 3 * rowHeight < maxY) {
+        startY = rowBottomY + rowSpacing;
+      } else {
+        this.addPage();
+        pageAdded = true;
+      }
+      // Allow the user to override style for rows
+      prepareRow(row, i);
+      // Print all cells of the current row
+      row.forEach((cell, i) => {
+        if (i === 0) {
+          var Niz = cell.split("\n");
+
+          Niz.forEach(element => {
+            if (element.includes("Godište:")) {
+              this.fontSize(8);
+              this.text(
+                element,
+                startX + i * columnContainerWidth,
+                startY + 12,
+                {
+                  width: columnWidth,
+                  align: "left"
+                }
+              );
+            } else if (element.includes("Nalaz izdan:")) {
+              this.fontSize(8);
+              this.text(
+                element,
+                startX + i * columnContainerWidth,
+                startY + 22,
+                {
+                  width: columnWidth,
+                  align: "left"
+                }
+              );
+            } else {
+              this.fontSize(9);
+              this.text(element, startX + i * columnContainerWidth, startY, {
+                width: columnWidth,
+                align: "left"
+              });
+            }
+          });
+        }
+        if (i === 1) {
+          this.fontSize(10);
+          var Arr = cell.split("\n");
+
+          // console.log(Arr.length);
+          if (Arr.length === 2) {
+            correction = 12;
+          } else {
+            correction = 0;
+          }
+
+          Arr.forEach(element => {
+            this.text(element, startX + i * columnContainerWidth, startY, {
+              width: columnWidth + 100,
+              align: "left",
+              underline: false
+            });
+            startY = this.y;
+
+            if (element.length) {
+              this.moveTo(this.x, this.y)
+                .lineTo(this.x + 230, this.y)
+                .lineWidth(0.5)
+                .opacity(0.7)
+                .stroke()
+                .opacity(1); // Reset opacity after drawing the line
+
+              this.moveTo(484, this.y)
+                .lineTo(535, this.y)
+                .lineWidth(0.5)
+                .opacity(0.7)
+                .stroke()
+                .opacity(1); // Reset opacity after drawing the line
+            }
+          });
+        }
+      });
+      // Refresh the y coordinate of the bottom of this row
+      rowBottomY = Math.max(startY + rowHeight, rowBottomY) + correction;
+      // Separation line between rows
+      this.moveTo(startX, rowBottomY - rowSpacing * 0.5)
+        .lineTo(startX + usableWidth, rowBottomY - rowSpacing * 0.5)
+        .lineWidth(1)
+        .opacity(0.7)
+        .stroke()
+        .opacity(1); // Reset opacity after drawing the line
+    });
+    this.x = startX;
+    this.moveDown();
+    return this;
+  }
+}
+
+// Pacijenti po lokaciji, Controller
+
+reportController.PPoLokaciji = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    var range = req.body.range.split("do");
+    if (range.length === 2) {
+      to = range[1].trim() + "T21:59:59";
+      to = new Date(to + "Z");
+      from = range[0].trim() + "T00:00:00";
+      from = new Date(from + "Z");
+    } else {
+      to = range[0].trim() + "T21:59:59";
+      to = new Date(to + "Z");
+      from = range[0].trim() + "T00:00:00";
+      from = new Date(from + "Z");
+    }
+
+    var tmpTime = "";
+    if (req.body.range.length > 20) {
+      tmpTime =
+        req.body.range.slice(8, 10) +
+        "." +
+        req.body.range.slice(5, 7) +
+        "." +
+        req.body.range.slice(0, 4) +
+        " do " +
+        req.body.range.slice(22, 24) +
+        "." +
+        req.body.range.slice(19, 21) +
+        "." +
+        req.body.range.slice(14, 18);
+    } else {
+      tmpTime =
+        req.body.range.slice(8, 10) +
+        "." +
+        req.body.range.slice(5, 7) +
+        "." +
+        req.body.range.slice(0, 4);
+    }
+
+    var uslov = {};
+
+    uslov = {
+      created_at: {
+        $gt: from,
+        $lt: to
+      },
+      customer: mongoose.Types.ObjectId(req.body.customer._id),
+      status: true
+    };
+
+    Nalazi.find(uslov)
+      .populate("patient site customer")
+      .exec(function(err, nalazi) {
+        if (err) {
+          console.log("Greška:", err);
+        } else {
+          if (nalazi.length) {
+            const doc = new PDFDocumentWithTablesPPoLokaciji({
+              bufferPages: true
+            });
+
+            doc.registerFont("PTSansRegular", config.nalaz_ptsansregular);
+            doc.registerFont("PTSansBold", config.nalaz_ptsansbold);
+            doc
+              .font("PTSansRegular")
+              .fontSize(16)
+              .fillColor("#black")
+              .text("Pošiljatelj: " + req.body.customer.opis, 70, 50, {
+                align: "left"
+              });
+
+            doc.moveDown();
+
+            var headers = ["Pacijent", "Analiza", "Cijena"];
+            var rows = [];
+            var linerow = [];
+
+            nalazi.forEach(nalaz => {
+              var tmp_time = new Date(
+                new Date(nalaz.created_at).getTime() -
+                  new Date(nalaz.created_at).getTimezoneOffset() * 60000
+              ).toISOString();
+
+              var akcija =
+                JSON.stringify(nalaz.created_at).slice(9, 11) +
+                "." +
+                JSON.stringify(nalaz.created_at).slice(6, 8) +
+                "." +
+                JSON.stringify(nalaz.created_at).slice(1, 5);
+              var time = JSON.stringify(tmp_time).substring(12, 17);
+
+              // console.log(akcija);
+              // console.log(time);
+
+              var godiste = nalaz.patient.jmbg.substring(4, 7);
+              switch (godiste[0]) {
+                case "9":
+                  godiste = "1" + godiste + ".";
+                  break;
+                case "0":
+                  godiste = "2" + godiste + ".";
+                  break;
+                default:
+                  break;
+              }
+
+              linerow = [];
+              analize = "";
+
+              if (godiste == "1920.") {
+                var ime =
+                  nalaz.patient.ime.trim() +
+                  " " +
+                  nalaz.patient.prezime.trim() +
+                  "\n" +
+                  "Godište: Nema podataka." +
+                  "\n" +
+                  "Nalaz izdan: " +
+                  akcija +
+                  ". godine";
+              } else {
+                var ime =
+                  nalaz.patient.ime.trim() +
+                  " " +
+                  nalaz.patient.prezime.trim() +
+                  "\n" +
+                  "Godište: " +
+                  godiste +
+                  "\n" +
+                  "Nalaz izdan: " +
+                  akcija +
+                  ". godine";
+              }
+
+              linerow.push(ime);
+
+              nalaz.rows.forEach(sekc => {
+                sekc.forEach(test => {
+                  if (test.hasOwnProperty("multi")) {
+                    if (test.test.includes("[")) {
+                      analize += test.test.substring(4).trim() + "\n";
+                    } else {
+                      analize += test.test.trim() + "\n";
+                    }
+                  } else {
+                    if (test.rezultat[0].includes("[")) {
+                      analize += test.rezultat[0].substring(4).trim() + "\n";
+                    } else {
+                      analize += test.rezultat[0].trim() + "\n";
+                    }
+                  }
+                });
+              });
+
+              linerow.push(analize);
+
+              rows.push(linerow);
+
+              doc.table(
+                {
+                  headers: headers,
+                  rows: rows
+                },
+                {
+                  prepareHeader: () => doc.fontSize(8),
+                  prepareRow: (row, i) => doc.fontSize(10)
+                }
+              );
+
+              if (analize.split("\n").length === 2) {
+                doc.moveDown();
+              } else {
+              }
+
+              rows = [];
+
+              doc.moveDown();
+            });
+            const range = doc.bufferedPageRange();
+
+            for (let i = range.start; i < range.start + range.count; i++) {
+              doc.switchToPage(i);
+              doc
+                .font("PTSansRegular")
+                .fontSize(13)
+                .fillColor("#7B8186")
+                .text(tmpTime, 70, 25);
+              doc
+                .font("PTSansRegular")
+                .fontSize(8)
+                .fillColor("#black")
+                .text(
+                  `Stranica ${i + 1} od ${range.count}`,
+                  doc.page.width / 2 - 25,
+                  doc.page.height - 30,
+                  { lineBreak: false }
+                );
+            }
+            doc.end();
+            doc.pipe(
+              fs
+                .createWriteStream(
+                  config.report_path +
+                    "ppolokaciji/" +
+                    req.body.timestamp +
+                    ".pdf"
+                )
+                .on("finish", function() {
+                  res.json({
+                    success: true,
+                    message: "Izvještaj uspjesno kreiran",
+                    id: req.body.range
+                  });
+                })
+            );
+          } else {
+            res.json({
+              success: true,
+              message: "Nema dostupnih podataka.",
+              id: req.body.range
+            });
+          }
+        }
+      });
+  }
+};
+
 module.exports = reportController;

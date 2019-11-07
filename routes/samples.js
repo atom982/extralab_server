@@ -4,10 +4,11 @@ var router = express.Router();
 var samples = require("../controllers/SampleController.js");
 
 router.get("/uzorci/lokacije/list", samples.LokacijeList);
+router.get("/uzorci/customers/list", samples.CustomersList);
 router.post("/uzorci/sekcije/list", samples.ListBySection);
-// VuesticModalEdit, Salko Islamović (22.03.2019)
+// 22.03.2019
 router.post("/uzorci/labassay/tip", samples.ListByLAbAssayType);
-// End of ...
+// ............................................................
 router.post("/uzorci/sekcije/listp", samples.ListBySectionP);
 router.post("/uzorci/sekcije/testovi", samples.TestsBySection);
 router.get("/uzorci/sekcije/list", samples.SectionList);

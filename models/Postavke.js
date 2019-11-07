@@ -19,6 +19,14 @@ var SchemaLokacija = mongoose.Schema({
   site: { type: mongoose.Schema.ObjectId, ref: "Site" }
 });
 
+var SchemaCustomers = mongoose.Schema({
+  naziv: { type: String, required: true },
+  opis: { type: String, required: true },
+  telefon: { type: String, required: true },
+  email: { type: String, required: true },
+  adresa: { type: String, required: true }
+});
+
 var SchemaDoktor = mongoose.Schema({
   doktorIme: { type: String, required: true },
   doktorPrezime: { type: String, required: true },
@@ -236,6 +244,7 @@ var SchemaSamples = mongoose.Schema({
   status: { type: String, default: "n/a" },
   doktor: { type: String, default: "n/a" },
   lokacija: { type: mongoose.Schema.ObjectId, ref: "Lokacija" },
+  customer: { type: mongoose.Schema.ObjectId, ref: "Customers", default: null },
   patient: { type: mongoose.Schema.ObjectId, ref: "Patients" },
   trudnica: { type: String, default: "NE" },
   menstc: { type: String, default: "NE" },
@@ -265,10 +274,11 @@ var SchemaResults = mongoose.Schema({
   verificiran: { type: Boolean, default: false },
   sample: { type: mongoose.Schema.ObjectId, ref: "Samples" },
   patient: { type: mongoose.Schema.ObjectId, ref: "Patients" },
+  customer: { type: mongoose.Schema.ObjectId, ref: "Customers", default: null },
   status: { type: String },
   odobren: { type: Boolean, default: false },
   isPrinted: { type: Boolean, default: false },
-  protokol: { type: String, default: '' },
+  protokol: { type: String, default: "" },
   rezultati: [
     {
       labassay: { type: mongoose.Schema.ObjectId, ref: "LabAssays" }, // link na kks
@@ -374,6 +384,7 @@ var SchemaNalazi = mongoose.Schema({
   uzorci: { type: Array, default: [] },
   timestamp: { type: String, default: "" },
   location: { type: String, default: "" },
+  customer: { type: mongoose.Schema.ObjectId, ref: "Customers", default: null },
   naziv: { type: String, default: "" },
   height: { type: String, default: "0" },
   komentar: { type: String, default: "" },
@@ -474,29 +485,30 @@ var SchemaUzorci = mongoose.Schema({
   komentar: { type: String, default: "" }
 });
 var SchemaIntegrationRaw = mongoose.Schema({
-  protokol: { type: String,unique: true ,required: true },
-  pime:{ type: String, required: true },
-  pprez:{ type: String, required: true },
-  imeo:{ type: String, required: true },
-  jmbg7:{ type: String, required: true },
+  protokol: { type: String, unique: true, required: true },
+  pime: { type: String, required: true },
+  pprez: { type: String, required: true },
+  imeo: { type: String, required: true },
+  jmbg7: { type: String, required: true },
   spol: { type: String },
-  analize: {type: Array, default: []},  
+  analize: { type: Array, default: [] },
   created_at: { type: Date, default: Date.now },
   site: { type: mongoose.Schema.ObjectId, ref: "Site" }
 });
 var SchemaIntegration = mongoose.Schema({
-  remote_id: { type: String,unique: true ,required: true },
-  local_id:  { type: mongoose.Schema.ObjectId, ref: "LabAssays" },
+  remote_id: { type: String, unique: true, required: true },
+  local_id: { type: mongoose.Schema.ObjectId, ref: "LabAssays" },
   multiparam: {
-               type:{ Boolean, required: true, default: false},
-               id:{ type: mongoose.Schema.ObjectId }
-              }
+    type: { Boolean, required: true, default: false },
+    id: { type: mongoose.Schema.ObjectId }
+  }
 });
 const models = [
   (tipAparata = mongoose.model("tipAparata", SchemaTip)),
   (tehnologijaAparata = mongoose.model("tehnologijaAparata", SchemaTehno)),
   (tipUzorka = mongoose.model("tipUzorka", SchemaTipUzorka)),
   (Lokacija = mongoose.model("Lokacija", SchemaLokacija)),
+  (Customers = mongoose.model("Customers", SchemaCustomers)),
   (Doktor = mongoose.model("Doktor", SchemaDoktor)),
   (Sekcija = mongoose.model("Sekcija", SchemaSekcija)),
   (grupaTesta = mongoose.model("grupaTesta", SchemaGrupaTesta)),
@@ -517,7 +529,7 @@ const models = [
   (Settings = mongoose.model("Settings", SchemaSettings)),
   (Uzorci = mongoose.model("Uzorci", SchemaUzorci)),
   (IntegrationRaw = mongoose.model("IntegrationRaw", SchemaIntegrationRaw)),
-  (Integration = mongoose.model("Integration", SchemaIntegration)),
+  (Integration = mongoose.model("Integration", SchemaIntegration))
 ];
 
 module.exports = models;

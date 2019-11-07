@@ -1068,15 +1068,20 @@ nalazController.Nalaz = function(req, res) {
                               .rezultat_m
                         });
                       } else {
-
-                        var kontrola = "No Class"
-                        if(rezultat.rezultat[rezultat.rezultat.length - 1].rezultat_m[0].pozitivan){
-                          kontrola = "Red"
-                        } else if(rezultat.rezultat[rezultat.rezultat.length - 1].rezultat_m[0].negativan){
-                          kontrola = "Green"
+                        var kontrola = "No Class";
+                        if (
+                          rezultat.rezultat[rezultat.rezultat.length - 1]
+                            .rezultat_m[0].pozitivan
+                        ) {
+                          kontrola = "Red";
+                        } else if (
+                          rezultat.rezultat[rezultat.rezultat.length - 1]
+                            .rezultat_m[0].negativan
+                        ) {
+                          kontrola = "Green";
                         }
-                       
-                        temp[1].kontrola = kontrola
+
+                        temp[1].kontrola = kontrola;
 
                         novirezultati.push({
                           sekcija: rezultat.labassay.sekcija,
@@ -1195,7 +1200,6 @@ nalazController.Nalaz = function(req, res) {
                   sekcijeniz.push(tempniz);
                 }
               }
-              
             }
           });
 
@@ -1292,6 +1296,13 @@ nalazController.Nalaz = function(req, res) {
                 obj.uzorci = req.body.uzorci;
                 obj.timestamp = req.body.timestamp;
                 obj.location = req.body.location;
+
+                // console.log(req.body.klijent);
+
+                if (req.body.klijent != null) {
+                  obj.customer = mongoose.Types.ObjectId(req.body.klijent);
+                }
+
                 obj.naziv = req.body.naziv;
 
                 obj.status = req.body.status;

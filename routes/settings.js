@@ -24,6 +24,7 @@ router.post("/postavke/analysers/insert", settings.AnalysersInsert);
 
 // Lokacije
 router.get("/postavke/list/lokacije", settings.LokacijeGet);
+router.get("/postavke/list/customers", settings.CustomersGet);
 router.post("/postavke/lokacije/edit", settings.LokacijeEdit);
 router.post("/postavke/lokacije/remove", settings.LokacijeRemove);
 router.post("/postavke/lokacije/insert", settings.LokacijeInsert);

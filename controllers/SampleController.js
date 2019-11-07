@@ -55,6 +55,31 @@ sampleController.LokacijeList = function(req, res) {
   }
 };
 
+sampleController.CustomersList = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Customers.find({}).exec(function(err, customers) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        res.json({
+          success: true,
+          message: "Customers",
+          customers
+        });
+      }
+    });
+  }
+};
+
 sampleController.TestsBySection = function(req, res) {
   if (mongoose.connection.readyState != 1) {
     res.json({
@@ -4780,8 +4805,8 @@ sampleController.sacuvajUzorke = function(req, res) {
               }
             });
           });
-          console.log(req.body.uzorci)
-          console.log('KRAJ')
+          console.log(req.body.uzorci);
+          console.log("KRAJ");
           req.body.uzorci.forEach(uzorakFront => {
             uzorakFront.all.sort(function(a, b) {
               return a == b ? 0 : +(a < b) || -1;
@@ -5292,6 +5317,13 @@ sampleController.sacuvajUzorke = function(req, res) {
             uzorakFront.tests = tests;
             uzorakFront.site = mongoose.Types.ObjectId(req.body.site);
             uzorakFront.lokacija = mongoose.Types.ObjectId(req.body.lokacija);
+
+            if (req.body.klijent != null) {
+              uzorakFront.customer = mongoose.Types.ObjectId(
+                req.body.klijent._id
+              );
+            }
+
             uzorakFront.type = uzorakFront.ime;
             uzorakFront.trudnica = req.body.drstanje;
 
@@ -5771,12 +5803,22 @@ sampleController.sacuvajUzorke = function(req, res) {
                                         );
                                         rezultat.sample = sample;
                                         rezultat.id = sample.id;
-                                        if (req.body.protokol !== undefined && req.body.protokol !== null) { 
-                                          rezultat.protokol = req.body.protokol
-                                         }else{
-                                          rezultat.protokol =  uzorakFront.pid
-                                         }
+                                        if (
+                                          req.body.protokol !== undefined &&
+                                          req.body.protokol !== null
+                                        ) {
+                                          rezultat.protokol = req.body.protokol;
+                                        } else {
+                                          rezultat.protokol = uzorakFront.pid;
+                                        }
                                         rezultat.patient = sample.patient;
+
+                                        if (req.body.klijent != null) {
+                                          rezultat.customer = mongoose.Types.ObjectId(
+                                            req.body.klijent._id
+                                          );
+                                        }
+
                                         rezultat.status = "U OBRADI";
 
                                         if (req.body.pid != "") {

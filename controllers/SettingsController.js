@@ -645,6 +645,40 @@ settingsController.LokacijeGet = function(req, res) {
   }
 };
 
+settingsController.CustomersGet = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Customers.find({})
+      .populate("site")
+      .exec(function(err, customers) {
+        if (err) {
+          console.log("Greška:", err);
+          res.json({
+            success: false,
+            message: err
+          });
+        } else {
+          customers = customers.sort(function(a, b) {
+            return a.naziv.localeCompare(b.naziv, undefined, {
+              numeric: true,
+              sensitivity: "base"
+            });
+          });
+
+          res.json({
+            success: true,
+            message: "Customers.",
+            customers: customers
+          });
+        }
+      });
+  }
+};
+
 settingsController.LokacijeEdit = function(req, res) {
   if (mongoose.connection.readyState != 1) {
     res.json({

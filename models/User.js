@@ -18,9 +18,18 @@ const Schema = mongoose.Schema({
     access: { type: Object, default: { level: 1, verify: false } },
     display: {
       type: Object,
-      default: { list: "15", show: "20", columns: "7", rows: "1" } 
+      default: { list: "15", show: "20", columns: "7", rows: "1" }
     },
-    reports: { type: Object, default: { fpodanu: true, ppodanu: true, ppomjestu: true, protokol: true} },
+    reports: {
+      type: Object,
+      default: {
+        fpodanu: true,
+        ppodanu: true,
+        ppomjestu: true,
+        ppolokaciji: true,
+        protokol: true
+      }
+    }
   },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
