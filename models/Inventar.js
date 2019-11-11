@@ -1,31 +1,7 @@
 const mongoose = require("mongoose");
 
 
-const SchemaProdukt = mongoose.Schema({
-      LN:  { type: String, required: true, unique:true },
-      opis: { type: String, required: true },
-      zasticeni_naziv: { type: String, required: true },
-      zemlja_porijekla: { type: String, required: true },
-      jedinica_mjere:{ type: String, required: true },
-      pakovanje:{ type: String, required: true },
-      kolicina:{ type: String, required: true },
-      lot:{ type: String, required: true },
-      shelflife:{ type: String, required: true },
-      expDT:{ type: String, required: true },
-      ulazDT:{ type: String, required: true },
-      izlazDT:{ type: String, required: true },
-      ulazKM:{ type: String, required: true },
-      izlazKM:{ type: String, required: true },
-      klasa:{ type: mongoose.Schema.ObjectId, ref: "Klasa" },
-      platforma:{ type: mongoose.Schema.ObjectId, ref: "Platforma" },
-      program:{ type: mongoose.Schema.ObjectId, ref: "Program" },
-      oj:{ type: mongoose.Schema.ObjectId, ref: "OJ" },
-      created_at: { type: Date, default: Date.now },
-      updated_at: { type: Date, default: Date.now },
-      created_by: { type: String, default:"" },
-      updated_by:{ type: String, default:"" },
-      site: { type: mongoose.Schema.ObjectId, ref: "Site" }
-});
+
 
 const SchemaOJ = mongoose.Schema({
       naziv: { type: String, required: true },
@@ -51,17 +27,44 @@ const SchemaVrstaUgovora = mongoose.Schema({
 
 const SchemaUgovor = mongoose.Schema({
       naziv:  { type: String, required: true },
-      datum:{ type: Date, default: Date.now },
+      vazi_od: { type: Date, default: Date.now },
+      vazi_do: { type: Date, default: Date.now },
       vrijednost: { type: String, required: true },
-      vrsta: { type: String, required: true },//okvirni,revers,direktni
+      vrsta:{ type: mongoose.Schema.ObjectId, ref: "VrstaUgovora" },//okvirni,revers,direktni
       dobavljac:  { type: mongoose.Schema.ObjectId, ref: "Dobavljac" },
-      trajanje:{ type: String, required: true },
+      oj:{ type: mongoose.Schema.ObjectId, ref: "OJ" },
       site: { type: mongoose.Schema.ObjectId, ref: "Site" },
       created_at: { type: Date, default: Date.now },
       updated_at: { type: Date, default: Date.now },
       created_by: { type: String, default:"" },
       updated_by: { type: String, default:"" },
   });
+
+  const SchemaProdukt = mongoose.Schema({
+    LN:  { type: String, required: true, unique:true },
+    opis: { type: String, required: true },
+    zasticeni_naziv: { type: String, required: true },
+    zemlja_porijekla: { type: String, required: true },
+    jedinica_mjere:{ type: String, required: true },
+    pakovanje:{ type: String, required: true },
+    kolicina:{ type: String, required: true },
+    lot:{ type: String, required: true },
+    shelflife:{ type: String, required: true },
+    expDT:{ type: String, required: true },
+    ulazDT:{ type: String, required: true },
+    izlazDT:{ type: String, required: true },
+    ulazKM:{ type: String, required: true },
+    izlazKM:{ type: String, required: true },
+    klasa:{ type: mongoose.Schema.ObjectId, ref: "Klasa" },
+    platforma:{ type: mongoose.Schema.ObjectId, ref: "Platforma" },
+    program:{ type: mongoose.Schema.ObjectId, ref: "Program" },
+    oj:{ type: mongoose.Schema.ObjectId, ref: "OJ" },
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now },
+    created_by: { type: String, default:"" },
+    updated_by:{ type: String, default:"" },
+    site: { type: mongoose.Schema.ObjectId, ref: "Site" }
+});
 const models = [
   Produkt = mongoose.model("Produkt", SchemaProdukt),
   OJ= mongoose.model("OJ", SchemaOJ),

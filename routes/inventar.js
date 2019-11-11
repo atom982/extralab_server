@@ -20,4 +20,10 @@ router.post("/inventar/createvrsta", inventar.CreateVrsta);
 router.get("/inventar/listvrsta", inventar.ListVrsta);
 router.post("/inventar/editvrsta", inventar.EditVrsta);
 router.post("/inventar/deletevrsta", inventar.DeleteVrsta);
+
+// Ugovor
+router.post("/inventar/createugovor", inventar.CreateUgovor);
+router.get("/inventar/listugovor", inventar.ListUgovor);
+router.post("/inventar/editugovor", inventar.EditUgovor);
+router.post("/inventar/deleteugovor", inventar.DeleteUgovor);
 module.exports = router;
