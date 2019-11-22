@@ -213,7 +213,7 @@ module.exports = {
                                                 });
                                               });
                                             });
-                                            if(k === rezultati.length+2){
+                                            if(k === rezultati.length+3){
                                               rezultat.controlmulti = true
                                               console.log('prije cuvanja')
                                               //console.log(rezultat.multi)
