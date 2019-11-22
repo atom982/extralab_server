@@ -1212,7 +1212,7 @@ odobravanjeController.RetestActivate = function(req, res) {
         console.log("Greška:", err);
       } else {
         rezultat.rezultati.forEach(test => {
-          if (req.body.id_t === test.labassay.sifra) {
+          if (req.body.id_t == test.labassay.sifra) {
             test.retest = true;
             console.log("Retest activate Result")
             console.log(req.body.id_t)
@@ -1227,7 +1227,7 @@ odobravanjeController.RetestActivate = function(req, res) {
               console.log("Greška:", err);
             } else {
               uzorak.tests.forEach(element => {
-                if (element.labassay.sifra === req.body.id_t) {
+                if (element.labassay.sifra == req.body.id_t) {
                   element.status_r = true;
                   console.log("Retest activate Sample")
                   console.log(req.body.id_t)
@@ -1260,7 +1260,7 @@ odobravanjeController.RetestDeactivate = function(req, res) {
         console.log("Greška:", err);
       } else {
         rezultat.rezultati.forEach(test => {
-          if (req.body.id_t === test.labassay.sifra) {
+          if (req.body.id_t == test.labassay.sifra) {
             test.retest = false;
             console.log("Retest deactivate Result")
             console.log(req.body.id_t)
@@ -1275,7 +1275,7 @@ odobravanjeController.RetestDeactivate = function(req, res) {
               console.log("Greška:", err);
             } else {
               uzorak.tests.forEach(element => {
-                if (element.labassay.sifra === req.body.id_t) {
+                if (element.labassay.sifra == req.body.id_t) {
                   element.status_r = false;
                   console.log("Retest activate Sample")
                   console.log(req.body.id_t)
