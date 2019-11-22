@@ -378,7 +378,7 @@ module.exports = {
               $gt: from,
               $lt: to
             },
-            status:'n/a'
+            //status:'n/a'
             //site: mongoose.Types.ObjectId(site)
           }
             var testovi = [];
