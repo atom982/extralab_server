@@ -215,6 +215,8 @@ module.exports = {
                                                 });
                                               });
                                             });
+                                            console.log('k')
+                                            console.log(k)
                                             if(k === rezultati.length+3){
                                               rezultat.controlmulti = true
                                               console.log('prije cuvanja')
