@@ -395,7 +395,8 @@ module.exports = {
                   callback(recordret);
                 } else {
                   uzorci.forEach(uzorak => {
-                         
+                       console.log('uzorak.pid')  
+                       console.log(uzorak.pid) 
                   AnaAssays.find({}).populate('aparat test').lean().exec(function (err, anaassays) {
                     goesIn = false
                     uzorak.tests.forEach(function (test) {
@@ -409,6 +410,10 @@ module.exports = {
                         if ( (anaassay.test.sifra === test.labassay.sifra) ) {
                           goesIn = true
                         }
+                        console.log('statusi')  
+                        console.log(test.status_r)  
+                        console.log(anaassay.test.sifra) 
+                        console.log(test.labassay.sifra)  
                         if (( (anaassay.test.sifra === test.labassay.sifra) && (test.status_r === true)) || ( (anaassay.test.sifra === test.labassay.sifra) && (test.status_t === "ZAPRIMLJEN") )) {
                           if(definisaniTestovi.includes(anaassay.kod)){
                             testovi.push('1'+anaassay.kod)
