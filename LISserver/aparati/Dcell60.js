@@ -161,7 +161,7 @@ module.exports = {
                                     });
                                     console.log(rezultati)
                                     console.log("terminator"); 
-                                    //console.log(rezultati)  
+                                    console.log(rezultati.length)  
                                     Results.findOne({id:sid}).populate('aparat').exec(function (err, rezultat) {
                                       if (err) {
                                         console.log("Greška:", err);
