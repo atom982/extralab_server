@@ -1227,6 +1227,8 @@ odobravanjeController.RetestActivate = function(req, res) {
               console.log("Greška:", err);
             } else {
               uzorak.tests.forEach(element => {
+                console.log(element.labassay.sifra)
+
                 if (element.labassay.sifra == req.body.id_t) {
                   element.status_r = true;
                   console.log("Retest activate Sample")
@@ -1277,7 +1279,7 @@ odobravanjeController.RetestDeactivate = function(req, res) {
               uzorak.tests.forEach(element => {
                 if (element.labassay.sifra == req.body.id_t) {
                   element.status_r = false;
-                  console.log("Retest activate Sample")
+                  console.log("Retest deactivate Sample")
                   console.log(req.body.id_t)
                 }
               });
