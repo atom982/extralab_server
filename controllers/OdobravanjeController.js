@@ -1211,6 +1211,8 @@ odobravanjeController.RetestActivate = function(req, res) {
         rezultat.rezultati.forEach(test => {
           if (req.body.id_t === test.labassay.sifra) {
             test.retest = true;
+            console.log("Retest activate Result")
+            console.log(req.body.id_t)
           }
         });
         Samples.findOne({
@@ -1224,8 +1226,12 @@ odobravanjeController.RetestActivate = function(req, res) {
               uzorak.tests.forEach(element => {
                 if (element.labassay.sifra === req.body.id_t) {
                   element.status_r = true;
+                  console.log("Retest activate Sample")
+                  console.log(req.body.id_t)
                 }
               });
+
+              
               uzorak.save();
               rezultat.save();
 
@@ -1251,6 +1257,8 @@ odobravanjeController.RetestDeactivate = function(req, res) {
         rezultat.rezultati.forEach(test => {
           if (req.body.id_t === test.labassay.sifra) {
             test.retest = false;
+            console.log("Retest deactivate Result")
+            console.log(req.body.id_t)
           }
         });
         Samples.findOne({
@@ -1264,6 +1272,8 @@ odobravanjeController.RetestDeactivate = function(req, res) {
               uzorak.tests.forEach(element => {
                 if (element.labassay.sifra === req.body.id_t) {
                   element.status_r = false;
+                  console.log("Retest activate Sample")
+                  console.log(req.body.id_t)
                 }
               });
               uzorak.save();
