@@ -60,82 +60,82 @@ module.exports = {
                                     console.log('WBC:'+element.substring(37,41))
                                     rezultati.push({
                                         analit:'WBC',
-                                        analit_rez:element.substring(37,40)+'.'+element.substring(40,41),
+                                        analit_rez:parseFloat(element.substring(37,40)+'.'+element.substring(40,41)).toFixed(1),
                                         analit_status:''
                                     })  
                                     rezultati.push({
                                         analit:'LYM',
-                                        analit_rez:element.substring(41,44)+'.'+element.substring(44,45),
+                                        analit_rez:parseFloat(element.substring(41,44)+'.'+element.substring(44,45)).toFixed(1),
                                         analit_status:''
                                         })    
                                     rezultati.push({
                                         analit:'MID',
-                                        analit_rez:element.substring(45,48)+'.'+element.substring(48,49),
+                                        analit_rez:parseFloat(element.substring(45,48)+'.'+element.substring(48,49)).toFixed(1),
                                         analit_status:''
                                         })  
                                     rezultati.push({
                                         analit:'GRA',
-                                        analit_rez:element.substring(49,52)+'.'+element.substring(52,53),
+                                        analit_rez:parseFloat(element.substring(49,52)+'.'+element.substring(52,53)).toFixed(1),
                                         analit_status:''
                                         })
                                     rezultati.push({
                                         analit:'LYM%',
-                                        analit_rez:element.substring(53,55)+'.'+element.substring(55,56),
+                                        analit_rez:parseFloat(element.substring(53,55)+'.'+element.substring(55,56)).toFixed(1),
                                         analit_status:''
                                         })
                                     rezultati.push({
                                         analit:'MID%',
-                                        analit_rez:element.substring(56,58)+'.'+element.substring(58,59),
+                                        analit_rez:parseFloat(element.substring(56,58)+'.'+element.substring(58,59)).toFixed(1),
                                         analit_status:''
                                         })
                                     rezultati.push({
                                         analit:'GRA%',
-                                        analit_rez:element.substring(59,61)+'.'+element.substring(61,62),
+                                        analit_rez:parseFloat(element.substring(59,61)+'.'+element.substring(61,62)).toFixed(1),
                                         analit_status:''
                                     })
                                     rezultati.push({
                                         analit:'RBC',
-                                        analit_rez:element.substring(62,63)+'.'+element.substring(63,65),
+                                        analit_rez:parseFloat(element.substring(62,63)+'.'+element.substring(63,65)).toFixed(2),
                                         analit_status:''
                                     })
                                     rezultati.push({
                                         analit:'HGB',
-                                        analit_rez:element.substring(65,68),
+                                        analit_rez:parseFloat(element.substring(65,68)).toFixed(0),
                                         analit_status:''
                                     })
                                     rezultati.push({
                                         analit:'MCHC',
-                                        analit_rez:element.substring(68,72),
+                                        analit_rez:parseFloat(element.substring(68,72)).toFixed(0),
                                         analit_status:''
                                     })                                    
                                     rezultati.push({
                                         analit:'MCV',
-                                        analit_rez:element.substring(72,75)+'.'+element.substring(75,76),
+                                        analit_rez:parseFloat(element.substring(72,75)+'.'+element.substring(75,76)).toFixed(1),
                                         analit_status:''
                                     })
                                     rezultati.push({
                                         analit:'MCH',
-                                        analit_rez:element.substring(76,79)+'.'+element.substring(79,80),
+                                        analit_rez:parseFloat(element.substring(76,79)+'.'+element.substring(79,80)).toFixed(1),
                                         analit_status:''
                                     }) 
                                     rezultati.push({
                                         analit:'RDW',
-                                        analit_rez:element.substring(80,82)+'.'+element.substring(82,83),
+                                        analit_rez:parseFloat(element.substring(80,82)+'.'+element.substring(82,83)).toFixed(1),
                                         analit_status:''
                                     }) 
                                     rezultati.push({
                                         analit:'HCT',
-                                        analit_rez:element.substring(83,85)+'.'+element.substring(85,86),
+                                        analit_rez:parseFloat(element.substring(83,85)+'.'+element.substring(85,86)).toFixed(3) ,
                                         analit_status:''
                                     })
                                     rezultati.push({
                                         analit:'PLT',
-                                        analit_rez:element.substring(86,90),
+                                        analit_rez:parseFloat(element.substring(86,90)).toFixed(0),
                                         analit_status:''
                                     })  
                                     rezultati.push({
                                         analit:'MPV',
-                                        analit_rez:element.substring(90,92)+'.'+element.substring(92,93),
+                                        analit_rez:parseFloat(element.substring(90,92)+'.'+element.substring(92,93)).toFixed(1),
                                         analit_status:''
                                     }) 
                                     // rezultati.push({
@@ -173,6 +173,8 @@ module.exports = {
                                             var k = 1
                                             var j = 1
                                             var tempRez = []
+
+                                            //parseFloat("123.456").toFixed(2)
                                             rezultat.multi.forEach(instance => { // multi rezultat
                                               instance.forEach(rez => { // rez - analit tj. npr wbc od kks
                                                 rez.retest = false
