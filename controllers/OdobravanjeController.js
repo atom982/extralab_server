@@ -1200,6 +1200,9 @@ odobravanjeController.UkloniOdobrenje = function(req, res) {
 };
 
 odobravanjeController.RetestActivate = function(req, res) {
+
+  console.log("Retest Activate")
+  console.log(req.body.id_t)
   Results.findOne({
     id: req.body.id_u
   })
@@ -1246,6 +1249,8 @@ odobravanjeController.RetestActivate = function(req, res) {
 };
 
 odobravanjeController.RetestDeactivate = function(req, res) {
+  console.log("Retest Deactivate")
+  console.log(req.body.id_t)
   Results.findOne({
     id: req.body.id_u
   })
