@@ -125,7 +125,7 @@ module.exports = {
                                     }) 
                                     rezultati.push({
                                         analit:'HCT',
-                                        analit_rez:parseFloat(element.substring(83,85)+'.'+element.substring(85,86)).toFixed(3) ,
+                                        analit_rez:parseFloat(element.substring(83,85)+'.'+element.substring(85,86)).toFixed(3)/100 ,
                                         analit_status:''
                                     })
                                     rezultati.push({
