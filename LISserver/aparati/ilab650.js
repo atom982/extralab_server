@@ -411,7 +411,7 @@ module.exports = {
                           goesIn = true
                         }
                         console.log('statusi')  
-                        console.log(test.status_r)  
+                        console.log(test)  
                         console.log(anaassay.test.sifra) 
                         console.log(test.labassay.sifra)  
                         if (( (anaassay.test.sifra === test.labassay.sifra) && (test.status_r === true)) || ( (anaassay.test.sifra === test.labassay.sifra) && (test.status_t === "ZAPRIMLJEN") )) {
