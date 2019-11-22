@@ -1200,9 +1200,6 @@ odobravanjeController.UkloniOdobrenje = function(req, res) {
 };
 
 odobravanjeController.RetestActivate = function(req, res) {
-
-  console.log("Retest Activate")
-  console.log(req.body.id_t)
   Results.findOne({
     id: req.body.id_u
   })
@@ -1212,10 +1209,8 @@ odobravanjeController.RetestActivate = function(req, res) {
         console.log("Greška:", err);
       } else {
         rezultat.rezultati.forEach(test => {
-          if (req.body.id_t == test.labassay.sifra) {
+          if (req.body.id_t === test.labassay.sifra) {
             test.retest = true;
-            console.log("Retest activate Result")
-            console.log(req.body.id_t)
           }
         });
         Samples.findOne({
@@ -1227,16 +1222,10 @@ odobravanjeController.RetestActivate = function(req, res) {
               console.log("Greška:", err);
             } else {
               uzorak.tests.forEach(element => {
-                console.log(element.labassay.sifra)
-
-                if (element.labassay.sifra == req.body.id_t) {
+                if (element.labassay.sifra === req.body.id_t) {
                   element.status_r = true;
-                  console.log("Retest activate Sample")
-                  console.log(req.body.id_t)
                 }
               });
-
-              
               uzorak.save();
               rezultat.save();
 
@@ -1251,8 +1240,6 @@ odobravanjeController.RetestActivate = function(req, res) {
 };
 
 odobravanjeController.RetestDeactivate = function(req, res) {
-  console.log("Retest Deactivate")
-  console.log(req.body.id_t)
   Results.findOne({
     id: req.body.id_u
   })
@@ -1262,10 +1249,8 @@ odobravanjeController.RetestDeactivate = function(req, res) {
         console.log("Greška:", err);
       } else {
         rezultat.rezultati.forEach(test => {
-          if (req.body.id_t == test.labassay.sifra) {
+          if (req.body.id_t === test.labassay.sifra) {
             test.retest = false;
-            console.log("Retest deactivate Result")
-            console.log(req.body.id_t)
           }
         });
         Samples.findOne({
@@ -1277,10 +1262,8 @@ odobravanjeController.RetestDeactivate = function(req, res) {
               console.log("Greška:", err);
             } else {
               uzorak.tests.forEach(element => {
-                if (element.labassay.sifra == req.body.id_t) {
+                if (element.labassay.sifra === req.body.id_t) {
                   element.status_r = false;
-                  console.log("Retest deactivate Sample")
-                  console.log(req.body.id_t)
                 }
               });
               uzorak.save();
