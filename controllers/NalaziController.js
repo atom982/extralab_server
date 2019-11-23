@@ -951,6 +951,25 @@ nalazController.Nalaz = function(req, res) {
                       if (test.rezultat === null) {
                         test.rezultat = "";
                       }
+
+                      if (
+                        rezultat.rezultat[rezultat.rezultat.length - 1].anaassay
+                          .float != "" &&
+                        !isNaN(
+                          rezultat.rezultat[rezultat.rezultat.length - 1]
+                            .anaassay.float
+                        ) &&
+                        !isNaN(test.rezultat)
+                      ) {
+                        let float = Number(
+                          rezultat.rezultat[rezultat.rezultat.length - 1]
+                            .anaassay.float
+                        );
+                        test.rezultat = parseFloat(test.rezultat).toFixed(
+                          float
+                        );
+                      }
+
                       var tmptest = test.naziv;
                       if (tmptest.includes("]")) {
                         tmptest = tmptest.split("]")[1].trim();

@@ -169,6 +169,7 @@ var SchemaAnaAssays = mongoose.Schema({
   sekcija: { type: String, required: true },
   grupa: { type: String, required: true },
   kod: { type: String, required: true },
+  float: { type: String, default: "" },
   metoda: { type: String, required: true },
   reference: [
     {

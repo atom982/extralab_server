@@ -1186,6 +1186,7 @@ postavkeController.anatestEdit = function(req, res) {
         if (anaassay) {
           (anaassay.kod = req.body.kod),
             (anaassay.metoda = req.body.metoda),
+            (anaassay.float = req.body.float),
             (anaassay.aparat = mongoose.Types.ObjectId(req.body.analizator)),
             (anaassay.updated_by = req.body.decoded.user);
           anaassay.updated_at = Date.now();
