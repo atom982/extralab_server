@@ -1279,6 +1279,61 @@ odobravanjeController.RetestDeactivate = function(req, res) {
     });
 };
 
+odobravanjeController.RetestSave = function(req, res) {
+  Results.findOne({
+    id: req.body.sid
+  })
+    .populate("patient rezultati.labassay rezultati.rezultat.anaassay")
+    .exec(function(err, rezultat) {
+      if (err) {
+        console.log("Greška:", err);
+      } else {
+
+        req.body.rezultati.forEach(rez => {
+
+          rezultat.rezultati.forEach(test => {
+            if (rez.test === test.labassay.sifra) {
+              test.retest = rez.retest;
+              // console.log("r - " + rez.ime + " / " + rez.retest) 
+            }
+          });
+
+        });
+
+
+        Samples.findOne({
+          id: req.body.sid
+        })
+          .populate("tests.labassay")
+          .exec(function(err, uzorak) {
+            if (err) {
+              console.log("Greška:", err);
+            } else {
+
+              req.body.rezultati.forEach(rez => {
+
+                uzorak.tests.forEach(element => {
+                  if (element.labassay.sifra === rez.test) {
+                    element.status_r = rez.retest;
+                    // console.log("s - " + rez.ime + " / " + rez.retest) 
+                  }
+                });
+              });
+
+              
+              uzorak.save();
+              rezultat.save();
+
+              res.json({
+                success: true,
+                message: "Retest saved."
+              });
+            }
+          });
+      }
+    });
+};
+
 odobravanjeController.Calculate = function(req, res) {
   // console.log("odobravanjeController.Calculate");
   // console.log(req.params.id);

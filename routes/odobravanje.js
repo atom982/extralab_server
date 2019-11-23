@@ -7,6 +7,7 @@ router.post("/rezultati/odobravanje/odobri/:id", odobravanje.OdobriSve);
 router.post("/rezultati/odobravanje/ukloni/:id", odobravanje.UkloniOdobrenje);
 router.post("/rezultati/odobravanje/retest/da", odobravanje.RetestActivate);
 router.post("/rezultati/odobravanje/retest/ne", odobravanje.RetestDeactivate);
+router.post("/rezultati/odobravanje/retest/save", odobravanje.RetestSave);
 router.post("/rezultati/odobravanje/calculate/:id", odobravanje.Calculate);
 router.post("/rezultati/odobravanje/sacuvaj/:id", odobravanje.SacuvajRezultate);
 router.post("/rezultati/odobravanje/analiti/:id", odobravanje.SacuvajAnalite);
