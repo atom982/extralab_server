@@ -84,7 +84,7 @@ class PDFDocumentWithTables extends PDFDocument {
       if (i === 3) {
         this.text(header, startX + i * columnContainerWidth, startY, {
           width: columnWidth,
-          align: "left"
+          align: "center"
         });
       }
     });
@@ -256,7 +256,7 @@ class PDFDocumentWithTables extends PDFDocument {
               startY,
               {
                 width: columnWidth,
-                align: "left"
+                align: "center"
               }
             );
           }
