@@ -34,13 +34,28 @@ module.exports = {
         }else{
           return [test, rezultat, interpretacija.Less(rezultat, dref, gref)[0], jedinica, dref + " - " + gref, interpretacija.Less(rezultat, dref, gref)[1], extend];
         }                
-        break; 
+        break;
+      case "lesseq":
+        return [test, rezultat, interpretacija.LessEqual(rezultat, dref, gref)[0], jedinica, " ≤ " + gref, interpretacija.LessEqual(rezultat, dref, gref)[1], extend];             
+        break;
+      case "lesspl":
+          return [test, rezultat, interpretacija.LessPlus(rezultat, dref, gref)[0], jedinica, " < " + gref + " x 10^6", interpretacija.LessPlus(rezultat, dref, gref)[1], extend];             
+          break; 
       case "infekc":
         return [test, rezultat, interpretacija.Infekcija(rezultat, dref, gref)[0], jedinica, dref + " - " + gref, interpretacija.Infekcija(rezultat, dref, gref)[1], extend];             
         break; 
       case "grt":
         return [test, rezultat, interpretacija.Greater(rezultat, dref, gref)[0], jedinica, " > " + gref, interpretacija.Greater(rezultat, dref, gref)[1], extend];        
         break; 
+      case "grtpl":
+          return [test, rezultat, interpretacija.Greater(rezultat, dref, gref)[0], jedinica, " > " + gref + " x 10^6", interpretacija.Greater(rezultat, dref, gref)[1], extend];        
+          break; 
+      case "grtepl":
+            return [test, rezultat, interpretacija.GreaterEqual(rezultat, dref, gref)[0], jedinica, " ≥ " + gref + " x 10^6", interpretacija.GreaterEqual(rezultat, dref, gref)[1], extend];        
+            break; 
+      case "grtno":
+          return [test, rezultat, interpretacija.GreaterNoInterp(rezultat, dref, gref)[0], jedinica, " > " + gref, interpretacija.GreaterNoInterp(rezultat, dref, gref)[1], extend];        
+          break; 
       case "grte":
         return [test, rezultat, interpretacija.GreaterEqual(rezultat, dref, gref)[0], jedinica, " ≥ " + gref, interpretacija.GreaterEqual(rezultat, dref, gref)[1], extend];        
         break;  
@@ -94,7 +109,10 @@ module.exports = {
         break;
       case "boja":
         return [test, rezultat, interpretacija.Boja(rezultat, dref, gref)[0], jedinica, "svjetlo žut", interpretacija.Boja(rezultat, dref, gref)[1], extend];
-        break;      
+        break;  
+      case "bojasp":
+          return [test, rezultat, interpretacija.BojaSpermiogram(rezultat, dref, gref)[0], jedinica, "blijedo žut", interpretacija.BojaSpermiogram(rezultat, dref, gref)[1], extend];
+          break;      
       case "nesto":
         return [test, rezultat, interpretacija.Nesto(rezultat, dref, gref)[0], jedinica, "nešto", interpretacija.Nesto(rezultat, dref, gref)[1], extend];
         break;

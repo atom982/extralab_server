@@ -35,6 +35,36 @@ module.exports = {
     }
   },
 
+  LessPlus: function(result, dref, gref) {
+    var rezultat = result.replace(/,/g, ".").replace(/</g, "").replace(/>/g, "") 
+    // (Interpretacija: "less")
+    if (rezultat === "") {
+      return [" ", "No Class"];
+    } else if (isNaN(rezultat)){
+      return ["H", "Red"];
+    }else if (Number(rezultat) > Number(Math.abs(gref))) {
+      return ["H", "Red"];
+    } else if (Number(rezultat) <= Number(Math.abs(gref)) && Number(rezultat) >= Number(Math.abs(dref))) {
+      return [" ", "Yellow"];
+    } else {
+      return [" ", "Green"];
+    }
+  },
+
+  LessEqual: function(result, dref, gref) {
+    var rezultat = result.replace(/,/g, ".").replace(/</g, "").replace(/>/g, "")   
+    // (Interpretacija: "grte")
+    if (isNaN(rezultat) || rezultat === "") {
+      return [" ", "No Class"];
+    } else if (Number(rezultat) > Number(Math.abs(gref))) {
+      return ["L", "Red"];
+    } else if (Number(rezultat) == Number(Math.abs(gref))) {
+      return [" ", "Green"];
+    } else {
+      return [" ", "Green"];
+    }
+  },
+
   Greater: function(result, dref, gref) {
     var rezultat = result.replace(/,/g, ".").replace(/</g, "").replace(/>/g, "")   
     // (Interpretacija: "grt")
@@ -46,6 +76,20 @@ module.exports = {
       return [" ", "Yellow"];
     } else {
       return [" ", "Green"];
+    }
+  },
+
+  GreaterNoInterp: function(result, dref, gref) {
+    var rezultat = result.replace(/,/g, ".").replace(/</g, "").replace(/>/g, "")   
+    // (Interpretacija: "grt")
+    if (isNaN(rezultat) || rezultat === "") {
+      return [" ", "No Class"];
+    } else if (Number(rezultat) < Number(Math.abs(gref))) {
+      return [" ", "No Class"];
+    } else if (Number(rezultat) == Number(Math.abs(gref))) {
+      return [" ", "No Class"];
+    } else {
+      return [" ", "No Class"];
     }
   },
 
@@ -269,6 +313,18 @@ module.exports = {
     if (rezultat === "") {
       return [" ", "No Class"];
     } else if (rezultat === "svjetlo žut") {
+      return [" ", "Green"];
+    } else {
+      return ["H", "Red"];
+    }
+  },
+
+  BojaSpermiogram: function(result, dref, gref) {
+    var rezultat = result.replace(/,/g, ".").replace(/</g, "").replace(/>/g, "") 
+    // (Interpretacija: "boja")
+    if (rezultat === "") {
+      return [" ", "No Class"];
+    } else if (rezultat === "blijedo žut") {
       return [" ", "Green"];
     } else {
       return ["H", "Red"];
