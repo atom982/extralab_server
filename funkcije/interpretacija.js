@@ -353,6 +353,16 @@ module.exports = {
     }
   },
 
+  Nema: function(result, dref, gref) {
+    var rezultat = result.replace(/,/g, ".").replace(/</g, "").replace(/>/g, "") 
+    // (Interpretacija: "exists")
+    if (rezultat === "") {
+      return [" ", "No Class"];
+    } else {      
+      return ["H", "Red"];
+    }
+  },
+
   Blasti: function(result, dref, gref) {
     var rezultat = result.replace(/,/g, ".").replace(/</g, "").replace(/>/g, "") 
     // DKS: Blasti (Interpretacija: "blst")

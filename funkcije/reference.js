@@ -119,6 +119,9 @@ module.exports = {
       case "exists":
         return [test, rezultat, interpretacija.Exists(rezultat, dref, gref)[0], jedinica, " ", interpretacija.Exists(rezultat, dref, gref)[1], extend];
         break;
+      case "nema":
+          return [test, rezultat, interpretacija.Nema(rezultat, dref, gref)[0], jedinica, "nema", interpretacija.Nema(rezultat, dref, gref)[1], extend];
+          break;
       case "blst":
         return [test, rezultat, interpretacija.Blasti(rezultat, dref, gref)[0], jedinica, gref, interpretacija.Blasti(rezultat, dref, gref)[1], extend];
         break;
