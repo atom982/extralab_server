@@ -108,7 +108,7 @@ module.exports = {
         return [test, rezultat, interpretacija.Bistar(rezultat, dref, gref)[0], jedinica, "bistar", interpretacija.Bistar(rezultat, dref, gref)[1], extend];
         break;
       case "boja":
-        return [test, rezultat, interpretacija.Boja(rezultat, dref, gref)[0], jedinica, "svjetlo žut", interpretacija.Boja(rezultat, dref, gref)[1], extend];
+        return [test, rezultat, interpretacija.Boja(rezultat, dref, gref)[0], jedinica, "žut", interpretacija.Boja(rezultat, dref, gref)[1], extend];
         break;  
       case "bojasp":
           return [test, rezultat, interpretacija.BojaSpermiogram(rezultat, dref, gref)[0], jedinica, "blijedo žut", interpretacija.BojaSpermiogram(rezultat, dref, gref)[1], extend];

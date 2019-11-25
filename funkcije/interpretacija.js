@@ -312,7 +312,7 @@ module.exports = {
     // (Interpretacija: "boja")
     if (rezultat === "") {
       return [" ", "No Class"];
-    } else if (rezultat === "svjetlo žut") {
+    } else if (rezultat === "svjetlo žut" || rezultat === "žut") {
       return [" ", "Green"];
     } else {
       return ["H", "Red"];
