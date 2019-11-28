@@ -1817,4 +1817,488 @@ apiUrlController.apiUrlAnaAssays = function(req, res) {
   }
 };
 
+apiUrlController.apiUrlControlEdit = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: err
+    });
+  } else {
+    var parametar = req.query.sort.slice(0, req.query.sort.indexOf("|")).trim();
+    var order = req.query.sort
+      .slice(req.query.sort.indexOf("|") + 1, req.query.sort.length)
+      .trim();
+
+    if (!req.query.filter) {
+      req.query.filter = "";
+    }
+
+    var uslov = {
+      disabled: false,
+      active: true,
+      site: mongoose.Types.ObjectId(req.query.site)
+    };
+
+    AnaAssays.find(uslov)
+      .populate("test aparat")
+      .exec(function(err, results) {
+        if (err) {
+          console.log("Greška:", err);
+        } else {
+          switch (parametar) {
+            case "kod":
+              results = results.filter(function(result) {
+                return (
+                  result.kod.includes(req.query.filter) &&
+                  result.test.test_type === "default"
+                );
+              });
+              break;
+            case "naziv":
+              results = results.filter(function(result) {
+                return (
+                  result.test.naziv
+                    .toLowerCase()
+                    .includes(req.query.filter.toLowerCase()) &&
+                  result.test.test_type === "default"
+                );
+              });
+              break;
+            case "analit":
+              results = results.filter(function(result) {
+                return (
+                  result.test.analit
+                    .toLowerCase()
+                    .includes(req.query.filter.toLowerCase()) &&
+                  result.test.test_type === "default"
+                );
+              });
+              break;
+            case "sekcija":
+              results = results.filter(function(result) {
+                return (
+                  result.sekcija
+                    .toLowerCase()
+                    .includes(req.query.filter.toLowerCase()) &&
+                  result.test.test_type === "default"
+                );
+              });
+              break;
+
+            default:
+              results = results.filter(function(result) {
+                return (
+                  (result.test.naziv
+                    .toLowerCase()
+                    .includes(req.query.filter.toLowerCase()) &&
+                    result.test.test_type === "default") ||
+                  (result.test.analit
+                    .toLowerCase()
+                    .includes(req.query.filter.toLowerCase()) &&
+                    result.test.test_type === "default")
+                );
+              });
+              break;
+          }
+
+          var json = {};
+          json.total = results.length;
+          json.per_page = req.query.per_page;
+          json.current_page = req.query.page;
+          json.last_page = Math.ceil(json.total / json.per_page);
+          json.next_page_url =
+            config.baseURL +
+            "assays/ana?sort=" +
+            req.query.sort +
+            "&page=" +
+            (req.query.page + 1) +
+            "&per_page=" +
+            req.query.per_page;
+          var prev_page = null;
+          if (json.current_page - 1 !== 0) {
+            prev_page = json.current_page - 1;
+          }
+          json.prev_page_url =
+            config.baseURL +
+            "assays/ana?sort=" +
+            req.query.sort +
+            "&page=" +
+            prev_page +
+            "&per_page=" +
+            req.query.per_page;
+          json.from = (json.current_page - 1) * 10 + 1;
+          json.to = (json.current_page - 1) * 10 + 10;
+          json.data = [];
+
+          switch (parametar) {
+            case "kod":
+              if (order === "asc") {
+                results = results.sort(function(a, b) {
+                  return a.kod.localeCompare(b.kod, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              if (order === "desc") {
+                results = results.sort(function(a, b) {
+                  return b.kod.localeCompare(a.kod, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              break;
+            case "naziv":
+              if (order === "asc") {
+                results = results.sort(function(a, b) {
+                  return a.test.naziv.localeCompare(b.test.naziv, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              if (order === "desc") {
+                results = results.sort(function(a, b) {
+                  return b.test.naziv.localeCompare(a.test.naziv, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              break;
+            case "analit":
+              if (order === "asc") {
+                results = results.sort(function(a, b) {
+                  return a.test.analit.localeCompare(b.test.analit, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              if (order === "desc") {
+                results = results.sort(function(a, b) {
+                  return b.test.analit.localeCompare(a.test.analit, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              break;
+            case "sekcija":
+              if (order === "asc") {
+                results = results.sort(function(a, b) {
+                  return a.sekcija.localeCompare(b.sekcija, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              if (order === "desc") {
+                results = results.sort(function(a, b) {
+                  return b.sekcija.localeCompare(a.sekcija, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              break;
+
+            default:
+              results = results.sort(function(a, b) {
+                return a.test.naziv.localeCompare(b.test.naziv, undefined, {
+                  numeric: true,
+                  sensitivity: "base"
+                });
+              });
+              break;
+          }
+
+          var niz = results.slice(json.from - 1, json.to);
+
+          niz.forEach(anaassay => {
+            var kod = anaassay.kod;
+            var naziv = anaassay.test.naziv;
+            var analit = anaassay.test.analit;
+            var tip = anaassay.tipoviUzorka[0];
+            var analizator = anaassay.aparat.ime;
+            var metoda = anaassay.metoda;
+            var sekcija = anaassay.sekcija;
+
+            if (anaassay.reference.length) {
+              var reference =
+                '<button class="btn btn-primary btn-micro"><span class="glyphicon glyphicon-stats"></span></button>';
+            } else {
+              var reference =
+                '<button class="btn btn-pale btn-micro"><span class="glyphicon glyphicon-stats"></span></button>';
+            }
+
+            var uredi =
+              '<button class="btn btn-warning btn-micro"><span class="glyphicon glyphicon-edit"></span></button>';
+            var akcija =
+              '<button class="btn btn-danger btn-micro"><span class="fa fa-trash-o"></span></button>';
+
+            json.data.push({
+              anaassay: anaassay,
+              id: anaassay._id,
+              kod: kod,
+              naziv: naziv,
+              analit: analit,
+              tip: tip,
+              analizator: analizator,
+              metoda: metoda,
+              sekcija: sekcija,
+              reference: reference,
+              uredi: uredi,
+              akcija: akcija
+            });
+          });
+          res.json(json);
+        }
+      });
+  }
+};
+
+apiUrlController.apiUrlControlClone = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: err
+    });
+  } else {
+    var parametar = req.query.sort.slice(0, req.query.sort.indexOf("|")).trim();
+    var order = req.query.sort
+      .slice(req.query.sort.indexOf("|") + 1, req.query.sort.length)
+      .trim();
+
+    if (!req.query.filter) {
+      req.query.filter = "";
+    }
+
+    var uslov = {
+      disabled: false,
+      active: true,
+      site: mongoose.Types.ObjectId(req.query.site)
+    };
+
+    AnaAssays.find(uslov)
+      .populate("test aparat")
+      .exec(function(err, results) {
+        if (err) {
+          console.log("Greška:", err);
+        } else {
+          switch (parametar) {
+            case "kod":
+              results = results.filter(function(result) {
+                return (
+                  result.kod.includes(req.query.filter) &&
+                  result.test.test_type === "default"
+                );
+              });
+              break;
+            case "naziv":
+              results = results.filter(function(result) {
+                return (
+                  result.test.naziv
+                    .toLowerCase()
+                    .includes(req.query.filter.toLowerCase()) &&
+                  result.test.test_type === "default"
+                );
+              });
+              break;
+            case "analit":
+              results = results.filter(function(result) {
+                return (
+                  result.test.analit
+                    .toLowerCase()
+                    .includes(req.query.filter.toLowerCase()) &&
+                  result.test.test_type === "default"
+                );
+              });
+              break;
+            case "sekcija":
+              results = results.filter(function(result) {
+                return (
+                  result.sekcija
+                    .toLowerCase()
+                    .includes(req.query.filter.toLowerCase()) &&
+                  result.test.test_type === "default"
+                );
+              });
+              break;
+
+            default:
+              results = results.filter(function(result) {
+                return (
+                  (result.test.naziv
+                    .toLowerCase()
+                    .includes(req.query.filter.toLowerCase()) &&
+                    result.test.test_type === "default") ||
+                  (result.test.analit
+                    .toLowerCase()
+                    .includes(req.query.filter.toLowerCase()) &&
+                    result.test.test_type === "default")
+                );
+              });
+              break;
+          }
+
+          var json = {};
+          json.total = results.length;
+          json.per_page = req.query.per_page;
+          json.current_page = req.query.page;
+          json.last_page = Math.ceil(json.total / json.per_page);
+          json.next_page_url =
+            config.baseURL +
+            "assays/ana?sort=" +
+            req.query.sort +
+            "&page=" +
+            (req.query.page + 1) +
+            "&per_page=" +
+            req.query.per_page;
+          var prev_page = null;
+          if (json.current_page - 1 !== 0) {
+            prev_page = json.current_page - 1;
+          }
+          json.prev_page_url =
+            config.baseURL +
+            "assays/ana?sort=" +
+            req.query.sort +
+            "&page=" +
+            prev_page +
+            "&per_page=" +
+            req.query.per_page;
+          json.from = (json.current_page - 1) * 10 + 1;
+          json.to = (json.current_page - 1) * 10 + 10;
+          json.data = [];
+
+          switch (parametar) {
+            case "kod":
+              if (order === "asc") {
+                results = results.sort(function(a, b) {
+                  return a.kod.localeCompare(b.kod, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              if (order === "desc") {
+                results = results.sort(function(a, b) {
+                  return b.kod.localeCompare(a.kod, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              break;
+            case "naziv":
+              if (order === "asc") {
+                results = results.sort(function(a, b) {
+                  return a.test.naziv.localeCompare(b.test.naziv, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              if (order === "desc") {
+                results = results.sort(function(a, b) {
+                  return b.test.naziv.localeCompare(a.test.naziv, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              break;
+            case "analit":
+              if (order === "asc") {
+                results = results.sort(function(a, b) {
+                  return a.test.analit.localeCompare(b.test.analit, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              if (order === "desc") {
+                results = results.sort(function(a, b) {
+                  return b.test.analit.localeCompare(a.test.analit, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              break;
+            case "sekcija":
+              if (order === "asc") {
+                results = results.sort(function(a, b) {
+                  return a.sekcija.localeCompare(b.sekcija, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              if (order === "desc") {
+                results = results.sort(function(a, b) {
+                  return b.sekcija.localeCompare(a.sekcija, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+              }
+              break;
+
+            default:
+              results = results.sort(function(a, b) {
+                return a.test.naziv.localeCompare(b.test.naziv, undefined, {
+                  numeric: true,
+                  sensitivity: "base"
+                });
+              });
+              break;
+          }
+
+          var niz = results.slice(json.from - 1, json.to);
+
+          niz.forEach(anaassay => {
+            var kod = anaassay.kod;
+            var naziv = anaassay.test.naziv;
+            var analit = anaassay.test.analit;
+            var tip = anaassay.tipoviUzorka[0];
+            var analizator = anaassay.aparat.ime;
+            var metoda = anaassay.metoda;
+            var sekcija = anaassay.sekcija;
+
+            if (anaassay.reference.length) {
+              var reference =
+                '<button class="btn btn-primary btn-micro"><span class="glyphicon glyphicon-stats"></span></button>';
+            } else {
+              var reference =
+                '<button class="btn btn-pale btn-micro"><span class="glyphicon glyphicon-stats"></span></button>';
+            }
+
+            var uredi =
+              '<button class="btn btn-warning btn-micro"><span class="glyphicon glyphicon-edit"></span></button>';
+            var akcija =
+              '<button class="btn btn-danger btn-micro"><span class="fa fa-trash-o"></span></button>';
+
+            json.data.push({
+              anaassay: anaassay,
+              id: anaassay._id,
+              kod: kod,
+              naziv: naziv,
+              analit: analit,
+              tip: tip,
+              analizator: analizator,
+              metoda: metoda,
+              sekcija: sekcija,
+              reference: reference,
+              uredi: uredi,
+              akcija: akcija
+            });
+          });
+          res.json(json);
+        }
+      });
+  }
+};
+
 module.exports = apiUrlController;

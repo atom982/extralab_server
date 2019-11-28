@@ -10,4 +10,7 @@ router.get("/nalazi/outbox", apiUrl.apiUrlNalaziOutbox);
 router.get("/assays/lab", apiUrl.apiUrlLabAssays);
 router.get("/assays/ana", apiUrl.apiUrlAnaAssays);
 
+router.get("/control/clone", apiUrl.apiUrlControlClone);
+router.get("/control/edit", apiUrl.apiUrlControlEdit);
+
 module.exports = router;
