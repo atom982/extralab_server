@@ -86,7 +86,8 @@ var SchemaLabAssays = mongoose.Schema({
         vrijeme: { type: String, default: "Nema podataka." },
         priprema: { type: String, default: "Nema podataka." },
         napomena: { type: String, default: "Nema podataka." }
-      }
+      },
+      izbornik: { type: Array, default: [] }
     }
   ],
   analit: { type: String, required: false },
