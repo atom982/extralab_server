@@ -26,4 +26,13 @@ router.post("/inventar/createugovor", inventar.CreateUgovor);
 router.get("/inventar/listugovor", inventar.ListUgovor);
 router.post("/inventar/editugovor", inventar.EditUgovor);
 router.post("/inventar/deleteugovor", inventar.DeleteUgovor);
+
+// Klasa
+router.post("/inventar/createklasa", inventar.CreateKlasa);
+router.get("/inventar/listklasa", inventar.ListKlasa);
+router.post("/inventar/editklasa", inventar.EditKlasa);
+router.post("/inventar/deleteklasa", inventar.DeleteKlasa);
+// Program
+
+// Platforma
 module.exports = router;

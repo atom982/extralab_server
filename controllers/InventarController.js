@@ -747,4 +747,188 @@ inventarController.DeleteUgovor = function(req, res) {
     );
   }
 };
+
+inventarController.CreateKlasa = function(req, res) {
+  
+
+  var klasa = new Klasa(req.body.klasa);
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    klasa.save(function(err) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        Klasa.find({})
+          .populate("site vrsta dobavljac oj")
+          .exec(function(err, klase) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              if(klase.length){
+                klase.forEach(element => {
+                  element.site_code = element.site.sifra;
+                });
+  
+                klase = klase.sort(function(a, b) {
+                  return a.site_code.localeCompare(b.site_code, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+  
+                res.json({
+                  success: true,
+                  message: "Unos uspješno obavljen.",
+                  klase: klase
+                });
+              }else{
+                res.json({
+                  success: true,
+                  message: "Unos uspješno obavljen.",
+                  ugovori: []
+                });
+              }
+            }
+          });
+      }
+    });
+  }
+};
+inventarController.ListKlasa = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Klasa.find({site:mongoose.Types.ObjectId(req.query.site)}).populate('site').exec(function (err, klase) {
+      res.json({
+        success: true,
+        message: "Lista vrsta ugovora",
+        klase: klase
+      })
+    }) 
+  }
+};
+
+inventarController.EditKlasa = function(req, res) {
+ 
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Klasa.replaceOne(
+      { _id: mongoose.Types.ObjectId(req.body.klasa._id) },
+
+      {
+        naziv: req.body.klasa.naziv,
+        site: mongoose.Types.ObjectId(req.body.klasa.site._id),
+        __v: req.body.klasa.__v
+      },
+      { upsert: false }
+    ).exec(function(err, klasa) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        Klasa.find({})
+          .populate("site")
+          .exec(function(err, klase) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              klase.forEach(element => {
+                element.site_code = element.site.sifra;
+              });
+
+              klase =  klase.sort(function(a, b) {
+                return a.site_code.localeCompare(b.site_code, undefined, {
+                  numeric: true,
+                  sensitivity: "base"
+                });
+              });
+              res.json({
+                success: true,
+                message: "Izmjena uspješno obavljena.",
+                klase: klase
+              });
+            }
+          });
+      }
+    });
+  }
+};
+inventarController.DeleteKlasa = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Klasa.remove(
+      {
+        _id: mongoose.Types.ObjectId(req.body.klasa._id)
+      },
+      function(err) {
+        if (err) {
+          console.log("Greška:", err);
+          res.json({
+            success: false,
+            message: err
+          });
+        } else {
+          Klasa.find({})
+            .populate("site vrsta dobavljac oj")
+            .exec(function(err, klase) {
+              if (err) {
+                console.log("Greška:", err);
+                res.json({
+                  success: false,
+                  message: err
+                });
+              } else {
+                klase.forEach(element => {
+                  element.site_code = element.site.sifra;
+                });
+
+                klase = klase.sort(function(a, b) {
+                  return a.site_code.localeCompare(b.site_code, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+
+                res.json({
+                  success: true,
+                  message: "Brisanje uspješno obavljeno.",
+                  klase: klase
+                });
+              }
+            });
+        }
+      }
+    );
+  }
+};
 module.exports = inventarController;
