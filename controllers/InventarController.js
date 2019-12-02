@@ -931,4 +931,376 @@ inventarController.DeleteKlasa = function(req, res) {
     );
   }
 };
+
+inventarController.CreateProgram = function(req, res) {
+  
+
+  var program = new Program(req.body.program);
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    program.save(function(err) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        Program.find({})
+          .populate("site vrsta dobavljac oj")
+          .exec(function(err, programi) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              if(programi.length){
+                programi.forEach(element => {
+                  element.site_code = element.site.sifra;
+                });
+  
+                programi = programi.sort(function(a, b) {
+                  return a.site_code.localeCompare(b.site_code, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+  
+                res.json({
+                  success: true,
+                  message: "Unos uspješno obavljen.",
+                  programi: programi
+                });
+              }else{
+                res.json({
+                  success: true,
+                  message: "Unos uspješno obavljen.",
+                  programi: []
+                });
+              }
+            }
+          });
+      }
+    });
+  }
+};
+
+inventarController.ListProgram = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Program.find({site:mongoose.Types.ObjectId(req.query.site)}).populate('site').exec(function (err, programi) {
+      res.json({
+        success: true,
+        message: "Lista vrsta ugovora",
+        programi: programi
+      })
+    }) 
+  }
+};
+
+inventarController.EditProgram = function(req, res) {
+ 
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Program.replaceOne(
+      { _id: mongoose.Types.ObjectId(req.body.program._id) },
+
+      {
+        naziv: req.body.program.naziv,
+        site: mongoose.Types.ObjectId(req.body.program.site._id),
+        __v: req.body.program.__v
+      },
+      { upsert: false }
+    ).exec(function(err, program) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        Program.find({})
+          .populate("site")
+          .exec(function(err, programi) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              programi.forEach(element => {
+                element.site_code = element.site.sifra;
+              });
+
+              programi =  programi.sort(function(a, b) {
+                return a.site_code.localeCompare(b.site_code, undefined, {
+                  numeric: true,
+                  sensitivity: "base"
+                });
+              });
+              res.json({
+                success: true,
+                message: "Izmjena uspješno obavljena.",
+                programi: programi
+              });
+            }
+          });
+      }
+    });
+  }
+};
+
+inventarController.DeleteProgram = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Program.remove(
+      {
+        _id: mongoose.Types.ObjectId(req.body.program._id)
+      },
+      function(err) {
+        if (err) {
+          console.log("Greška:", err);
+          res.json({
+            success: false,
+            message: err
+          });
+        } else {
+          Program.find({})
+            .populate("site vrsta dobavljac oj")
+            .exec(function(err, programi) {
+              if (err) {
+                console.log("Greška:", err);
+                res.json({
+                  success: false,
+                  message: err
+                });
+              } else {
+                programi.forEach(element => {
+                  element.site_code = element.site.sifra;
+                });
+
+                programi = programi.sort(function(a, b) {
+                  return a.site_code.localeCompare(b.site_code, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+
+                res.json({
+                  success: true,
+                  message: "Brisanje uspješno obavljeno.",
+                  programi: programi
+                });
+              }
+            });
+        }
+      }
+    );
+  }
+};
+
+inventarController.CreatePlatforma = function(req, res) {
+  
+
+  var platforma = new Platforma(req.body.platforma);
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    platforma.save(function(err) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        Platforma.find({})
+          .populate("site vrsta dobavljac oj")
+          .exec(function(err, platforme) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              if(platforme.length){
+                platforme.forEach(element => {
+                  element.site_code = element.site.sifra;
+                });
+  
+                platforme = platforme.sort(function(a, b) {
+                  return a.site_code.localeCompare(b.site_code, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+  
+                res.json({
+                  success: true,
+                  message: "Unos uspješno obavljen.",
+                  platforme: platforme
+                });
+              }else{
+                res.json({
+                  success: true,
+                  message: "Unos uspješno obavljen.",
+                  platforme: []
+                });
+              }
+            }
+          });
+      }
+    });
+  }
+};
+
+inventarController.ListPlatforma = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Platforma.find({site:mongoose.Types.ObjectId(req.query.site)}).populate('site').exec(function (err, platforme) {
+      res.json({
+        success: true,
+        message: "Lista vrsta ugovora",
+        platforme: platforme
+      })
+    }) 
+  }
+};
+
+inventarController.EditPlatforma = function(req, res) {
+ 
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Platforma.replaceOne(
+      { _id: mongoose.Types.ObjectId(req.body.platforma._id) },
+
+      {
+        naziv: req.body.platforma.naziv,
+        site: mongoose.Types.ObjectId(req.body.platforma.site._id),
+        __v: req.body.platforma.__v
+      },
+      { upsert: false }
+    ).exec(function(err, platforma) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        Platforma.find({})
+          .populate("site")
+          .exec(function(err, platforme) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              platforme.forEach(element => {
+                element.site_code = element.site.sifra;
+              });
+
+              platforme =  platforme.sort(function(a, b) {
+                return a.site_code.localeCompare(b.site_code, undefined, {
+                  numeric: true,
+                  sensitivity: "base"
+                });
+              });
+              res.json({
+                success: true,
+                message: "Izmjena uspješno obavljena.",
+                platforme: platforme
+              });
+            }
+          });
+      }
+    });
+  }
+};
+
+inventarController.DeletePlatforma = function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    Platforma.remove(
+      {
+        _id: mongoose.Types.ObjectId(req.body.platforma._id)
+      },
+      function(err) {
+        if (err) {
+          console.log("Greška:", err);
+          res.json({
+            success: false,
+            message: err
+          });
+        } else {
+          Platforma.find({})
+            .populate("site vrsta dobavljac oj")
+            .exec(function(err, platforme) {
+              if (err) {
+                console.log("Greška:", err);
+                res.json({
+                  success: false,
+                  message: err
+                });
+              } else {
+                platforme.forEach(element => {
+                  element.site_code = element.site.sifra;
+                });
+
+                platforme = platforme.sort(function(a, b) {
+                  return a.site_code.localeCompare(b.site_code, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+
+                res.json({
+                  success: true,
+                  message: "Brisanje uspješno obavljeno.",
+                  platforme: platforme
+                });
+              }
+            });
+        }
+      }
+    );
+  }
+};
 module.exports = inventarController;

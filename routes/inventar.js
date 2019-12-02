@@ -32,7 +32,16 @@ router.post("/inventar/createklasa", inventar.CreateKlasa);
 router.get("/inventar/listklasa", inventar.ListKlasa);
 router.post("/inventar/editklasa", inventar.EditKlasa);
 router.post("/inventar/deleteklasa", inventar.DeleteKlasa);
+
 // Program
+router.post("/inventar/createprogram", inventar.CreateProgram);
+router.get("/inventar/listprogram", inventar.ListProgram);
+router.post("/inventar/editprogram", inventar.EditProgram);
+router.post("/inventar/deleteprogram", inventar.DeleteProgram);
 
 // Platforma
+router.post("/inventar/createplatforma", inventar.CreatePlatforma);
+router.get("/inventar/listplatforma", inventar.ListPlatforma);
+router.post("/inventar/editplatforma", inventar.EditPlatforma);
+router.post("/inventar/deleteplatforma", inventar.DeletePlatforma);
 module.exports = router;
