@@ -44,4 +44,8 @@ router.post("/inventar/createplatforma", inventar.CreatePlatforma);
 router.get("/inventar/listplatforma", inventar.ListPlatforma);
 router.post("/inventar/editplatforma", inventar.EditPlatforma);
 router.post("/inventar/deleteplatforma", inventar.DeletePlatforma);
+
+//Produkti
+router.post("/inventar/createprodukt", inventar.CreateProdukt);
+
 module.exports = router;

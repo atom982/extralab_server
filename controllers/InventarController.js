@@ -1303,4 +1303,62 @@ inventarController.DeletePlatforma = function(req, res) {
     );
   }
 };
+
+inventarController.CreateProdukt = function(req, res) {
+  
+  var platforma = new Platforma(req.body.platforma);
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    platforma.save(function(err) {
+      if (err) {
+        console.log("Greška:", err);
+        res.json({
+          success: false,
+          message: err
+        });
+      } else {
+        Platforma.find({})
+          .populate("site vrsta dobavljac oj")
+          .exec(function(err, platforme) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              if(platforme.length){
+                platforme.forEach(element => {
+                  element.site_code = element.site.sifra;
+                });
+  
+                platforme = platforme.sort(function(a, b) {
+                  return a.site_code.localeCompare(b.site_code, undefined, {
+                    numeric: true,
+                    sensitivity: "base"
+                  });
+                });
+  
+                res.json({
+                  success: true,
+                  message: "Unos uspješno obavljen.",
+                  platforme: platforme
+                });
+              }else{
+                res.json({
+                  success: true,
+                  message: "Unos uspješno obavljen.",
+                  platforme: []
+                });
+              }
+            }
+          });
+      }
+    });
+  }
+};
 module.exports = inventarController;
