@@ -86,6 +86,23 @@ const SchemaStanje = mongoose.Schema({
     updated_by:{ type: String, default:"" },
     site: { type: mongoose.Schema.ObjectId, ref: "Site" }
 });
+const SchemaUlaz = mongoose.Schema({
+  produkt:{ type: mongoose.Schema.ObjectId, ref: "Produkt" },
+  faktura:{ type: String, required: true },
+  kolicina:{ type: String, required: true },
+  lot:{ type: String, required: true },
+  shelflife:{ type: String, required: true },
+  expDT:{ type: String, required: true },
+  ulazDT:{ type: String, required: true },
+  izlazDT:{ type: String, required: true },
+  ulazKM:{ type: String, required: true },
+  izlazKM:{ type: String, required: true },
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now },
+  created_by: { type: String, default:"" },
+  updated_by:{ type: String, default:"" },
+  site: { type: mongoose.Schema.ObjectId, ref: "Site" }
+});
 const models = [
 
   OJ= mongoose.model("OJ", SchemaOJ),
