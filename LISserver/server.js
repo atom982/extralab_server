@@ -60,7 +60,7 @@ class lisServer {
   }
   start(io,port,aparat, callback) {
     let lisserver = this; // we'll use 'this' inside the callback belo
-   
+    this.port = port
     lisserver.connection = net.createServer((socket) => {
       socket.setEncoding('utf8');
       socket.setNoDelay(false);
@@ -457,7 +457,7 @@ class lisServer {
     });
     // starting the server
     this.connection.listen(port);
-    lisserver.port = port
+   
     // setuping the callback of the start function
     this.connection.on('listening', function () {
       console.log('ATOM | lis server running || PORT: %j', lisserver.port);
