@@ -525,9 +525,9 @@ module.exports = {
                   //                                     Request Type 0 routine    Sample Disk No.                             cup type   (dilution) (rerun)  (reflex) (doctor code)
                   var buffer1 = new Buffer('\u0002W10000'+uzorak.id+'    '+'0'+ime+dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'   +  '0'+    '0'+   '001');
                   var buffer3 = Buffer.concat([buffer1,buffer2]); 
-                  console.log('Order za slanje na lokaciju:'+lokacija) 
-                  console.log(JSON.stringify(order))
-                  console.log(JSON.stringify(buffer3))
+                  //console.log('Order za slanje na lokaciju:'+lokacija) 
+                  //console.log(JSON.stringify(order))
+                  //console.log(JSON.stringify(buffer3))
                     recordret.push(buffer3);
                     brojac++
                     uzorak.status = "U OBRADI"
