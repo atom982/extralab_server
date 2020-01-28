@@ -15,7 +15,7 @@ const { crc16modbus } = require('crc');
 
 class lisServer {
   constructor(port, address) {
-    this.port = process.env.lisPORT;
+    //this.port = process.env.lisPORT;
     this.address = '127.0.0.1';
     // Holds our currently connected clients
     this.clients = [];
@@ -58,14 +58,14 @@ class lisServer {
       }
     });
   }
-  start(io, callback) {
+  start(io,port,aparat, callback, callback) {
     let lisserver = this; // we'll use 'this' inside the callback below
    
     lisserver.connection = net.createServer((socket) => {
       socket.setEncoding('utf8');
       socket.setNoDelay(false);
       let client = new Client(socket);
-      console.log(`Aparat konektovan -> adresa: ${client.address}, port: ${client.port}`);
+      console.log(aparat+` konektovan -> adresa: ${client.address}, port: ${port}`);
 
       // Storing client for later usage
       lisserver.clients.push(client);
@@ -456,7 +456,8 @@ class lisServer {
       });
     });
     // starting the server
-    this.connection.listen(this.port);
+    this.connection.listen(port);
+    lisserver.port = port
     // setuping the callback of the start function
     this.connection.on('listening', function () {
       console.log('ATOM | lis server running || PORT: %j', lisserver.port);
