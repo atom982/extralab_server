@@ -59,7 +59,7 @@ class lisServer {
     });
   }
   start(io,port,aparat, callback) {
-    let lisserver = this; // we'll use 'this' inside the callback below
+    let lisserver = this; // we'll use 'this' inside the callback belo
    
     lisserver.connection = net.createServer((socket) => {
       socket.setEncoding('utf8');
