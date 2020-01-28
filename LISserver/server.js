@@ -58,7 +58,7 @@ class lisServer {
       }
     });
   }
-  start(io,port,aparat, callback, callback) {
+  start(io,port,aparat, callback) {
     let lisserver = this; // we'll use 'this' inside the callback below
    
     lisserver.connection = net.createServer((socket) => {
