@@ -123,7 +123,7 @@ class lisServer {
                 //console.log(JSON.stringify(frame))
                 if(frame !='\u0002R1\u0003'){
                   if (frame.includes('X')) { //ACK primljen
-                      console.log('odgovor analizatora:'+JSON.stringify(frame))
+                      //console.log('odgovor analizatora:'+JSON.stringify(frame))
                   } else{
                     lisserver.poruka.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
                     lisserver.poruka.push("R|"+frame)
