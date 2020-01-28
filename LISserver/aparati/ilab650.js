@@ -82,9 +82,9 @@ module.exports = {
           // if(element.analit_rez.substring(0, 1) == "."){
           //     element.analit_rez ='0'+element.analit_rez
           // }
-          console.log('SID:'+sid)
-          console.log(fRezultati)
-          console.log('broj testova:'+nrTests)
+          //console.log('SID:'+sid)
+          //console.log(fRezultati)
+          //console.log('broj testova:'+nrTests)
 
               Samples.findOne({ id: sid }).populate('patient tests.labassay').exec(function (err, uzorak) {
                 if (err) {
@@ -456,8 +456,8 @@ module.exports = {
                     ime = ime.replace(/š/g,'s')
                     ime = ime.replace(/đ/g,'d')
                     ime = ime.replace(/ž/g,'z')
-                    console.log('PODACI IME')
-                    console.log('ime length before:'+ime.length)
+                    //console.log('PODACI IME')
+                    //console.log('ime length before:'+ime.length)
                     if(ime.length >= 18){
                       ime=ime.substring(0,18)
                     }else{
@@ -466,13 +466,13 @@ module.exports = {
                         ime+=' '    
                       }
                     }
-                    console.log('ime length after:'+ime.length)
-                    console.log('sifre testova:'+testovi)
+                    //console.log('ime length after:'+ime.length)
+                    //console.log('sifre testova:'+testovi)
                     
                     var nrTests = testovi.length
                     var allTST = ''
 
-                    console.log('broj testova:'+nrTests)
+                    //console.log('broj testova:'+nrTests)
                     testovi.forEach(element => {
                       allTST +=  element  
                     });
