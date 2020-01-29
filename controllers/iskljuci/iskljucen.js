@@ -1,11 +1,12 @@
 module.exports = {
   test: function(test, site) {
-    /* if ((test === "Limfociti" || test === "Monociti" || test === "Neutrofili")) {
+    console.log(test)
+    if ((test === "HGB - KKS3" || test === "HbA1c - ILab 650")) {
       return false;
     } else {
       return true;
-    }   */
-    return true;
+    } 
+    // return true;
   }
 };
 
