@@ -81,7 +81,8 @@ module.exports = {
     var uzorkovan = JSON.stringify(report.uzorkovano).substring(1, 11).split("-");
 
     doc.font("PTSansRegular").text("Vrijeme:", 445 + 10, nvisina + 14).text(data.vrijeme, 506.5 + 10, nvisina + 14);
-    doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text("Datum", 444.5 + 10, nvisina + 32).text("uzorkovanja:", 444.5 + 10, nvisina + 40).fontSize(10).text(uzorkovan[2] + "." + uzorkovan[1] + "." + uzorkovan[0], 501 + 10, nvisina + 38);
+    doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text("Datum i vrijeme uzorkovanja:", 444.5 + 10, nvisina + 32);
+    doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text(uzorkovan[2] + "." + uzorkovan[1] + "." + uzorkovan[0] + " " + data.uzorkovano_t, 444.5 + 10, nvisina + 42);
     doc.font("PTSansBold").fontSize(12).text(rowsno, 50, nvisina + 60);
     doc.moveDown(1);
 
