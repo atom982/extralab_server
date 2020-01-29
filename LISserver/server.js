@@ -91,7 +91,7 @@ class lisServer {
       // }, 50000);
       //--------------------------------------------
       socket.on('data', (data) => {
-       //console.log(JSON.stringify(data))
+        console.log(JSON.stringify(data))
         //----------------------Emerald blok
         if (data.charCodeAt(data.length - 1) !== 10) { //podaci od aparata
           frame += data; //dodaj u buffer \u001a
