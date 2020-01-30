@@ -42,8 +42,8 @@ module.exports = {
     var tpsa = "";
     var fe = "";
 
-      console.log('usao u iLab650 fajl')
-      //console.log(record)
+      console.log('result parser:')
+      console.log(record)
     record.forEach(function (element) {
       record_type = element.charAt(0);
       switch (record_type) {
@@ -344,8 +344,8 @@ module.exports = {
         break;
     }
     var brojac = 0
-    //console.log('Query Parser: ');
-    //console.log(record);
+    console.log('Query Parser: ');
+    console.log(record);
     record.forEach(function (element) {
       record_type = element.charAt(0);
       switch (record_type) {
