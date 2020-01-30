@@ -536,7 +536,14 @@ module.exports = {
                     console.log(buffer3.length)
                     if(brojac===uzorci.length){
                       if(recordret.length){
-                        callback(recordret);
+                        if(buffer3.length <= 68){
+                          var norqt= new Buffer('\u0002E18\u0003')
+                          callback(norqt);
+
+                        }else{
+                          callback(recordret);
+                        }
+                        
                       }
                     }
                     Results.findOne({ 'id': uzorak.id }).populate('patient rezultati.labassay').exec(function (err, rezultat) {
