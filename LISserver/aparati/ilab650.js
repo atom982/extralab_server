@@ -536,13 +536,13 @@ module.exports = {
                     console.log(buffer3.length)
                     if(brojac===uzorci.length){
                       if(recordret.length){
-                        if(buffer3.length <= 68){
-                          var norqt= new Buffer('\u0002E18\u0003')
-                          callback(norqt);
+                        //if(buffer3.length <= 68){
+                          //var norqt= new Buffer('\u0002E18\u0003')
+                          //callback(norqt);
 
-                        }else{
+                        //}else{
                           callback(recordret);
-                        }
+                       // }
                         
                       }
                     }
