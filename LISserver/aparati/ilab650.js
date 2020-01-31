@@ -484,6 +484,8 @@ module.exports = {
                     nrTests = '0'+nrTests
                   }
                   var buffer2 = new Buffer(nrTests);
+
+                  var limit=testovi.length
                   testovi.forEach(element => {
                     buffer2 = Buffer.concat([buffer2,new Buffer(element)]);  
                   });
@@ -536,13 +538,15 @@ module.exports = {
                     console.log(buffer3.length)
                     if(brojac===uzorci.length){
                       if(recordret.length){
-                        //if(buffer3.length <= 68){
-                          //var norqt= new Buffer('\u0002E18\u0003')
-                          //callback(norqt);
+                        if(limit.length === 0){
+                          console.log('no orders')
+                          var norqt= new Buffer('\u0002E18\u0003')
+                          callback(norqt);
 
-                        //}else{
+                        }else{
+                          console.log('yes orders')
                           callback(recordret);
-                       // }
+                        }
                         
                       }
                     }
