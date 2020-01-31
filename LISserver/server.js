@@ -140,10 +140,10 @@ class lisServer {
                   temp_rec.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
                   temp_rec.push("L|1")
                   funkcija.parsaj_query(temp_rec, function (poruka) {
-                    poruka.forEach(element => {
-                      console.log('Šaljem order za ILAB 650:'+JSON.stringify(element))
-                      lisserver.broadcast(element, client)
-                    });
+                    //poruka.forEach(element => {
+                      console.log('Šaljem order za ILAB 650:'+JSON.stringify(poruka))
+                      lisserver.broadcast(poruka, client)
+                    //});
                     frame = ''
                     lisserver.poruka = [] 
                     lisserver.counter = 0;
