@@ -534,8 +534,8 @@ module.exports = {
                   if(limit){
                     recordret.unshift(buffer3);
                   }else{
-                    var norqt= new Buffer('\u0002E18\u0003')
-                    recordret.push(norqt);
+                  
+                    recordret.push('\u0002E18\u0003');
                   }
                     
                     brojac++
