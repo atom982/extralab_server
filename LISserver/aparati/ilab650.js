@@ -526,10 +526,10 @@ module.exports = {
        
                                                                                           //yymmdd   time    diskno         scpos      stype   sex     cuptype     dil   rerun   reflex   doctor    nrTests   (testtype+testno)
                   //var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
-                  var order ='\u0002W10000'+uzorak.id+'    '+'0'+ime+ dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})+'\u0003'
+                  //var order ='\u0002W10000'+uzorak.id+'    '+'0'+ime+ dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})+'\u0003'
                   //                                     Request Type 0 routine    Sample Disk No.                             cup type   (dilution) (rerun)  (reflex) (doctor code)
                   //var buffer1 = Buffer.from('\u0002W10000'+uzorak.id+'    '+'0'+ime+dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'   +  '0'+    '0'+   '001');
-                  var buffer3 = Buffer.concat([Buffer.from('\u0002W10000'+uzorak.id+'    '+'0'+ime+dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'   +  '0'+    '0'+   '001'),buffer2]); 
+                  //var buffer3 = Buffer.concat([Buffer.from('\u0002W10000'+uzorak.id+'    '+'0'+ime+dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'   +  '0'+    '0'+   '001'),buffer2]); 
                   //console.log('Order za slanje na lokaciju:'+lokacija) 
                   //console.log(JSON.stringify(order))
                   //console.log(JSON.stringify(buffer3))
