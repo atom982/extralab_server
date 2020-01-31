@@ -483,14 +483,15 @@ module.exports = {
                   if(nrTests  >= 10 ){
                     nrTests = '0'+nrTests
                   }
-                  var buffer2 = new Buffer(nrTests);
+                  //var buffer2 = new Buffer(nrTests);
+                  var buffer2 = Buffer.from(nrTests)
 
                   var limit=testovi.length
                   
                   testovi.forEach(element => {
-                    buffer2 = Buffer.concat([buffer2,new Buffer(element)]);  
+                    buffer2 = Buffer.concat([buffer2,Buffer.from(element)]);  
                   });
-                  buffer2 = Buffer.concat([buffer2,new Buffer('\u0003')]);
+                  buffer2 = Buffer.concat([buffer2,Buffer.from('\u0003')]);
                   testovi = []
                   // W (Request code)
                   // 1 (Instrument No)
@@ -526,8 +527,8 @@ module.exports = {
                   //var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
                   var order ='\u0002W10000'+uzorak.id+'    '+'0'+ime+ dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})+'\u0003'
                   //                                     Request Type 0 routine    Sample Disk No.                             cup type   (dilution) (rerun)  (reflex) (doctor code)
-                  var buffer1 = new Buffer('\u0002W10000'+uzorak.id+'    '+'0'+ime+dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'   +  '0'+    '0'+   '001');
-                  var buffer3 = Buffer.concat([buffer1,buffer2]); 
+                  //var buffer1 = Buffer.from('\u0002W10000'+uzorak.id+'    '+'0'+ime+dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'   +  '0'+    '0'+   '001');
+                  var buffer3 = Buffer.concat([Buffer.from('\u0002W10000'+uzorak.id+'    '+'0'+ime+dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'   +  '0'+    '0'+   '001'),buffer2]); 
                   //console.log('Order za slanje na lokaciju:'+lokacija) 
                   //console.log(JSON.stringify(order))
                   //console.log(JSON.stringify(buffer3))
