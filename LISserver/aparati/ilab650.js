@@ -532,7 +532,7 @@ module.exports = {
                   //console.log(JSON.stringify(order))
                   //console.log(JSON.stringify(buffer3))
                   if(limit){
-                    recordret.push(buffer3);
+                    recordret.unshift(buffer3);
                   }else{
                     var norqt= new Buffer('\u0002E18\u0003')
                     recordret.push(norqt);
