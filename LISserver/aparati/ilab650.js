@@ -547,7 +547,7 @@ module.exports = {
                      
                         
 
-                          callback(recordret);
+                          callback(recordret[0]);
                       
                         
                       

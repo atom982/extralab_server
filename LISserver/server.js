@@ -92,19 +92,6 @@ class lisServer {
       //--------------------------------------------
       socket.on('data', (data) => {
         console.log(JSON.stringify(data))
-        var temp_rec = [];
-        console.log('Parsam query ILAB 650:')
-        temp_rec.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
-        temp_rec.push("L|1")
-        funkcija.parsaj_query(temp_rec, function (poruka) {
-          poruka.forEach(element => {
-            console.log('Šaljem order za ILAB 650:'+JSON.stringify(element))
-            lisserver.broadcast(element, client)
-          });
-          frame = ''
-          lisserver.poruka = [] 
-          lisserver.counter = 0;
-        });
         //----------------------Emerald blok
         if (data.charCodeAt(data.length - 1) !== 10) { //podaci od aparata
           frame += data; //dodaj u buffer \u001a
@@ -132,7 +119,7 @@ class lisServer {
               if(frame.indexOf("\u0003") >= 0 ){
                 //console.log('Check if poll,message or query')
                 //console.log(JSON.stringify(frame))
-                if(frame !='u0002R1u0003'){
+                if(frame !='\u0002R1\u0003'){
                   if (frame.includes('X')) { //ACK primljen
                       console.log('odgovor ILAB 650:'+JSON.stringify(frame))
                       frame = ''
