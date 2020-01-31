@@ -4636,8 +4636,6 @@ sampleController.prijemLabassays = function(req, res) {
 };
 
 sampleController.sacuvajUzorke = function(req, res) {
-  console.log('Aktivna ruta')
-  console.log(req.body)
   if (mongoose.connection.readyState != 1) {
     res.json({
       success: false,
@@ -4803,17 +4801,12 @@ sampleController.sacuvajUzorke = function(req, res) {
             }
 
             uzorci.forEach(uzorakBack => {
-              console.log('petlja')
-              console.log(uzorakBack.id)
               if (uzorakFront.ime[0] === uzorakBack.type[0]) {
                 uzorakFront.all.push(uzorakBack.id);
-                console.log('petlja if')
-                console.log(uzorakBack.id)
               }
             });
           });
   
-           console.log("KRAJ");
           req.body.uzorci.forEach(uzorakFront => {
             uzorakFront.all.sort(function(a, b) {
               return a == b ? 0 : +(a < b) || -1;
