@@ -531,21 +531,23 @@ module.exports = {
                   //console.log('Order za slanje na lokaciju:'+lokacija) 
                   //console.log(JSON.stringify(order))
                   //console.log(JSON.stringify(buffer3))
+                  if(limit){
                     recordret.push(buffer3);
+                  }else{
+                    var norqt= new Buffer('\u0002E18\u0003')
+                    recordret.push(norqt);
+                  }
+                    
                     brojac++
                     uzorak.status = "U OBRADI"
                     uzorak.save()  
                     if(brojac===uzorci.length){
                       if(recordret.length){
-                        if(limit.length === 0){
-                          console.log('no orders')
-                          var norqt= new Buffer('\u0002E18\u0003')
-                          callback(norqt);
 
-                        }else{
-                          console.log('yes orders')
+                        
+
                           callback(recordret);
-                        }
+                      
                         
                       }
                     }
