@@ -483,15 +483,18 @@ module.exports = {
                   if(nrTests  >= 10 ){
                     nrTests = '0'+nrTests
                   }
-                  //var buffer2 = new Buffer(nrTests);
-                  var buffer2 = Buffer.from(nrTests)
-
-                  var limit=testovi.length
-                  
+                  var dstamp = new Date()
+                  dstamp=JSON.stringify(dstamp)
+                  dstamp=dstamp.substring(3,5)+dstamp.substring(6,8)+dstamp.substring(9,11)+dstamp.substring(12,14)+dstamp.substring(15,17) 
+                  var sendRec = '\u0002W10000'+uzorak.id+'    '+'0'+ime+dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'   +  '0'+    '0'+   '001'+nrTests
+                  var limit = testovi.length
                   testovi.forEach(element => {
-                    buffer2 = Buffer.concat([buffer2,Buffer.from(element)]);  
+                    //buffer2 = Buffer.concat([buffer2,Buffer.from(element)]);  
+                    sendRec +=element
                   });
-                  buffer2 = Buffer.concat([buffer2,Buffer.from('\u0003')]);
+                  sendRec +='\u0003'
+                  //buffer2 = Buffer.concat([buffer2,Buffer.from('\u0003')]);
+
                   testovi = []
                   // W (Request code)
                   // 1 (Instrument No)
@@ -520,9 +523,7 @@ module.exports = {
                   // 1 (test type ) 1 - biochemistry, 2 - ise, 3- calculated, 4 -serum index
                   // Test NO
                  
-                  var dstamp = new Date()
-                  dstamp=JSON.stringify(dstamp)
-                  dstamp=dstamp.substring(3,5)+dstamp.substring(6,8)+dstamp.substring(9,11)+dstamp.substring(12,14)+dstamp.substring(15,17)        
+       
                                                                                           //yymmdd   time    diskno         scpos      stype   sex     cuptype     dil   rerun   reflex   doctor    nrTests   (testtype+testno)
                   //var order ='\u0002'+ 'W10000'+uzorak.id+'    '+'0'+"                  "+'191006'+ '1130'+   '1'      +cupPosition+   '1'   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests+     + allTST+'\u0003'
                   var order ='\u0002W10000'+uzorak.id+'    '+'0'+ime+ dstamp+   '1'      +cupPosition+   stype   + sex+     '1' +     '001'+ '0'+    '0'+   '001'+   nrTests.toString()+     + allTST.toLocaleString('fullwide', {useGrouping:false})+'\u0003'
@@ -533,7 +534,7 @@ module.exports = {
                   //console.log(JSON.stringify(order))
                   //console.log(JSON.stringify(buffer3))
                   if(limit){
-                    recordret.unshift(buffer3);
+                    recordret.unshift(sendRec);
                   }else{
                   
                     recordret.push('\u0002E18\u0003');
@@ -546,7 +547,7 @@ module.exports = {
                      
                         
 
-                          callback(recordret.slice(0, 1));
+                          callback(recordret);
                       
                         
                       
