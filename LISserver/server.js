@@ -119,7 +119,7 @@ class lisServer {
               if(frame.indexOf("\u0003") >= 0 ){
                 //console.log('Check if poll,message or query')
                 //console.log(JSON.stringify(frame))
-                if(frame !='\u0002R1\u0003'){
+                if(frame !='u0002R1u0003'){
                   if (frame.includes('X')) { //ACK primljen
                       console.log('odgovor ILAB 650:'+JSON.stringify(frame))
                       frame = ''
