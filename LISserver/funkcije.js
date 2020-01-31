@@ -221,7 +221,7 @@ parsaj_rezultat: function(record,io){
                             immulite1000.parsaj_rezultat(record,io);
                             break; 
         case 'RJ-1C110261':  // D Cell 60 Diagon hematologija
-                            console.log('parsaj D CELL 60')
+                            
                             Dcell60.parsaj_rezultat(record,io);
                             break; 
                             default:
