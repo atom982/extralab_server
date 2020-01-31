@@ -534,8 +534,6 @@ module.exports = {
                     brojac++
                     uzorak.status = "U OBRADI"
                     uzorak.save()  
-                    console.log("+++++++++BUFFER LEBGTH++++")
-                    console.log(buffer3.length)
                     if(brojac===uzorci.length){
                       if(recordret.length){
                         if(limit.length === 0){
