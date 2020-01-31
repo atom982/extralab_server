@@ -92,6 +92,11 @@ class lisServer {
       //--------------------------------------------
       socket.on('data', (data) => {
         console.log(JSON.stringify(data))
+        console.log('Parsam rezultat ILAB 650:'+JSON.stringify(data))
+        lisserver.poruka.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
+        lisserver.poruka.push("R|"+data)
+        funkcija.parsaj_rezultat(lisserver.poruka, io);
+        lisserver.broadcast('\u0002E18\u0003', client)
         //----------------------Emerald blok
         if (data.charCodeAt(data.length - 1) !== 10) { //podaci od aparata
           frame += data; //dodaj u buffer \u001a
