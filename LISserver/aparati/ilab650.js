@@ -476,7 +476,7 @@ module.exports = {
                     testovi.forEach(element => {
                       allTST +=  element  
                     });
-                
+                    console.log(testovi)
                   if(nrTests <10){
                     nrTests = '00'+nrTests
                   }
