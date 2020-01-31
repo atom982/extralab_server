@@ -121,10 +121,11 @@ class lisServer {
                 //console.log(JSON.stringify(frame))
                 if(frame !='\u0002R1\u0003'){
                   if (frame.includes('X')) { //ACK primljen
-                      //console.log('odgovor analizatora:'+JSON.stringify(frame))
+                      console.log('odgovor ILAB 650:'+JSON.stringify(frame))
                       frame = ''
                       lisserver.poruka = [] 
                   } else{
+                    console.log('Parsam rezultat ILAB 650:'+JSON.stringify(frame))
                     lisserver.poruka.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
                     lisserver.poruka.push("R|"+frame)
                     funkcija.parsaj_rezultat(lisserver.poruka, io);
@@ -135,10 +136,12 @@ class lisServer {
 
                 }else{
                   var temp_rec = [];
+                  console.log('Parsam query ILAB 650:')
                   temp_rec.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
                   temp_rec.push("L|1")
                   funkcija.parsaj_query(temp_rec, function (poruka) {
                     poruka.forEach(element => {
+                      console.log('Šaljem order za ILAB 650:'+JSON.stringify(element))
                       lisserver.broadcast(element, client)
                     });
                     frame = ''
