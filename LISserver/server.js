@@ -426,7 +426,7 @@ class lisServer {
    
     // setuping the callback of the start function
     this.connection.on('listening', function () {
-      console.log('ATOM | lis server running || PORT: %j', lisserver.port);
+      console.log('ATOM | lis server running || PORT: %j', port);
     });
 
 

@@ -213,7 +213,6 @@ parsaj_rezultat: function(record,io){
       switch(sn){
  
         case 'U10714300027':  // Extralab instrumentation laboratory ilab650 biohemija
-                            console.log('parsaj instrumentation labotatory ilab650')
                             ilab650.parsaj_rezultat(record,io);
                             break;          
         case '27026012':  // Extralab siemens immulite 1000 imunohemija
