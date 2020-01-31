@@ -476,7 +476,7 @@ module.exports = {
                     testovi.forEach(element => {
                       allTST +=  element  
                     });
-                    console.log(testovi)
+                   
                   if(nrTests <10){
                     nrTests = '00'+nrTests
                   }
@@ -486,6 +486,7 @@ module.exports = {
                   var buffer2 = new Buffer(nrTests);
 
                   var limit=testovi.length
+                  console.log(testovi)
                   testovi.forEach(element => {
                     buffer2 = Buffer.concat([buffer2,new Buffer(element)]);  
                   });
