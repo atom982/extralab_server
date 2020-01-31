@@ -486,7 +486,7 @@ module.exports = {
                   var buffer2 = new Buffer(nrTests);
 
                   var limit=testovi.length
-                  console.log(limit)
+                  
                   testovi.forEach(element => {
                     buffer2 = Buffer.concat([buffer2,new Buffer(element)]);  
                   });
@@ -542,14 +542,13 @@ module.exports = {
                     uzorak.status = "U OBRADI"
                     uzorak.save()  
                     if(brojac===uzorci.length){
-                      if(recordret.length){
-
+                     
                         
 
-                          callback(recordret);
+                          callback(recordret[0]);
                       
                         
-                      }
+                      
                     }
                     Results.findOne({ 'id': uzorak.id }).populate('patient rezultati.labassay').exec(function (err, rezultat) {
 
