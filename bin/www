@@ -61,7 +61,7 @@ app.set("socketio", io);
 // Starting our server
 
 lisserver.start(io,9610,"DCell 60  Omega -Tuzla");//DCell Omega
-lisserver.start(io,9611,"iLAB 650 Omega-Tuzla");//ilab 650  Omega
+//lisserver.start(io,9611,"iLAB 650 Omega-Tuzla");//ilab 650  Omega
 // loggerserver.start(io)
 /*
  * Listen on provided port, on all network interfaces.
