@@ -145,7 +145,7 @@ nalazController.Mail = function(req, res) {
 
                 var transporter = nodemailer.createTransport(smtpConfig);
 
-                var cc = nalaz.site.email;
+                var cc = "extralab.tuzla@yahoo.com" // nalaz.site.email;
                 // var cc = process.env.MAIL_USER;
 
                 var mailOptions = {
@@ -157,7 +157,7 @@ nalazController.Mail = function(req, res) {
                     process.env.MAIL_USER +
                     ">",
                   to: req.body.email + "," + cc,
-                  replyTo: cc,
+                  replyTo: nalaz.site.email,
                   subject:
                     "Nalaz za pacijenta: " +
                     nalaz.patient.ime +
