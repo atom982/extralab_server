@@ -141,8 +141,8 @@ class lisServer {
                   temp_rec.push("L|1")
                   funkcija.parsaj_query(temp_rec, function (poruka) {
                     poruka.forEach(element => {
-                      console.log('Šaljem order za ILAB 650:'+JSON.stringify(poruka))
-                      lisserver.broadcast(poruka, client)
+                      console.log('Šaljem order za ILAB 650:'+JSON.stringify(element))
+                      lisserver.broadcast(element, client)
                     });
                     frame = ''
                     lisserver.poruka = [] 
