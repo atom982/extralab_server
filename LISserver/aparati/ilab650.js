@@ -548,7 +548,7 @@ module.exports = {
                      
                         
 
-                          callback(recordret);
+                          callback(recordret.slice(0, 1));
                       
                         
                       
