@@ -543,11 +543,12 @@ module.exports = {
                     brojac++
                     uzorak.status = "U OBRADI"
                     uzorak.save()  
+                    console.log(recordret)
                     if(brojac===uzorci.length){
                      
                         
 
-                          callback(recordret[0]);
+                          callback(recordret);
                       
                         
                       
