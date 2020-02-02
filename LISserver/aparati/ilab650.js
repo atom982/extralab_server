@@ -546,12 +546,18 @@ module.exports = {
                     console.log(recordret)
                     if(brojac===uzorci.length){
                      
-                        
-
+                         if(recordret[0].includes('E18')){
                           callback(recordret.slice(0, 1));
-                      
-                        
-                      
+                         }else{
+                          if(recordret[1].includes('E18')){
+                            callback(recordret.slice(0, 1));
+                          }else{
+                            if(recordret[2].includes('E18')){
+                              callback(recordret.slice(0, 2));
+                            }
+                          }
+                         }
+                     
                     }
                     Results.findOne({ 'id': uzorak.id }).populate('patient rezultati.labassay').exec(function (err, rezultat) {
 
