@@ -383,7 +383,7 @@ module.exports = {
           }
             var testovi = [];
             
-            Samples.find(uslov).populate('tests.labassay patient').sort({created_at: 1}).limit(3).exec(function (err, uzorci) {
+            Samples.find(uslov).populate('tests.labassay patient').sort({created_at: -1}).limit(3).exec(function (err, uzorci) {
               if (err) {
                 console.log("Greška:", err);
               }
