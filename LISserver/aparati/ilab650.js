@@ -566,7 +566,7 @@ module.exports = {
                         //     }
                         //   }
                         //  }
-                        callback(recordret.slice(0, 3));
+                        callback(recordret);
                      
                     }
                     Results.findOne({ 'id': uzorak.id }).populate('patient rezultati.labassay').exec(function (err, rezultat) {
