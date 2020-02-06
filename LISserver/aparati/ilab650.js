@@ -546,25 +546,26 @@ module.exports = {
                     console.log(recordret)
                     if(brojac===uzorci.length){
                      
-                         if(recordret[0].includes('E18')){
-                          callback(recordret.slice(0, 1));
-                          recordret = []
-                         }else{
-                          if(recordret[1].includes('E18')){
-                            callback(recordret.slice(0, 1));
-                            recordret = []
-                          }else{
-                            if(recordret[2].includes('E18')){
-                              callback(recordret.slice(0, 2));
-                              recordret = []
-                            }else{
-                              if(recordret[3].includes('E18')){
-                                callback(recordret.slice(0, 3));
-                                recordret = []
-                              }
-                            }
-                          }
-                         }
+                        //  if(recordret[0].includes('E18')){
+                        //   callback(recordret.slice(0, 1));
+                        //   recordret = []
+                        //  }else{
+                        //   if(recordret[1].includes('E18')){
+                        //     callback(recordret.slice(0, 1));
+                        //     recordret = []
+                        //   }else{
+                        //     if(recordret[2].includes('E18')){
+                        //       callback(recordret.slice(0, 2));
+                        //       recordret = []
+                        //     }else{
+                        //       if(recordret[3].includes('E18')){
+                        //         callback(recordret.slice(0, 3));
+                        //         recordret = []
+                        //       }
+                        //     }
+                        //   }
+                        //  }
+                        callback(recordret.slice(0, 3));
                      
                     }
                     Results.findOne({ 'id': uzorak.id }).populate('patient rezultati.labassay').exec(function (err, rezultat) {
