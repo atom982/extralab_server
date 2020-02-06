@@ -434,7 +434,7 @@ module.exports = {
                         break;
                         case "K":
                           stype = 3
-                          //cupPosition = parseInt(cupPosition)+50
+                          cupPosition = parseInt(cupPosition)+25
                           break;                   
                       default:
                           stype = 1
