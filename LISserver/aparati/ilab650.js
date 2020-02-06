@@ -548,15 +548,19 @@ module.exports = {
                      
                          if(recordret[0].includes('E18')){
                           callback(recordret.slice(0, 1));
+                          recordret = []
                          }else{
                           if(recordret[1].includes('E18')){
                             callback(recordret.slice(0, 1));
+                            recordret = []
                           }else{
                             if(recordret[2].includes('E18')){
                               callback(recordret.slice(0, 2));
+                              recordret = []
                             }else{
                               if(recordret[3].includes('E18')){
                                 callback(recordret.slice(0, 3));
+                                recordret = []
                               }
                             }
                           }
