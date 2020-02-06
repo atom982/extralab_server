@@ -422,6 +422,7 @@ module.exports = {
                       })
                     })
                     var tests = '';
+                    console.log(uzorak.id)
                     var sampleType = uzorak.id.substring(0,1)
                     var stype = 1
                     var cupPosition = uzorak.id.substring(2,4)
