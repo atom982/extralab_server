@@ -344,8 +344,8 @@ module.exports = {
         break;
     }
     var brojac = 0
-    console.log('Query Parser: ');
-    console.log(record);
+    //console.log('Query Parser: ');
+    //console.log(record);
     record.forEach(function (element) {
       record_type = element.charAt(0);
       switch (record_type) {
@@ -422,7 +422,7 @@ module.exports = {
                       })
                     })
                     var tests = '';
-                    console.log(uzorak.id)
+                    //console.log(uzorak.id)
                     var sampleType = uzorak.id.substring(0,1)
                     var stype = 1
                     var cupPosition = uzorak.id.substring(2,4)
@@ -544,7 +544,7 @@ module.exports = {
                     brojac++
                     uzorak.status = "U OBRADI"
                     uzorak.save()  
-                    console.log(recordret)
+                    //console.log(recordret)
                     if(brojac===uzorci.length){
                      
                         //  if(recordret[0].includes('E18')){

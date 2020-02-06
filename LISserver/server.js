@@ -136,7 +136,7 @@ class lisServer {
 
                 }else{
                   var temp_rec = [];
-                  console.log('Parsam query ILAB 650:')
+                  //console.log('Parsam query ILAB 650:')
                   temp_rec.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
                   temp_rec.push("L|1")
                   funkcija.parsaj_query(temp_rec, function (poruka) {
