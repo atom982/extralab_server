@@ -91,7 +91,7 @@ class lisServer {
       // }, 50000);
       //--------------------------------------------
       socket.on('data', (data) => {
-        console.log(JSON.stringify(data))
+        //console.log(JSON.stringify(data))
         //----------------------Emerald blok
         if (data.charCodeAt(data.length - 1) !== 10) { //podaci od aparata
           frame += data; //dodaj u buffer \u001a
@@ -141,7 +141,10 @@ class lisServer {
                   temp_rec.push("L|1")
                   funkcija.parsaj_query(temp_rec, function (poruka) {
                     poruka.forEach(element => {
-                      console.log('Šaljem order za ILAB 650:'+JSON.stringify(element))
+                      if(element !="\u0002E18\u0003"){
+                        console.log('Šaljem order za ILAB 650:'+JSON.stringify(element))
+                      }
+                      
                       lisserver.broadcast(element, client)
                     });
                     frame = ''
