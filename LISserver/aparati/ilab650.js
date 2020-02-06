@@ -378,12 +378,12 @@ module.exports = {
               $gt: from,
               $lt: to
             },
-            //status:'n/a'
+            status:'n/a'
             //site: mongoose.Types.ObjectId(site)
           }
             var testovi = [];
             
-            Samples.find(uslov).populate('tests.labassay patient').sort({created_at: -1}).limit(3).exec(function (err, uzorci) {
+            Samples.find(uslov).populate('tests.labassay patient').sort({created_at: -1}).exec(function (err, uzorci) {
               if (err) {
                 console.log("Greška:", err);
               }

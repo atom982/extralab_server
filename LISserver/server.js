@@ -139,9 +139,6 @@ class lisServer {
                   console.log('Parsam query ILAB 650:')
                   temp_rec.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
                   temp_rec.push("L|1")
-                  var myInt = setInterval(function () {
-                    console.log("Hello");
-                }, 1000*10);
                   funkcija.parsaj_query(temp_rec, function (poruka) {
                     poruka.forEach(element => {
                       console.log('Šaljem order za ILAB 650:'+JSON.stringify(element))
