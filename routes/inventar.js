@@ -45,8 +45,21 @@ router.get("/inventar/listplatforma", inventar.ListPlatforma);
 router.post("/inventar/editplatforma", inventar.EditPlatforma);
 router.post("/inventar/deleteplatforma", inventar.DeletePlatforma);
 
+// Proizvodjac
+router.post("/inventar/createproizvodjac", inventar.CreateProizvodjac);
+router.get("/inventar/listproizvodjac", inventar.ListProizvodjac);
+router.post("/inventar/editproizvodjac", inventar.EditProizvodjac);
+router.post("/inventar/deleteproizvodjac", inventar.DeleteProizvodjac);
+
 //Produkti
 router.post("/inventar/createprodukt", inventar.CreateProdukt);
 router.post("/inventar/readprodukt", inventar.ReadProdukt);
 router.get("/inventar/produkti", inventar.apiUrlProdukti);
+router.get("/inventar/listprodukti", inventar.ListProdukti);
+
+//Produkti
+router.post("/inventar/createklijent", inventar.CreateKlijent);
+router.get("/inventar/listklijenti", inventar.ListKlijenti);
+router.post("/inventar/editklijent", inventar.EditKlijent);
+router.post("/inventar/deleteklijent", inventar.DeleteKlijent);
 module.exports = router;
