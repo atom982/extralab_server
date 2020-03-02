@@ -752,32 +752,33 @@ module.exports = {
 
     },
     order_query: function (record, callback) {
+        var Order_Response = ""
         var segments = record.split("\r")
         segments.forEach(function (segment) {
             segment_type = segment.substring(0,3);
             switch (segment_type) {
                  case 'MSH':
                     console.log("MSH: ");
-                    var MSH  = "MSH|^~\\&|||||20160801015944||RSP^K11^RSP_K11|e2703c29-8392-48f5-b085-9664475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-27^IHE"+"\u000d"
+                    Order_Response  += "MSH|^~\\&|||||20160801015944||RSP^K11^RSP_K11|e2703c29-8392-48f5-b085-9664475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-27^IHE"+"\u000d"
                     console.log(segment)
                     var ack_key = segment.split("|")[9]
                     console.log(ack_key)
-                    var MSA = "MSA|AA|"+ack_key+"\u000d"
+                    Order_Response += "MSA|AA|"+ack_key+"\u000d"
                     break;
                   case 'QPD':
                     console.log("QPD: ");
-                    var QAK = "QAK|"+segment.split("|")[2]+"|OK|WOS^Work Order Step^IHELAW"+"\u000d"
+                    Order_Response += "QAK|"+segment.split("|")[2]+"|OK|WOS^Work Order Step^IHELAW"+"\u000d"
                     console.log(segment)
                     var sample_id = segment.split("|")[3]
-                    var QPD  =segment+"\u000d"
+                    Order_Response  +=segment+"\u000d"
                     console.log(sample_id)
                     break;
                  case 'RCP':
                         console.log("RCP ");
                         console.log(segment)
-                        var Order_Response = "\u000b"+MSH+MSA+QAK+QPD+"\u001c"+"\u000d"
-                        console.log(JSON.stringify(Order_Response))
-                        callback(Order_Response)
+                        Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
+                       
+                        
                         // MSH|^~\&|LISApp|MainFacility|AlinityApp|LabFacility|20160801103758||OML^O33^OML_O33|7e68205ea431-464c-afd7-0115b5baf653|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE
                         // PID|||100||Doe^John^Lee^^^^L||19500214|M
                         // PV1||N|^ER 2
@@ -792,8 +793,8 @@ module.exports = {
                     console.log("Nepozanat HL7 segment !");
             }
         })
-
-        //callback(hostData);
+        console.log(JSON.stringify(Order_Response))
+        callback(Order_Response)
 
     },
   };
