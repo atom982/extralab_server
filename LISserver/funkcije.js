@@ -285,11 +285,7 @@ parsaj_hl7: function(record,callback){
   console.log(JSON.stringify(record))
   var Parts = record.split("|");
   var Type = Parts[8].split("^")
-  // var hostData = "MSH|^~\&|LIS|MainLab|Alinity ci|Lab2|20160801021528||ACK^N02^ACK|45bd3540-39d1-4500-b3d5-bd668f752dd3|P|2.5.1||||||UNICODE UTF-8"
-  // hostData +=  "MSA|AA|"+Parts[9]
-  // console.log(hostData)
-  // hostData = "\u000b"+hostData+'\r'+'\u001c'+'\r'
-  // socket.write(hostData)
+
   var sn = Type[0]
   // • Order Query
   // • Results Upload
