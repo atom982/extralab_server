@@ -759,6 +759,8 @@ module.exports = {
                  case 'MSH':
                     console.log("MSH: ");
                     console.log(segment)
+                    var ack_key = segment.split("|")[9]
+                    console.log(ack_key)
                     break;
                   case 'QPD':
                     console.log("QPD: ");
