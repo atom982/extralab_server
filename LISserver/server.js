@@ -110,7 +110,7 @@ class lisServer {
               console.log(JSON.stringify(orders[1]))
               console.log(client.address)
               console.log(client.port)
-              client.port  = 50020
+              //client.port  = 50020
               lisserver.broadcast(orders[1], client)
               // var klient = new net.Socket();
               //     klient.connect(50020, client.address, function() {
