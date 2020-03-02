@@ -274,5 +274,50 @@ parsaj_query: function(record,callback){
 
 
 },
+parsaj_hl7: function(record,callback){
+
+  //-------definicija protocola za aparat
+  var alinity = require('./aparati/alinity')
+
+  //-------------------------------------
+
+  console.log("Parsam HL7... funkcije");
+  console.log(JSON.stringify(record))
+  var Parts = record.split("|");
+  var Type = Parts[8].split("^")
+  // var hostData = "MSH|^~\&|LIS|MainLab|Alinity ci|Lab2|20160801021528||ACK^N02^ACK|45bd3540-39d1-4500-b3d5-bd668f752dd3|P|2.5.1||||||UNICODE UTF-8"
+  // hostData +=  "MSA|AA|"+Parts[9]
+  // console.log(hostData)
+  // hostData = "\u000b"+hostData+'\r'+'\u001c'+'\r'
+  // socket.write(hostData)
+  var sn = Type[0]
+  // • Order Query
+  // • Results Upload
+  // • Test Status Update
+  // • Sample Status Update
+  // • Connection Test
+  // • Assay Availability
+  switch(sn){
+
+    case 'NMD':  // Connection Test
+                        alinity.connection_test(record,function(poruka){
+                        console.log("Kreirano: ");
+                        console.log(poruka);
+                        callback(poruka);
+                        });
+                        break;          
+    case '27026012':  // Extralab siemens immulite 1000 imunohemija
+                        console.log('parsaj AIA-360')
+                        immulite1000.parsaj_rezultat(record,io);
+                        break; 
+    case 'RJ-1C110261':  // D Cell 60 Diagon hematologija
+                        
+                        Dcell60.parsaj_rezultat(record,io);
+                        break; 
+                        default:
+            console.log("U LIS -u nije definisan aparat, sa serijskim brojem: "+sn);
+  }
+
+},
 
 };
