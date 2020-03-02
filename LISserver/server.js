@@ -95,12 +95,14 @@ class lisServer {
         console.log(JSON.stringify(data))
         //----------------------Emerald blok
         // HL7
-        if (data.charCodeAt(data.length - 1) !== 28) {// Check if HL7? // "\u001c" === 28 // "\r"  "\u000b"
+        if (!data.includes('\u001c')) {// Check if HL7? // "\u001c" === 28 // "\r"  "\u000b"
            HL7data += data
 
         }else{
+          HL7data += data
           if (HL7data.includes('\u000b')) { 
             console.log('HL7 data received')
+            HL7data = ""
           }
         }
         // HL7
