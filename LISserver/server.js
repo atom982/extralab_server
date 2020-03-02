@@ -112,12 +112,14 @@ class lisServer {
               console.log(client.port)
               //client.port  = 50020
               lisserver.broadcast(orders[1], client)
-              var klient = new net.Socket();
-                  klient.connect(50020,'77.239.18.84', function() {
-                  console.log('Connected');
-                  klient.write(poruka);
-                  klient.destroy();
-                });
+              var klient = new Client(socket)
+              klient.port = 50020
+              klient.write(orders[1]);
+                //   klient.connect(50020,'77.239.18.84', function() {
+                //   console.log('Connected');
+                //   klient.write(poruka);
+                //   klient.destroy();
+                // });
               lisserver.poruka = [] 
               lisserver.counter = 0;
             });
