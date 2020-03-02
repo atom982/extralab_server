@@ -1981,4 +1981,66 @@ inventarController.DeleteKlijent = function(req, res) {
     );
   }
 };
+inventarController.CreateCijeneD= function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    var counter  = 0
+    req.body.cijene.forEach(element => {
+      element.created_by = req.body.decoded.user
+      var dobavljacc = new CijenaDobavljac(element);
+      dobavljacc.save(function(err) {
+        if (err) {
+          console.log("Greška:", err);
+          res.json({
+            success: false,
+            message: err
+          });
+        } else {
+          counter++    
+          if(counter ===req.body.cijene.length){
+            res.json({
+              success: true,
+              message: "Unos uspješno obavljen.",
+            });
+          }   
+        }
+      });
+    });
+  }
+};
+inventarController.CreateCijeneK= function(req, res) {
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: "Greška prilikom konekcije na MongoDB."
+    });
+  } else {
+    var counter  = 0
+    req.body.cijene.forEach(element => {
+      element.created_by = req.body.decoded.user
+      var klijentc = new CijenaKlijent(element);
+      klijentc.save(function(err) {
+        if (err) {
+          console.log("Greška:", err);
+          res.json({
+            success: false,
+            message: err
+          });
+        } else {
+          counter++    
+          if(counter ===req.body.cijene.length){
+            res.json({
+              success: true,
+              message: "Unos uspješno obavljen.",
+            });
+          }   
+        }
+      });
+    });
+  }
+};
 module.exports = inventarController;

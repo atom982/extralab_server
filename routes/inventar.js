@@ -62,4 +62,13 @@ router.post("/inventar/createklijent", inventar.CreateKlijent);
 router.get("/inventar/listklijenti", inventar.ListKlijenti);
 router.post("/inventar/editklijent", inventar.EditKlijent);
 router.post("/inventar/deleteklijent", inventar.DeleteKlijent);
+
+//Cijene Dobavljac
+router.post("/inventar/createcijened", inventar.CreateCijeneD);
+//router.get("/inventar/listklijenti", inventar.ListKlijenti);
+//router.post("/inventar/editklijent", inventar.EditKlijent);
+//router.post("/inventar/deleteklijent", inventar.DeleteKlijent);
+
+//Cijene Klijent
+router.post("/inventar/createcijenek", inventar.CreateCijeneK);
 module.exports = router;
