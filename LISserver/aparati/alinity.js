@@ -753,6 +753,7 @@ module.exports = {
     },
     order_query: function (record, callback) {
         var Order_Response = ""
+        var Order_Download = ""
         var segments = record.split("\r")
         segments.forEach(function (segment) {
             segment_type = segment.substring(0,3);
@@ -779,22 +780,23 @@ module.exports = {
                         Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
                        
                         
-                        // MSH|^~\&|LISApp|MainFacility|AlinityApp|LabFacility|20160801103758||OML^O33^OML_O33|7e68205ea431-464c-afd7-0115b5baf653|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE
-                        // PID|||100||Doe^John^Lee^^^^L||19500214|M
-                        // PV1||N|^ER 2
-                        // SPM|1|||""|||||||P^Patient^HL70369
-                        // SAC|||S000501
-                        // ORC|NW||||||||20160801103758
-                        // TQ1|1||||||||S^Stat^HL70485
-                        // OBR||ORDER#1005||249^TSH^99ABT|||||||A
-                        // NTE|0||Order comment
+                        Order_Download += "MSH|^~\\&|LISApp|MainFacility|AlinityApp|LabFacility|20160801103758||OML^O33^OML_O33|7e68205ea431-464c-afd7-0115b5baf653|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
+                        Order_Download += "PID|||100||Doe^John^Lee^^^^L||19500214|M"+"\u000d"
+                        Order_Download += "PV1||N|^ER 2"+"\u000d"
+                        Order_Download += "SPM|1|||""|||||||P^Patient^HL70369"+"\u000d"
+                        Order_Download += "SAC|||S000501"+"\u000d"
+                        Order_Download += "ORC|NW||||||||20160801103758"+"\u000d"
+                        Order_Download += "TQ1|1||||||||S^Stat^HL70485"+"\u000d"
+                        Order_Download += "OBR||ORDER#1005||249^TSH^99ABT|||||||A"+"\u000d"
+                        Order_Download += "NTE|0||Order comment"+"\u000d"
+                        Order_Download = "\u000b"+Order_Download+"\u001c"+"\u000d"
                         break;
                   default:
                     console.log("Nepozanat HL7 segment !");
             }
         })
         console.log(JSON.stringify(Order_Response))
-        callback(Order_Response)
+        callback(Order_Response+Order_Download)
 
     },
   };
