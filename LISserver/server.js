@@ -104,22 +104,17 @@ class lisServer {
             console.log('HL7 data received:')
             HL7data = HL7data.substring(HL7data.indexOf("\u000b") + 1, HL7data.indexOf("\u001c") - 1)  
             funkcija.parsaj_hl7(HL7data, function (poruka) {
-              var orders = poruka.split("\u000f")
-              lisserver.broadcast(orders[0], client)
-              console.log('KLIJENT REM port')
-              console.log(JSON.stringify(orders[1]))
-              console.log(client.address)
-              console.log(client.port)
-              //client.port  = 50020
-              lisserver.broadcast(orders[1], client)
-              var klient = new Client(socket)
-              klient.port = 50020
-              klient.write(orders[1]);
-                //   klient.connect(50020,'77.239.18.84', function() {
-                //   console.log('Connected');
-                //   klient.write(poruka);
-                //   klient.destroy();
-                // });
+              // var orders = poruka.split("\u000f")
+              // lisserver.broadcast(orders[0], client)
+              // console.log('KLIJENT REM port')
+              // console.log(JSON.stringify(orders[1]))
+              // console.log(client.address)
+              // console.log(client.port)
+              // //client.port  = 50020
+              // var klient = new net.Socket();
+              //     klient.connect(50020,'localhost', function() {
+
+              //   });
               lisserver.poruka = [] 
               lisserver.counter = 0;
             });
