@@ -285,6 +285,8 @@ parsaj_hl7: function(record,callback){
   console.log(JSON.stringify(record))
   var Parts = record.split("|");
   var Type = Parts[8].split("^")
+  var Segments = record.split("\r")
+  console.log(Segments)
 
   var sn = Type[0]
   // • Order Query
