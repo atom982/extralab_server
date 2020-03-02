@@ -71,6 +71,7 @@ class lisServer {
       lisserver.clients.push(client);
       
       var frame = '';
+      var HL7data = ""
       var frames = '';
       var frame_number = 1;
       var incom_frame_nr = '';
@@ -93,6 +94,16 @@ class lisServer {
       socket.on('data', (data) => {
         console.log(JSON.stringify(data))
         //----------------------Emerald blok
+        // HL7
+        if (data.charCodeAt(data.length - 1) !== 28) {// Check if HL7? // "\u001c" === 28 // "\r"  "\u000b"
+           HL7data += data
+
+        }else{
+          if (HL7data.includes('\u000b')) { 
+            console.log('HL7 data received')
+          }
+        }
+        // HL7
         if (data.charCodeAt(data.length - 1) !== 10) { //podaci od aparata
           frame += data; //dodaj u buffer \u001a
 
