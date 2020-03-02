@@ -92,7 +92,7 @@ class lisServer {
       // }, 50000);
       //--------------------------------------------
       socket.on('data', (data) => {
-        console.log(JSON.stringify(data))
+        //console.log(JSON.stringify(data))
         //----------------------Emerald blok
         // HL7
         if (!data.includes('\u001c')) {// Check if HL7? // "\u001c" === 28 // "\r"  "\u000b"
@@ -101,7 +101,9 @@ class lisServer {
         }else{
           HL7data += data
           if (HL7data.includes('\u000b')) { 
-            console.log('HL7 data received')
+            console.log('HL7 data received:')
+            HL7data = HL7data.substring(HL7data.indexOf("\u000b") + 1, HL7data.indexOf("\u001c") - 1)
+            console.log(JSON.stringify(HL7data))
             HL7data = ""
           }
         }
