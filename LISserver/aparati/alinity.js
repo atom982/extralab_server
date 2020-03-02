@@ -776,6 +776,7 @@ module.exports = {
                         console.log("RCP ");
                         console.log(segment)
                         var Order_Response = "\u000b"+MSH+MSA+QAK+QPD+"\u001c"+"\u000d"
+                        console.log(JSON.stringify(Order_Response))
                         callback(Order_Response)
                         // MSH|^~\&|LISApp|MainFacility|AlinityApp|LabFacility|20160801103758||OML^O33^OML_O33|7e68205ea431-464c-afd7-0115b5baf653|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE
                         // PID|||100||Doe^John^Lee^^^^L||19500214|M
