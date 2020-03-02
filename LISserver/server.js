@@ -104,13 +104,16 @@ class lisServer {
             console.log('HL7 data received:')
             HL7data = HL7data.substring(HL7data.indexOf("\u000b") + 1, HL7data.indexOf("\u001c") - 1)  
             funkcija.parsaj_hl7(HL7data, function (poruka) {
-              lisserver.broadcast(poruka, client)
-              var klient = new net.Socket();
-                  klient.connect(50020, client.address, function() {
-                  console.log('Connected');
-                  klient.write(poruka);
-                  klient.destroy();
-                });
+              Order_Response+"\u000f"+Order_Download
+              var orders = poruka.split("\u000f")
+              lisserver.broadcast(orders[0], client)
+              lisserver.broadcast(orders[1], client)
+              // var klient = new net.Socket();
+              //     klient.connect(50020, client.address, function() {
+              //     console.log('Connected');
+              //     klient.write(poruka);
+              //     klient.destroy();
+              //   });
               lisserver.poruka = [] 
               lisserver.counter = 0;
             });
