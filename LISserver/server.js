@@ -105,6 +105,12 @@ class lisServer {
             HL7data = HL7data.substring(HL7data.indexOf("\u000b") + 1, HL7data.indexOf("\u001c") - 1)  
             funkcija.parsaj_hl7(HL7data, function (poruka) {
               lisserver.broadcast(poruka, client)
+              var klient = new net.Socket();
+                  klient.connect(50020, client.address, function() {
+                  console.log('Connected');
+                  klient.write(poruka);
+                  klient.destroy();
+                });
               lisserver.poruka = [] 
               lisserver.counter = 0;
             });
