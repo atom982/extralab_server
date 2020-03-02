@@ -744,7 +744,7 @@ module.exports = {
     connection_test: function (record, callback) {
         console.log('BAZNA funkcija')
         var Parts = record.split("|");
-        var hostData = "MSH|^~\&|LIS|MainLab|Alinity ci|Lab2|20160801021528||ACK^N02^ACK|45bd3540-39d1-4500-b3d5-bd668f752dd3|P|2.5.1||||||UNICODE UTF-8"+"\u000d"
+        var hostData = "MSH|^~\\&|LIS|MainLab|Alinity ci|Lab2|20160801021528||ACK^N02^ACK|45bd3540-39d1-4500-b3d5-bd668f752dd3|P|2.5.1||||||UNICODE UTF-8"+"\u000d"
         hostData +=  "MSA|AA|"+Parts[9]+"\u000d"
         hostData = "\u000b" +hostData +"\u001c"+"\u000d"
         console.log(JSON.stringify(hostData))
