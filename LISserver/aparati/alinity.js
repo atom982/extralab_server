@@ -765,6 +765,8 @@ module.exports = {
                   case 'QPD':
                     console.log("QPD: ");
                     console.log(segment)
+                    var sample_id = segment.split("|")[3]
+                    console.log(sample_id)
                     break;
                  case 'RCP':
                         console.log("RCP ");
