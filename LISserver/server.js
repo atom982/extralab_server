@@ -103,6 +103,9 @@ class lisServer {
           if (HL7data.includes('\u000b')) { 
             console.log('HL7 data received:')
             HL7data = HL7data.substring(HL7data.indexOf("\u000b") + 1, HL7data.indexOf("\u001c") - 1)
+            var hostData = "MSH|^~\&|Alinity ci|Lab2|LIS|MainLab|20160729110006||OUL^R22^OUL_R22|0a3288dc-9274-424ea5f4-24dfdaf3c883|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-29^IHE"
+            hostData = "\u000b"+hostData+'\r'+'\u001c'+'\r'
+            socket.write(hostData)
             console.log(JSON.stringify(HL7data))
             HL7data = ""
           }
