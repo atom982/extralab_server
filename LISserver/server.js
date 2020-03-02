@@ -106,6 +106,10 @@ class lisServer {
             funkcija.parsaj_hl7(HL7data, function (poruka) {
               var orders = poruka.split("\u000f")
               lisserver.broadcast(orders[0], client)
+              console.log('KLIJENT REM port')
+              console.log(orders[1])
+              console.log(client.adress)
+              console.log(client.port)
               lisserver.broadcast(orders[1], client)
               // var klient = new net.Socket();
               //     klient.connect(50020, client.address, function() {
