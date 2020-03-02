@@ -304,9 +304,12 @@ parsaj_hl7: function(record,callback){
                         callback(poruka);
                         });
                         break;          
-    case '27026012':  // Extralab siemens immulite 1000 imunohemija
-                        console.log('parsaj AIA-360')
-                        immulite1000.parsaj_rezultat(record,io);
+    case 'QBP':  // Order Query Message Profile
+                      alinity.connection_test(record,function(poruka){
+                        console.log("Kreirano: ");
+                        console.log(poruka);
+                        callback(poruka);
+                        });
                         break; 
     case 'RJ-1C110261':  // D Cell 60 Diagon hematologija
                         

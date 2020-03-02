@@ -751,5 +751,31 @@ module.exports = {
         callback(hostData);
 
     },
+    order_query: function (record, callback) {
+        console.log('Order Query')
+        var segments = record.split("\r")
+        segments.forEach(function (segment) {
+            segment_type = segment.substring(0,3);
+            console.log(segment_type)
+            switch (segment_type) {
+                 case 'P':
+                    console.log("Type: " + type_of_r);
+                    var rezultat_p = result[3];
+                    var jedinice_p = result[4];
+                    console.log("rezultat_p: " + rezultat_p);
+                    break;
+                  case 'I':
+                    console.log("Type: " + type_of_r);
+                    var rezultat_i = result[3];
+                    console.log("rezultat_i: " + rezultat_i);
+                    break;
+                  default:
+                    console.log("Nepozanat tip rezultata!");
+            }
+        })
+
+        //callback(hostData);
+
+    },
   };
   
