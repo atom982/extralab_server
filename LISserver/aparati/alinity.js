@@ -744,7 +744,7 @@ module.exports = {
     connection_test: function (record, callback) {
         console.log('Connection TEST sucecessful')
         var Parts = record.split("|");
-        var hostData = "MSH|^~\\&|LIS|MainLab|Alinity ci|Lab2|20160801021528||ACK^N02^ACK|45bd3540-39d1-4500-b3d5-bd668f752dd3|P|2.5.1||||||UNICODE UTF-8"+"\u000d"
+        var hostData = "MSH|^~\\&|atom-lis|MainLab|Alinity ci|Lab2|20160801021528||ACK^N02^ACK|45bd3540-39d1-4500-b3d5-bd668f752dd3|P|2.5.1||||||UNICODE UTF-8"+"\u000d"
         hostData +=  "MSA|AA|"+Parts[9]+"\u000d"
         hostData = "\u000b" +hostData +"\u001c"+"\u000d"
         console.log(JSON.stringify(hostData))
@@ -760,7 +760,7 @@ module.exports = {
             switch (segment_type) {
                  case 'MSH':
                     console.log("MSH: ");
-                    Order_Response  += "MSH|^~\\&|||||20160801015944||RSP^K11^RSP_K11|e2703c29-8392-48f5-b085-9664475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-27^IHE"+"\u000d"
+                    Order_Response  += "MSH|^~\\&|atom-lis||||20200801015944||RSP^K11^RSP_K11|e2703c29-8392-48f5-b085-9664475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-27^IHE"+"\u000d"
                     console.log(segment)
                     var ack_key = segment.split("|")[9]
                     console.log(ack_key)
@@ -777,17 +777,19 @@ module.exports = {
                  case 'RCP':
                         console.log("RCP ");
                         console.log(segment)
+                        var rcp = segment.split("|")[3]
+                
                         Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
                        
                         
-                        Order_Download += "MSH|^~\\&|LISApp|MainFacility|AlinityApp|LabFacility|20160801103758||OML^O33^OML_O33|7e68205ea431-464c-afd7-0115b5baf653|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
+                        Order_Download += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-1382-48f5-b085-9694475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
                         Order_Download += "PID|||100||Doe^John^Lee^^^^L||19500214|M"+"\u000d"
                         Order_Download += "PV1||N|^ER 2"+"\u000d"
-                        Order_Download += "SPM|1||||||||||P^Patient^HL70369"+"\u000d"
+                        Order_Download += "SPM|1|||'Blood'|||||||P^Patient^HL70369"+"\u000d"
                         Order_Download += "SAC|||S000501"+"\u000d"
                         Order_Download += "ORC|NW||||||||20160801103758"+"\u000d"
                         Order_Download += "TQ1|1||||||||S^Stat^HL70485"+"\u000d"
-                        Order_Download += "OBR||ORDER#1005||249^TSH^99ABT|||||||A"+"\u000d"
+                        Order_Download += "OBR||ORDER#1005||1975^CRP48^99ABT|||||||A"+"\u000d"
                         Order_Download += "NTE|0||Order comment"+"\u000d"
                         Order_Download = "\u000b"+Order_Download+"\u001c"+"\u000d"
                         break;
@@ -795,9 +797,77 @@ module.exports = {
                     console.log("Nepozanat HL7 segment !");
             }
         })
+        console.log('ORDER RESPONSE')
         console.log(JSON.stringify(Order_Response))
-        callback(Order_Response+"\u000f"+Order_Download)
+        console.log('ORDER DOWNLOAD')
+        console.log(JSON.stringify(Order_Download))
+        var resp = Order_Response+"\u000f"+Order_Download
+        callback(resp)
 
     },
+    specimen_result: function (record, callback) {
+      var Result_Response = ""
+      var segments = record.split("\r")
+      segments.forEach(function (segment) {
+          segment_type = segment.substring(0,3);
+          switch (segment_type) {
+               case 'MSH':
+                  console.log("MSH: ");
+                  Result_Response  += "MSH|^~\\&|atom-lis||||20200801015944||ACK^R22^ACK|e2703c29-8392-48f5-b085-9664475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-29^IHE"+"\u000d"
+                  console.log(segment)
+                  var ack_key = segment.split("|")[9]
+                  console.log(ack_key)
+                  Result_Response += "MSA|AA|"+ack_key+"\u000d"
+                  Result_Response = "\u000b"+Result_Response+"\u001c"+"\u000d"
+                  break;
+                case 'PID':
+                  console.log("PID: ");
+
+                      break;
+                case 'PV1':
+                    console.log("PV1: ");
+  
+                      break;
+                case 'SPM':
+                    console.log("SPM: ");
+  
+                      break;  
+                case 'SAC':
+                      console.log("SAC: ");
+    
+                      break;   
+                case 'OBR':
+                        console.log("OBR: ");
+      
+                      break; 
+                case 'ORC':
+                          console.log("ORC: ");
+        
+                      break; 
+                case 'TQ1':
+                          console.log("TQ1: ");
+          
+                      break; 
+                case 'OBX':
+                        console.log("OBX: ");
+            
+                      break; 
+                case 'TCD':
+                        console.log("TCD: ");
+              
+                      break;  
+                case 'NTE':
+                        console.log("NTE: ");
+              
+                      break;                
+                default:
+                  console.log("Nepozanat HL7 segment !");
+          }
+      })
+      console.log('RESULT RESPONSE')
+      console.log(JSON.stringify(Result_Response))
+      callback(Result_Response)
+
+  },
   };
   

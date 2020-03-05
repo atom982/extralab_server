@@ -278,7 +278,7 @@ parsaj_hl7: function(record,callback){
 
   //-------definicija protocola za aparat
   var alinity = require('./aparati/alinity')
-
+  const net = require('net');
   //-------------------------------------
 
   console.log("Parsam HL7... funkcije");
@@ -306,15 +306,18 @@ parsaj_hl7: function(record,callback){
                         break;          
     case 'QBP':  // Order Query Message Profile
                       alinity.order_query(record,function(poruka){
-                        console.log("Kreirano: ");
-                        console.log(poruka);
+                        //console.log("Kreirano: ");
+                        //console.log(poruka);
                         callback(poruka);
                         });
                         break; 
-    case 'RJ-1C110261':  // D Cell 60 Diagon hematologija
-                        
-                        Dcell60.parsaj_rezultat(record,io);
-                        break; 
+    case 'OUL':  // Order Query Message Profile
+                        alinity.specimen_result(record,function(poruka){
+                          //console.log("Kreirano: ");
+                          //console.log(poruka);
+                          callback(poruka);
+                          });
+                          break; 
                         default:
             console.log("U LIS -u nije definisan aparat, sa serijskim brojem: "+sn);
   }

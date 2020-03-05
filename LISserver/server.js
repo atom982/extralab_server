@@ -77,23 +77,43 @@ class lisServer {
       var incom_frame_nr = '';
       var emerald = ''
       var eliteframe = ''
-      //--------------------------------------------
-      // setInterval(() => {
-      //   var temp_rec = [];
-      //   temp_rec.push("H|\\^&|||iLab650^1.00^U10714300027^H1R1L1|||||||P|1|")
-      //   temp_rec.push("L|1")
-      //   funkcija.parsaj_query(temp_rec, function (poruka) {
-      //     poruka.forEach(element => {
-      //       lisserver.broadcast(element, client)
-      //     });
-          
-      //     lisserver.counter = 0;
-      //   });
-      // }, 50000);
-      //--------------------------------------------
+      //--------------------------------------------CLIENT
+  //     var retrying = false;
+
+  //     function makeConnection () {
+  //         klijent.connect(50020, '192.168.1.107');
+  //       }
+  //     function closeEventHandler () {
+  //           if (!retrying) {
+  //               retrying = true;
+  //               console.log('Rekonektujem se ...');
+  //               setTimeout(makeConnection, 2000);
+  //           }
+            
+  //       }
+  //   function connectEventHandler() {
+  //         console.log('klijent konektovan');
+  //     }
+  //     function errorEventHandler() {
+  //       console.log('Greška prilikom spajanja na REmote Application');
+  //       retrying = true;
+  //   }
+  //   function sendData(data) {
+
+  //     console.log('ORDER DOWNLOAD XDX send DATA')
+  //     console.log(JSON.stringify(data))
+  //     klijent.write(data)
+  // }
+  //   var klijent = new net.Socket();
+  //   klijent.on('connect', connectEventHandler);
+  //   klijent.on('close',   closeEventHandler);
+  //   klijent.on('error',   errorEventHandler);
+  //     makeConnection()
+
+      //-------------------------------------------- CLIENT
       socket.on('data', (data) => {
         //console.log(JSON.stringify(data))
-        //----------------------Emerald blok
+        //---------------------Emerald blok
         // HL7
         if (!data.includes('\u001c')) {// Check if HL7? // "\u001c" === 28 // "\r"  "\u000b"
            HL7data += data
@@ -104,17 +124,20 @@ class lisServer {
             console.log('HL7 data received:')
             HL7data = HL7data.substring(HL7data.indexOf("\u000b") + 1, HL7data.indexOf("\u001c") - 1)  
             funkcija.parsaj_hl7(HL7data, function (poruka) {
-              // var orders = poruka.split("\u000f")
-              // lisserver.broadcast(orders[0], client)
-              // console.log('KLIJENT REM port')
-              // console.log(JSON.stringify(orders[1]))
-              // console.log(client.address)
-              // console.log(client.port)
-              // //client.port  = 50020
-              // var klient = new net.Socket();
-              //     klient.connect(50020,'localhost', function() {
-
-              //   });
+              var orders = poruka.split("\u000f")
+              console.log('ORDER RESPONSE XDX')
+              console.log(JSON.stringify(orders[0]))
+              lisserver.broadcast(orders[0], client)
+              if(orders.length > 1){           
+                //sendData(orders[1]);
+                this.clients.forEach((cnl) => {
+                  if(cnl !=client){
+                    cnl.sendMessage(orders[1]);  
+                  }
+                      
+                });
+              }
+              
               lisserver.poruka = [] 
               lisserver.counter = 0;
             });
