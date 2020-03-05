@@ -130,7 +130,7 @@ class lisServer {
               lisserver.broadcast(orders[0], client)
               if(orders.length > 1){           
                 //sendData(orders[1]);
-                this.clients.forEach((cnl) => {
+                lisserver.clients.forEach((cnl) => {
                   if(cnl !=client){
                     cnl.sendMessage(orders[1]);  
                   }
