@@ -131,9 +131,9 @@ class lisServer {
               if(orders.length > 1){           
                 //sendData(orders[1]);
                 lisserver.clients.forEach((cnl) => {
-                  if(cnl !=client){
+                  //if(cnl !=client){
                     cnl.sendMessage(orders[1]);  
-                  }
+                  //}
                       
                 });
               }
