@@ -902,6 +902,10 @@ module.exports = {
             }
         })
     },
+    order_query_resp: function (record, callback) {
+      console.log('Query response')
+      console.log(JSON.stringify(record))
+  },
     specimen_result: function (record, callback) {
       var Result_Response = ""
       var segments = record.split("\r")

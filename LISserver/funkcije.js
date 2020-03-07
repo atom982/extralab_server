@@ -311,6 +311,13 @@ parsaj_hl7: function(record,callback){
                         callback(poruka);
                         });
                         break; 
+    case 'ORL':  // Order Query Message Profile
+                        alinity.order_query_resp(record,function(poruka){
+                          console.log("Kreirano: ");
+                          console.log(poruka);
+                          callback(poruka);
+                          });
+                          break; 
     case 'OUL':  // Order Query Message Profile
                         alinity.specimen_result(record,function(poruka){
                           //console.log("Kreirano: ");
