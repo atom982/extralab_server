@@ -885,7 +885,7 @@ module.exports = {
                                   //   console.log(JSON.stringify(Order_Response))
                                   //    console.log('ORDER DOWNLOAD')
                                   //   console.log(JSON.stringify(Order_Download))
-                                  //   var resp = Order_Response+"\u000f"+Order_Download
+                                    var resp = Order_Response+"\u000f"+Order_Download
                                     callback(resp)
                                   }
             
