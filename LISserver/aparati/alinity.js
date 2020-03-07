@@ -841,7 +841,7 @@ module.exports = {
 
                                     console.log("Kreiram Record: ");
                                     Order_Download += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-1362-48f5-b085-9694475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
-
+                                                        
 
                                     
                                     var prezime = rezultat.patient.prezime
