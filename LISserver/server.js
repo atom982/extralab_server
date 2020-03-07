@@ -49,8 +49,8 @@ class lisServer {
   broadcasthl7(message, clientSender) {
     this.clients.forEach((client) => {
       if (client.address === clientSender.address) {
-        console.log('broadcasting ....'+client.address)
-        console.log(message)
+        console.log('broadcasting ....adress:'+client.address+ " port:"+client.port)
+        console.log(JSON.stringify(message))
         client.sendMessage(message);
       }
     });
