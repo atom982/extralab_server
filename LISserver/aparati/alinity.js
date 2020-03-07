@@ -779,31 +779,140 @@ module.exports = {
                         console.log(segment)
                         var rcp = segment.split("|")[3]
                 
-                        Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
+                        // Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
                        
                         
-                        Order_Download += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-1362-48f5-b085-9694475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
-                        Order_Download += "PID|||100||Doe^John^Lee^^^^L||19500214|M"+"\u000d"
-                        Order_Download += "PV1||N|^ER 2"+"\u000d"
-                        Order_Download += "SPM|1|||'Blood'|||||||P^Patient^HL70369"+"\u000d"
-                        Order_Download += "SAC|||S000502"+"\u000d"
-                        Order_Download += "ORC|NW||||||||20160801103758"+"\u000d"
-                        Order_Download += "TQ1|1||||||||S^Stat^HL70485"+"\u000d"
-                        Order_Download += "OBR||ORDER#1006||1975^CRP48^99ABT|||||||A"+"\u000d"
-                        Order_Download += "NTE|0||Order comment"+"\u000d"
-                        Order_Download = "\u000b"+Order_Download+"\u001c"+"\u000d"
+                        // Order_Download += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-1362-48f5-b085-9694475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
+                        // Order_Download += "PID|||100||Doe^John^Lee^^^^L||19500214|M"+"\u000d"
+                        // Order_Download += "PV1||N|^ER 2"+"\u000d"
+                        // Order_Download += "SPM|1|||''|||||||P^Patient^HL70369"+"\u000d"
+                        // Order_Download += "SAC|||S000502"+"\u000d"
+                        // Order_Download += "ORC|NW||||||||20160801103758"+"\u000d"
+                        // Order_Download += "TQ1|1||||||||S^Stat^HL70485"+"\u000d"
+                        // Order_Download += "OBR||ORDER#1006||1975^CRP48^99ABT|||||||A"+"\u000d"
+                        // Order_Download += "NTE|0||Order comment"+"\u000d"
+                        // Order_Download = "\u000b"+Order_Download+"\u001c"+"\u000d"
+                        Samples.findOne({ id: sample_id }).populate('tests.labassay').exec(function (err, uzorak) {
+                          if (err) {
+                            console.log("Greška:", err);
+                          }
+                          else {
+                            if (uzorak === null) {
+                              console.log("U LIS-u ne postoji uzorak sa brojem: " + sample_id);
+                              Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
+                              Order_Download  += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-8392-48f5-b085-9664475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-27^IHE"+"\u000d"
+                              Order_Download  += "SPM|1|||''|||||||U^Unknown^HL70369"+"\u000d"
+                              Order_Download  += "SAC|||02231522041700"+"\u000d"
+                              Order_Download  += "ORC|DC||||||||20160725022110"+"\u000d"
+                              Order_Download = "\u000b"+Order_Download+"\u001c"+"\u000d"
+                              var negquery= Order_Response+"\u000f"+Order_Download
+                              callback(negquery);
+                            } else {
+                              var tests = '';
+                              var counter = 0;
+                              var uzoraklength = uzorak.tests.length;
+                              Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
+
+                              AnaAssays.find({}).populate('aparat test').lean().exec(function (err, anaassays) {
+                                uzorak.tests.forEach(function (test) {
+                                  anaassays.forEach(function (anaassay) {
+                                    if ((anaassay.test.sifra === test.labassay.sifra) && (anaassay.test.calculated)) {
+                                      test.status_t = "U OBRADI"
+                                    }
+                                    if (((anaassay.test.sifra === test.labassay.sifra) && (test.status_r === true) && (!anaassay.test.manual) && (!anaassay.test.calculated)) || ( (anaassay.test.sifra === test.labassay.sifra) && (test.status_t === "ZAPRIMLJEN") && (!anaassay.test.manual) && (!anaassay.test.calculated))) {
+                                      testovi.push({ordernr:uzorak.pid,kod:anaassay.kod, ime:anaassay.test.naziv})
+            
+                                      test.status_t = "U OBRADI"
+                                    }
+                                  })
+                                })
+
+                                Results.findOne({ 'id': uzorak.id }).populate('patient rezultati.labassay').exec(function (err, rezultat) {
+            
+                                  if (testovi.length < 1) {
+                                    console.log("Za uzorak :" + sample_id + " ne postoji niti jedan test ili rerun!");
+                                    Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
+                                    Order_Download  += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-8392-48f5-b085-9664475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-27^IHE"+"\u000d"
+                                    Order_Download  += "SPM|1|||''|||||||U^Unknown^HL70369"+"\u000d"
+                                    Order_Download  += "SAC|||02231522041700"+"\u000d"
+                                    Order_Download  += "ORC|DC||||||||20160725022110"+"\u000d"
+                                    Order_Download = "\u000b"+Order_Download+"\u001c"+"\u000d"
+                                    var negquery= Order_Response+"\u000f"+Order_Download
+                                    callback(negquery);
+                                  } else {
+
+                                    rezultat.status = "U OBRADI"
+                                    uzorak.status = "U OBRADI"
+                                    rezultat.save(function (err) {
+                                      if (err) {
+                                        console.log("Greška:", err);
+            
+                                      } else {
+            
+                                      }
+                                    });
+                                    uzorak.save()
+
+                                    console.log("Kreiram Record: ");
+                                    Order_Download += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-1362-48f5-b085-9694475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
+
+
+                                    
+                                    var prezime = rezultat.patient.prezime
+                                    var rime = rezultat.patient.ime
+                                    var ime = prezime+'^'+rime
+                                    ime = ime.replace(/Ć/g,'C')
+                                    ime = ime.replace(/Č/g,'C')
+                                    ime = ime.replace(/Š/g,'S')
+                                    ime = ime.replace(/Đ/g,'D')
+                                    ime = ime.replace(/Ž/g,'Z')
+                                    ime = ime.replace(/č/g,'c')
+                                    ime = ime.replace(/ć/g,'c')
+                                    ime = ime.replace(/š/g,'s')
+                                    ime = ime.replace(/đ/g,'d')
+                                    ime = ime.replace(/ž/g,'z')
+                                    Order_Download += "PID|||"+rezultat.patient.jmbg+"||"+ime+"^^^^^L||19500214|M"+"\u000d"
+                                    Order_Download += "PV1||N|^ER 2"+"\u000d"
+                                    Order_Download += "SPM|1|||''|||||||P^Patient^HL70369"+"\u000d"
+                                    Order_Download += "SAC|||"+uzorak.id+"\u000d"
+                                    //-----------------
+                                    testovi.forEach(element => {
+                                      counter++;
+                                      if (counter < testovi.length) {
+                                        dilution = ''
+                                        Order_Download += "ORC|NW||||||||20200101103758"+"\u000d"
+                                        Order_Download += "TQ1|1||||||||S^Stat^HL70485"+"\u000d" //R^Routine^HL70485
+                                        Order_Download += "OBR||"+element.ordernr+"||"+element.kod+"^"+element.ime+"^99ABT|||||||A"+"\u000d"
+                                        Order_Download += "NTE|0||Order comment"+"\u000d"
+                                      } else {
+                                        dilution = ''
+                                        Order_Download += "ORC|NW||||||||20200101103758"+"\u000d"
+                                        Order_Download += "TQ1|1||||||||S^Stat^HL70485"+"\u000d" //R^Routine^HL70485
+                                        Order_Download += "OBR||"+element.ordernr+"||"+element.kod+"^"+element.ime+"^99ABT|||||||A"+"\u000d"
+                                        Order_Download += "NTE|0||Order comment"+"\u000d"
+                                      }
+                                    });
+                                    //-----------------
+            
+                                    // console.log('ORDER RESPONSE')
+                                    // console.log(JSON.stringify(Order_Response))
+                                    // console.log('ORDER DOWNLOAD')
+                                    // console.log(JSON.stringify(Order_Download))
+                                    var resp = Order_Response+"\u000f"+Order_Download
+                                    callback(resp)
+                                  }
+            
+                                })
+                              })
+                            } // else if uzorak null
+            
+                          }
+                        });
                         break;
                   default:
                     console.log("Nepozanat HL7 segment !");
             }
         })
-        console.log('ORDER RESPONSE')
-        console.log(JSON.stringify(Order_Response))
-        console.log('ORDER DOWNLOAD')
-        console.log(JSON.stringify(Order_Download))
-        var resp = Order_Response+"\u000f"+Order_Download
-        callback(resp)
-
     },
     specimen_result: function (record, callback) {
       var Result_Response = ""
