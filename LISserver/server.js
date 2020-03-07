@@ -43,9 +43,13 @@ class lisServer {
         //console.log('Šaljem na adresu: ' + client.address + ', port: ' + client.port);
         //console.log(JSON.stringify(message))
       }
-      if (client.sn === "frontClient") {
+    });
+
+  }
+  broadcasthl7(message, clientSender) {
+    this.clients.forEach((client) => {
+      if (client != clientSender) {
         client.sendMessage(message);
-        //console.log('Šaljem na adresu: ' + client.address + ', port: ' + client.port);
       }
     });
 
@@ -129,15 +133,8 @@ class lisServer {
               console.log(JSON.stringify(orders[0]))
               lisserver.broadcast(orders[0], client)
               if(orders.length > 1){           
-                //sendData(orders[1]);
-                lisserver.clients.forEach((cnl) => {
-                  //if(cnl !=client){
-                    cnl.sendMessage(orders[1]);  
-                  //}
-                      
-                });
-              }
-              
+                lisserver.broadcasthl7(orders[1], client)
+              }         
               lisserver.poruka = [] 
               lisserver.counter = 0;
             });
