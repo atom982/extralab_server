@@ -820,7 +820,7 @@ module.exports = {
                                     if ((anaassay.test.sifra === test.labassay.sifra) && (anaassay.test.calculated)) {
                                       test.status_t = "U OBRADI"
                                     }
-                                    if (((anaassay.test.sifra === test.labassay.sifra) && (test.status_r === true) && (!anaassay.test.manual) && (!anaassay.test.calculated)) || ( (anaassay.test.sifra === test.labassay.sifra) && (test.status_t === "ZAPRIMLJEN") && (!anaassay.test.manual) && (!anaassay.test.calculated))) {
+                                    if (((anaassay.test.sifra === test.labassay.sifra) && (test.status_r === true) ) || ( (anaassay.test.sifra === test.labassay.sifra) && (test.status_t === "ZAPRIMLJEN") )) {
                                       testovi.push({ordernr:uzorak.pid,kod:anaassay.kod, ime:anaassay.test.naziv})
             
                                       test.status_t = "U OBRADI"
