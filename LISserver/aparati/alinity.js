@@ -875,7 +875,7 @@ module.exports = {
                                         dilution = ''
                                         Order_Download += "ORC|NW||||||||20200101103758"+"\u000d"
                                         Order_Download += "TQ1|1||||||||S^Stat^HL70485"+"\u000d" //R^Routine^HL70485
-                                        Order_Download += "OBR||"+element.ordernr+"||"+element.kod+"^"+element.ime+"^99ABT|||||||A"+"\u000d"
+                                        Order_Download += "OBR||"+element.ordernr+"||"+element.kod.replace(/^0+/, '')+"^"+element.ime+"^99ABT|||||||A"+"\u000d"
                                         Order_Download += "NTE|0||Order comment"+"\u000d"
                                       }
                                     });
@@ -885,6 +885,7 @@ module.exports = {
                                   //   console.log(JSON.stringify(Order_Response))
                                   //    console.log('ORDER DOWNLOAD')
                                   //   console.log(JSON.stringify(Order_Download))
+                                    Order_Download = "\u000b"+Order_Download+"\u001c"+"\u000d"
                                     var resp = Order_Response+"\u000f"+Order_Download
                                     callback(resp)
                                   }
