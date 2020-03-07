@@ -840,7 +840,8 @@ module.exports = {
                                     uzorak.save()
 
                                     console.log("Kreiram Record: ");
-                                    Order_Download += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-1362-48f5-b085-"+Math.random().toString(36).substring(13)+"|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
+                                    console.log(Math.random().toString(36).substring(12))
+                                    Order_Download += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-1362-48f5-b085-"+Math.random().toString(36).substring(12)+"|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
                                                         
 
                                     
