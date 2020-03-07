@@ -863,22 +863,14 @@ module.exports = {
                                     Order_Download += "SPM|1|||''|||||||P^Patient^HL70369"+"\u000d"
                                     Order_Download += "SAC|||"+uzorak.id+"\u000d"
                                     //-----------------
-                                    var counter = 0;
-                                    testovi.forEach(element => {
-                                      counter++;
-                                      if (counter < testovi.length) {
+                                 
+                                    testovi.forEach(element => {           
                                         dilution = ''
                                         Order_Download += "ORC|NW||||||||20200101103758"+"\u000d"
                                         Order_Download += "TQ1|1||||||||S^Stat^HL70485"+"\u000d" //R^Routine^HL70485
                                         Order_Download += "OBR||"+element.ordernr+"||"+element.kod.replace(/^0+/, '')+"^"+element.ime+"^99ABT|||||||A"+"\u000d"
                                         Order_Download += "NTE|0||Order comment"+"\u000d"
-                                      } else {
-                                        dilution = ''
-                                        Order_Download += "ORC|NW||||||||20200101103758"+"\u000d"
-                                        Order_Download += "TQ1|1||||||||S^Stat^HL70485"+"\u000d" //R^Routine^HL70485
-                                        Order_Download += "OBR||"+element.ordernr+"||"+element.kod.replace(/^0+/, '')+"^"+element.ime+"^99ABT|||||||A"+"\u000d"
-                                        Order_Download += "NTE|0||Order comment"+"\u000d"
-                                      }
+                                      
                                     });
                                     //-----------------
             
