@@ -306,8 +306,8 @@ parsaj_hl7: function(record,callback){
                         break;          
     case 'QBP':  // Order Query Message Profile
                       alinity.order_query(record,function(poruka){
-                        //console.log("Kreirano: ");
-                        //console.log(poruka);
+                        console.log("Kreirano: ");
+                        console.log(poruka);
                         callback(poruka);
                         });
                         break; 
