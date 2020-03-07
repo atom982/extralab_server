@@ -1200,6 +1200,7 @@ odobravanjeController.UkloniOdobrenje = function(req, res) {
 };
 
 odobravanjeController.RetestActivate = function(req, res) {
+  console.log('Retest Activate')
   Results.findOne({
     id: req.body.id_u
   })
@@ -1224,6 +1225,7 @@ odobravanjeController.RetestActivate = function(req, res) {
               uzorak.tests.forEach(element => {
                 if (element.labassay.sifra === req.body.id_t) {
                   element.status_r = true;
+                  console.log('aktiviran retest:'+req.body.id_t)
                 }
               });
               uzorak.save();
