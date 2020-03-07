@@ -802,7 +802,7 @@ module.exports = {
                             if (uzorak === null) {
                               console.log("U LIS-u ne postoji uzorak sa brojem: " + sample_id);
                               Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
-                              Order_Download  += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-8392-48f5-b085-9664475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-27^IHE"+"\u000d"
+                              Order_Download  += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-8392-48f5-b085-9664475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
                               Order_Download  += "SPM|1|||''|||||||U^Unknown^HL70369"+"\u000d"
                               Order_Download  += "SAC|||02231522041700"+"\u000d"
                               Order_Download  += "ORC|DC||||||||20160725022110"+"\u000d"
@@ -833,7 +833,7 @@ module.exports = {
                                   if (testovi.length < 1) {
                                     console.log("Za uzorak :" + sample_id + " ne postoji niti jedan test ili rerun!");
                                     Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
-                                    Order_Download  += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-8392-48f5-b085-9664475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-27^IHE"+"\u000d"
+                                    Order_Download  += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-8392-48f5-b085-9664475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
                                     Order_Download  += "SPM|1|||''|||||||U^Unknown^HL70369"+"\u000d"
                                     Order_Download  += "SAC|||02231522041700"+"\u000d"
                                     Order_Download  += "ORC|DC||||||||20160725022110"+"\u000d"
@@ -855,7 +855,7 @@ module.exports = {
                                     uzorak.save()
 
                                     console.log("Kreiram Record: ");
-                                    Order_Download += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-1362-48f5-b085-9694475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||"+"\u000d"
+                                    Order_Download += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-1362-48f5-b085-9694475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
 
 
                                     
@@ -884,7 +884,7 @@ module.exports = {
                                         dilution = ''
                                         Order_Download += "ORC|NW||||||||20200101103758"+"\u000d"
                                         Order_Download += "TQ1|1||||||||S^Stat^HL70485"+"\u000d" //R^Routine^HL70485
-                                        Order_Download += "OBR||"+element.ordernr+"||"+element.kod+"^"+element.ime+"^99ABT|||||||A"+"\u000d"
+                                        Order_Download += "OBR||"+element.ordernr+"||"+element.kod.replace(/^0+/, '')+"^"+element.ime+"^99ABT|||||||A"+"\u000d"
                                         Order_Download += "NTE|0||Order comment"+"\u000d"
                                       } else {
                                         dilution = ''
