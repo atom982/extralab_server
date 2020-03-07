@@ -779,21 +779,6 @@ module.exports = {
                  case 'RCP':
                         console.log("RCP ");
                         console.log(segment)
-                        var rcp = segment.split("|")[3]
-                
-                        // Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
-                       
-                        
-                        // Order_Download += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-1362-48f5-b085-9694475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
-                        // Order_Download += "PID|||100||Doe^John^Lee^^^^L||19500214|M"+"\u000d"
-                        // Order_Download += "PV1||N|^ER 2"+"\u000d"
-                        // Order_Download += "SPM|1|||''|||||||P^Patient^HL70369"+"\u000d"
-                        // Order_Download += "SAC|||S000502"+"\u000d"
-                        // Order_Download += "ORC|NW||||||||20160801103758"+"\u000d"
-                        // Order_Download += "TQ1|1||||||||S^Stat^HL70485"+"\u000d"
-                        // Order_Download += "OBR||ORDER#1006||1975^CRP48^99ABT|||||||A"+"\u000d"
-                        // Order_Download += "NTE|0||Order comment"+"\u000d"
-                        // Order_Download = "\u000b"+Order_Download+"\u001c"+"\u000d"
                         Samples.findOne({ id: sample_id }).populate('tests.labassay').exec(function (err, uzorak) {
                           if (err) {
                             console.log("Greška:", err);
@@ -896,11 +881,11 @@ module.exports = {
                                     });
                                     //-----------------
             
-                                  console.log('ORDER RESPONSE')
-                                    console.log(JSON.stringify(Order_Response))
-                                     console.log('ORDER DOWNLOAD')
-                                    console.log(JSON.stringify(Order_Download))
-                                    var resp = Order_Response+"\u000f"+Order_Download
+                                  // console.log('ORDER RESPONSE')
+                                  //   console.log(JSON.stringify(Order_Response))
+                                  //    console.log('ORDER DOWNLOAD')
+                                  //   console.log(JSON.stringify(Order_Download))
+                                  //   var resp = Order_Response+"\u000f"+Order_Download
                                     callback(resp)
                                   }
             

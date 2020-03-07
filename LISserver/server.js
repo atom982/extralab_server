@@ -40,6 +40,8 @@ class lisServer {
     this.clients.forEach((client) => {
       if (client === clientSender) {
         client.sendMessage(message);
+        console.log('broadcasting direct....adress:'+client.address+ " port:"+client.port)
+        console.log(JSON.stringify(message))
         //console.log('Šaljem na adresu: ' + client.address + ', port: ' + client.port);
         //console.log(JSON.stringify(message))
       }
@@ -49,7 +51,7 @@ class lisServer {
   broadcasthl7(message, clientSender) {
     this.clients.forEach((client) => {
       if (client.address === clientSender.address) {
-        console.log('broadcasting ....adress:'+client.address+ " port:"+client.port)
+        console.log('broadcasting hl7....adress:'+client.address+ " port:"+client.port)
         console.log(JSON.stringify(message))
         client.sendMessage(message);
       }
@@ -131,8 +133,8 @@ class lisServer {
             HL7data = HL7data.substring(HL7data.indexOf("\u000b") + 1, HL7data.indexOf("\u001c") - 1)  
             funkcija.parsaj_hl7(HL7data, function (poruka) {
               var orders = poruka.split("\u000f")
-              console.log('ORDER RESPONSE XDX')
-              console.log(JSON.stringify(orders[0]))
+              // console.log('ORDER RESPONSE XDX')
+              // console.log(JSON.stringify(orders[0]))
               lisserver.broadcast(orders[0], client)
               if(orders.length > 1){           
                 lisserver.broadcasthl7(orders[1], client)
