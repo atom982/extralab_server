@@ -755,6 +755,7 @@ module.exports = {
         var Order_Response = ""
         var Order_Download = ""
         var sample_id = ""
+        var testovi  =[]
         var segments = record.split("\r")
         segments.forEach(function (segment) {
             segment_type = segment.substring(0,3);
@@ -808,10 +809,9 @@ module.exports = {
                               Order_Download = "\u000b"+Order_Download+"\u001c"+"\u000d"
                               var negquery= Order_Response+"\u000f"+Order_Download
                               callback(negquery);
-                            } else {
-                              var tests = '';
-                              var counter = 0;
-                              var uzoraklength = uzorak.tests.length;
+                            } else {   
+                              
+
                               Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
 
                               AnaAssays.find({}).populate('aparat test').lean().exec(function (err, anaassays) {
@@ -877,6 +877,7 @@ module.exports = {
                                     Order_Download += "SPM|1|||''|||||||P^Patient^HL70369"+"\u000d"
                                     Order_Download += "SAC|||"+uzorak.id+"\u000d"
                                     //-----------------
+                                    var counter = 0;
                                     testovi.forEach(element => {
                                       counter++;
                                       if (counter < testovi.length) {
