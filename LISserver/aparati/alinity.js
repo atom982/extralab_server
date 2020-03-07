@@ -754,6 +754,7 @@ module.exports = {
     order_query: function (record, callback) {
         var Order_Response = ""
         var Order_Download = ""
+        var sample_id = ""
         var segments = record.split("\r")
         segments.forEach(function (segment) {
             segment_type = segment.substring(0,3);
@@ -770,7 +771,7 @@ module.exports = {
                     console.log("QPD: ");
                     Order_Response += "QAK|"+segment.split("|")[2]+"|OK|WOS^Work Order Step^IHELAW"+"\u000d"
                     console.log(segment)
-                    var sample_id = segment.split("|")[3]
+                    sample_id = segment.split("|")[3]
                     Order_Response  +=segment+"\u000d"
                     console.log(sample_id)
                     break;
