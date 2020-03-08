@@ -752,6 +752,7 @@ module.exports = {
 
     },
     order_query: function (record, callback) {
+        var mongoose = require("mongoose");
         var Order_Response = ""
         var Order_Download = ""
         var sample_id = ""
