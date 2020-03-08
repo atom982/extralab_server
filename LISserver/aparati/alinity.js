@@ -758,6 +758,16 @@ module.exports = {
         var sample_id = ""
         var testovi  =[]
         var segments = record.split("\r")
+        function makeid(length) {
+          var result           = '';
+          var characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
+          var charactersLength = characters.length;
+          for ( var i = 0; i < length; i++ ) {
+             result += characters.charAt(Math.floor(Math.random() * charactersLength));
+          }
+          return result;
+       }
+       
         segments.forEach(function (segment) {
             segment_type = segment.substring(0,3);
             switch (segment_type) {
@@ -842,7 +852,7 @@ module.exports = {
 
                                     console.log("Kreiram Record: ");
                                     console.log(Math.random().toString(36).substring(12))
-                                    Order_Download += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-1362-48f5-b085-"+Math.random().toString(36).substring(12)+"|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
+                                    Order_Download += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-1362-48f5-b085-"+makeid(12)+"|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
                                                         
 
                                     
