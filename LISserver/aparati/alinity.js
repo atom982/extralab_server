@@ -799,7 +799,7 @@ module.exports = {
 
                               Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
 
-                              AnaAssays.find({}).populate('aparat test').lean().exec(function (err, anaassays) {
+                              AnaAssays.find({site:ObjectId("5c69f68c338fe912f99f833b")}).populate('aparat test').lean().exec(function (err, anaassays) {
                                 uzorak.tests.forEach(function (test) {
                                   anaassays.forEach(function (anaassay) {
                                     if ((anaassay.test.sifra === test.labassay.sifra) && (anaassay.test.calculated)) {
