@@ -541,7 +541,7 @@ module.exports = {
                                 })
 
                                 Results.findOne({ 'id': uzorak.id }).populate('patient rezultati.labassay').exec(function (err, rezultat) {
-            
+                                  var stamp = new Date()
                                   if (testovi.length < 1) {
                                     console.log("Za uzorak :" + sample_id + " ne postoji niti jedan test ili rerun!");
                                     Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
@@ -567,7 +567,7 @@ module.exports = {
                                     uzorak.save()
 
                                     console.log("Kreiram Record: ");
-                                    var stamp = new Date()
+                                    
                                     Order_Download += "MSH|^~\\&|atom-lis||||"+ makedate(stamp)+"||OML^O33^OML_O33|e2703c29-1362-48f5-"+makeid(4)+"-"+makeid(12)+"|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
                                                         
 
