@@ -863,7 +863,7 @@ module.exports = {
                                     uzorak.save()
 
                                     console.log("Kreiram Record: ");
-                                    var stamp = Date.now()
+                                    var stamp = new Date()
                                     Order_Download += "MSH|^~\\&|atom-lis||||"+ makedate(stamp)+"||OML^O33^OML_O33|e2703c29-1362-48f5-"+makeid(4)+"-"+makeid(12)+"|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
                                                         
 
