@@ -758,6 +758,7 @@ module.exports = {
         var sample_id = ""
         var testovi  =[]
         var segments = record.split("\r")
+
         function makeid(length) {
           var result           = '';
           var characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -767,7 +768,18 @@ module.exports = {
           }
           return result;
        }
-       
+        function makedate(date) {
+          function pad2(n) {  // always returns a string
+            return (n < 10 ? '0' : '') + n;
+        }
+
+        return date.getFullYear() +
+               pad2(date.getMonth() + 1) + 
+               pad2(date.getDate()) +
+               pad2(date.getHours()) +
+               pad2(date.getMinutes()) +
+               pad2(date.getSeconds());
+       } 
         segments.forEach(function (segment) {
             segment_type = segment.substring(0,3);
             switch (segment_type) {
@@ -851,8 +863,8 @@ module.exports = {
                                     uzorak.save()
 
                                     console.log("Kreiram Record: ");
-                                    console.log(Math.random().toString(36).substring(12))
-                                    Order_Download += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-1362-48f5-b085-"+makeid(12)+"|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
+                                    var stamp = Date.now()
+                                    Order_Download += "MSH|^~\\&|atom-lis||||"+ makedate(stamp)+"||OML^O33^OML_O33|e2703c29-1362-48f5-"+makeid(4)+"-"+makeid(12)+"|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
                                                         
 
                                     
@@ -869,7 +881,13 @@ module.exports = {
                                     ime = ime.replace(/š/g,'s')
                                     ime = ime.replace(/đ/g,'d')
                                     ime = ime.replace(/ž/g,'z')
-                                    Order_Download += "PID|||"+rezultat.patient.jmbg+"||"+ime+"^^^^^L||19500214|M"+"\u000d"
+                                    var spol = rezultat.patient.spol
+                                    if(spol ==="MUŠKI"){
+                                      spol = "M"
+                                    }else{
+                                      spol = "F"
+                                    }
+                                    Order_Download += "PID|||"+rezultat.patient.jmbg+"||"+ime+"^^^^^L||19500214|"+spol+"\u000d"
                                     Order_Download += "PV1||N|^ER 2"+"\u000d"
                                     Order_Download += "SPM|1|||''|||||||P^Patient^HL70369"+"\u000d"
                                     Order_Download += "SAC|||"+uzorak.id+"\u000d"
