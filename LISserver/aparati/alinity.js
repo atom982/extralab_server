@@ -445,302 +445,6 @@ module.exports = {
         }
       });
     },
-  
-    parsaj_query: function (record, callback) {
-  
-      var mongoose = require("mongoose");
-      var Samples = require("../../models/Postavke");
-      var Samples = mongoose.model("Samples");
-      var AnaAssays = require("../../models/Postavke");
-      var AnaAssays = mongoose.model("AnaAssays");
-      var Results = require("../../models/Postavke");
-      var Results = mongoose.model("Results");
-      var ControlSamples = require("../../models/Postavke");
-      var ControlSamples = mongoose.model("ControlSamples");
-  
-      var Kontrole = require("../../models/Postavke");
-      var Kontrole = mongoose.model("Kontrole");
-  
-      var record_type = '';
-      var json = {};
-      var testovi = [];
-      var recordret = [];
-      var dilution = ''
-      var ime = ''+'^'+''
-      console.log('Funkcija: ');
-      console.log(record);
-      record.forEach(function (element) {
-        record_type = element.charAt(0);
-        switch (record_type) {
-          case 'H':
-            console.log("Header: ");
-            var header = element.split("|");
-            var sender = header[4].split("^");
-            json.sn = sender[2];
-            json.vrijeme_prijenosa = header[13];
-            break;
-          case 'Q':
-  
-            console.log("Query: ");
-            var query_arr = element.split("|");
-            json.sequence = query_arr[1];
-            var patient_arr = query_arr[2].split("^");
-            json.pid = patient_arr[0];
-            json.sid = patient_arr[1];
-            json.endrange = query_arr[3]
-            var test_arr = query_arr[4].split("^");
-            json.test_id = test_arr[3];
-            json.request_type = query_arr[12];
-            console.log(json.sid);
-            break;
-          case 'L':
-            console.log("Terminator: ");
-            if (json.sid.charAt(2) === '-') {
-              console.log('Najvjerovatnije naš Sample!')
-              ControlSamples.findOne({ id: json.sid }).populate('tests.labassay tests.anaassay').exec(function (err, uzorak) {
-                if (err) {
-                  console.log("Greška:", err);
-                }
-                else {
-                  if (uzorak) {
-                    var tests = []
-                    var counter = 0
-                    uzorak.tests.forEach(element => {
-                      counter++;
-                      element.status = "U OBRADI"
-                      if (counter < uzorak.tests.length) {
-                        tests += '^^^' + element.anaassay.kod + '^^' + 'STANDARD^P\\';
-                      } else {
-                        tests += '^^^' + element.anaassay.kod + '^^' + 'STANDARD^P';
-                      }
-                    });
-                    console.log("Kreiram kontrolni Order Record!");
-                    var header = 'H|\\^&||||||||||P|1';
-                    recordret.push(header);
-                    var patient = 'P|1|' + '2' + '||||||';
-                    recordret.push(patient);
-                    var order = 'O|1|' + json.sid + '||' + tests + '|||||||N||||||||||||||Q';
-                    var niztest = []
-  
-                    if (order.length > 240) {
-                      niztest = tests.split("^^^")
-                      niztest.splice(0, 1);
-                      order = ""
-                      tests = ""
-                      var testtemp = ""
-                      var j = 1
-                      niztest.forEach(test => {
-  
-                        console.log("Test: " + test)
-                        testtemp = tests + "^^^" + test
-                        if (testtemp.length < 200) {
-                          if (test.indexOf("\\") === -1) {
-                            order = 'O|' + j + '|' + json.sid + '||' + tests + "^^^" + test + '|||||||N||||||||||||||Q';
-                            tests = "^^^" + test
-                            recordret.push(order);
-                          } else {
-  
-                            tests = tests + "^^^" + test
-  
-                          }
-  
-                        } else {
-                          order = 'O|' + j + '|' + json.sid + '||' + tests + '|||||||N||||||||||||||Q';
-                          tests = ""
-                          tests = "^^^" + test
-                          recordret.push(order);
-                          order = ""
-                          j++
-                        }
-  
-                      });
-                    } else {
-                      recordret.push(order);
-                    }
-                    var terminator = 'L|1';
-                    recordret.push(terminator);
-                    uzorak.status = "U OBRADI"
-                    uzorak.save()
-                    callback(recordret);
-                  } else {
-  
-                    console.log("U LIS-u ne postoji uzorak sa brojem: " + json.sid);
-                    var header = 'H|\\^&||||||||||P|1';
-                    recordret.push(header);
-                    var query = 'Q|1|^' + json.sid + '||^^^ALL||||||||X'
-                    recordret.push(query);
-                    var terminator = 'L|1';
-                    recordret.push(terminator);
-                    callback(recordret);
-                  }
-                }
-              })
-            } else {
-              var testovi = [];
-              Samples.findOne({ id: json.sid }).populate('tests.labassay').exec(function (err, uzorak) {
-                if (err) {
-                  console.log("Greška:", err);
-                }
-                else {
-                  if (uzorak === null) {
-                    console.log("U LIS-u ne postoji uzorak sa brojem: " + json.sid);
-                    var header = 'H|\\^&||||||||||P|1';
-                    recordret.push(header);
-                    var query = 'Q|1|^' + json.sid + '||^^^ALL||||||||X'
-                    recordret.push(query);
-                    var terminator = 'L|1';
-                    recordret.push(terminator);
-                    callback(recordret);
-                  } else {
-                    var tests = '';
-                    var counter = 0;
-                    var uzoraklength = uzorak.tests.length;
-  
-                    AnaAssays.find({}).populate('aparat test').lean().exec(function (err, anaassays) {
-                      uzorak.tests.forEach(function (test) {
-                        anaassays.forEach(function (anaassay) {
-                          if ((anaassay.aparat.sn === json.sn) && (anaassay.test.sifra === test.labassay.sifra) && (anaassay.test.calculated)) {
-                            test.status_t = "U OBRADI"
-                          }
-                          if (((anaassay.aparat.sn === json.sn) && (anaassay.test.sifra === test.labassay.sifra) && (test.status_r === true) && (!anaassay.test.manual) && (!anaassay.test.calculated)) || ((anaassay.aparat.sn === json.sn) && (anaassay.test.sifra === test.labassay.sifra) && (test.status_t === "NA ČEKANJU") && (!anaassay.test.manual) && (!anaassay.test.calculated))) {
-                            testovi.push(anaassay.kod)
-  
-                            test.status_t = "U OBRADI"
-                          }
-                        })
-                      })
-                      testovi.forEach(element => {
-                        counter++;
-                        if (counter < testovi.length) {
-                          if (element === '1048') { dilution = 'STD (1:3)' } else { dilution = 'STANDARD' }
-                          if (element === '110' || element === '621' || element === '241' || element === '221' || element === '651' || element === '371' || element === '381' || element === '601' || element === '580' || element === '281' || element === '201' || element === '523' || element === '771' || element === '161' || element === '620' || element === '131' || element === '187' || element === '851' || element === '591' || element === '191' || element === '585' || element === '628' || element === '30' || element === '107' || element === '561' || element === '121' || element === '321' || element === '896' || element === '81' || element === '901' || element === '639' || element === '641' || element === '713' || element === '3' || element === '859') { dilution = 'UNDILUTED' }
-                          if (element === '211' || element === '341' || element === '61' || element === '41') { dilution = 'SAMP/CNTRL' }
-                          if (element === '1036') { dilution = 'STD(1:20)' }
-                          if (element === '1096') { dilution = '1:20' }
-                          if (element === '234' || element === '235') { dilution = '1:3' }
-                          if (element === '1105') { dilution = '' }
-                          if (element === '1106') { dilution = 'Std_WB' }
-                          tests += '^^^' + element + '^' + '^' + dilution + '^P\\';
-                        } else {
-                          if (element === '1048') { dilution = 'STD (1:3)' } else { dilution = 'STANDARD' }
-                          if (element === '110' || element === '621' || element === '241' || element === '221' || element === '651' || element === '371' || element === '381' || element === '601' || element === '580' || element === '281' || element === '201' || element === '523' || element === '771' || element === '161' || element === '620' || element === '131' || element === '187' || element === '851' || element === '591' || element === '191' || element === '585' || element === '628' || element === '30' || element === '107' || element === '561' || element === '121' || element === '321' || element === '896' || element === '81' || element === '901' || element === '639' || element === '641' || element === '713' || element === '3' || element === '859') { dilution = 'UNDILUTED' }
-                          if (element === '211' || element === '341' || element === '61' || element === '41') { dilution = 'SAMP/CNTRL' }
-                          if (element === '1036') { dilution = 'STD(1:20)' }
-                          if (element === '1096') { dilution = '1:20' }
-                          if (element === '234' || element === '235') { dilution = '1:3' }
-                          if (element === '1105') { dilution = '' }
-                          if (element === '1106') { dilution = 'Std_WB' }
-                          tests += '^^^' + element + '^' + '^' + dilution + '^P';
-                        }
-                      });
-                      Results.findOne({ 'id': uzorak.id }).populate('patient rezultati.labassay').exec(function (err, rezultat) {
-  
-                        if (testovi.length < 1) {
-                          console.log("Za uzorak :" + json.sid + " ne postoji niti jedan rerun zahtjev!");
-                          var header = 'H|\\^&||||||||||P|1';
-                          recordret.push(header);
-                          var query = 'Q|1|^' + json.sid + '||^^^ALL||||||||X'
-                          recordret.push(query);
-                          var terminator = 'L|1';
-                          recordret.push(terminator);
-                          callback(recordret);
-                        } else {
-                          rezultat.status = "U OBRADI"
-                          uzorak.status = "U OBRADI"
-                          rezultat.save(function (err) {
-                            if (err) {
-                              console.log("Greška:", err);
-  
-                            } else {
-  
-                            }
-                          });
-                          uzorak.save()
-                          console.log("Kreiram Record: ");
-                          var header = 'H|\\^&||||||||||P|1';
-                          recordret.push(header);
-                          var prezime = rezultat.patient.prezime
-                          var rime = rezultat.patient.ime
-                          if(prezime.length > 20){
-                            prezime = rezultat.patient.prezime.substring(0,19)
-                          }
-                          if(rime.length > 20){
-                            rime = rezultat.patient.ime.substring(0,19)
-                          }
-                          ime = prezime+'^'+rime+'^'
-                          ime = ime.replace(/Ć/g,'C')
-                          ime = ime.replace(/Č/g,'C')
-                          ime = ime.replace(/Š/g,'S')
-                          ime = ime.replace(/Đ/g,'D')
-                          ime = ime.replace(/Ž/g,'Z')
-                          ime = ime.replace(/č/g,'c')
-                          ime = ime.replace(/ć/g,'c')
-                          ime = ime.replace(/š/g,'s')
-                          ime = ime.replace(/đ/g,'d')
-                          ime = ime.replace(/ž/g,'z')
-                          var patient = 'P|1|' + '2' + '||'+rezultat.patient.jmbg+'|'+ime+'|||';
-                          recordret.push(patient);
-                          var order = 'O|1|' + json.sid + '||' + tests + '|||||||N||||||||||||||Q';
-                          var niztest = []
-  
-                          if (order.length > 240) {
-                            niztest = tests.split("^^^")
-                            niztest.splice(0, 1);
-                            order = ""
-                            tests = ""
-                            var testtemp = ""
-                            var j = 1
-                            niztest.forEach(test => {
-  
-                              console.log("Test: " + test)
-                              testtemp = tests + "^^^" + test
-                              if (testtemp.length < 200) {
-                                if (test.indexOf("\\") === -1) {
-                                  order = 'O|' + j + '|' + json.sid + '||' + tests + "^^^" + test + '|||||||N||||||||||||||Q';
-                                  tests = "^^^" + test
-                                  recordret.push(order);
-                                } else {
-  
-                                  tests = tests + "^^^" + test
-  
-                                }
-  
-                              } else {
-                                order = 'O|' + j + '|' + json.sid + '||' + tests + '|||||||N||||||||||||||Q';
-                                tests = ""
-                                tests = "^^^" + test
-                                recordret.push(order);
-                                order = ""
-                                if (j === 7) { j = 0 } else {
-                                  j++
-                                }
-                              }
-  
-                            });
-                          } else {
-                            recordret.push(order);
-                          }
-                          var terminator = 'L|1';
-                          recordret.push(terminator);
-  
-                          callback(recordret);
-                        }
-  
-                      })
-                    })
-                  } // else if uzorak null
-  
-                }
-              });
-            }
-            break;
-          default:
-  
-            console.log("Nepoznat Type of Frame!");
-  
-        }
-      });
-    },
     connection_test: function (record, callback) {
         console.log('Connection TEST sucecessful')
         var Parts = record.split("|");
@@ -841,10 +545,10 @@ module.exports = {
                                   if (testovi.length < 1) {
                                     console.log("Za uzorak :" + sample_id + " ne postoji niti jedan test ili rerun!");
                                     Order_Response = "\u000b"+Order_Response+"\u001c"+"\u000d"
-                                    Order_Download  += "MSH|^~\\&|atom-lis||||20200801015944||OML^O33^OML_O33|e2703c29-8392-48f5-b085-9664475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
+                                    Order_Download  += "MSH|^~\\&|atom-lis||||"+ makedate(stamp)+"||OML^O33^OML_O33|e2703c29-8392-48f5-b085-"+makeid(4)+"-"+makeid(12)+"|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-28^IHE"+"\u000d"
                                     Order_Download  += "SPM|1|||''|||||||U^Unknown^HL70369"+"\u000d"
-                                    Order_Download  += "SAC|||02231522041700"+"\u000d"
-                                    Order_Download  += "ORC|DC||||||||20160725022110"+"\u000d"
+                                    Order_Download  += "SAC|||"+uzorak.id+"\u000d"
+                                    Order_Download  += "ORC|DC||||||||"+ makedate(stamp)+"\u000d"
                                     Order_Download = "\u000b"+Order_Download+"\u001c"+"\u000d"
                                     var negquery= Order_Response+"\u000f"+Order_Download
                                     callback(negquery);
@@ -897,7 +601,7 @@ module.exports = {
                                     console.log(testovi)
                                     testovi.forEach(element => {           
                                         dilution = ''
-                                        Order_Download += "ORC|NW||||||||20200101103758"+"\u000d"
+                                        Order_Download += "ORC|NW||||||||"+makedate(stamp)+"\u000d"
                                         Order_Download += "TQ1|1||||||||R^Routine^HL70485"+"\u000d" //S^STAT^HL70485
                                         Order_Download += "OBR||"+element.ordernr+"||"+element.kod.replace(/^0+/, '')+"^"+element.ime+"^99ABT|||||||A"+"\u000d"
                                         Order_Download += "NTE|0||Order comment"+"\u000d"
@@ -933,12 +637,33 @@ module.exports = {
     specimen_result: function (record, callback) {
       var Result_Response = ""
       var segments = record.split("\r")
+      function makeid(length) {
+        var result           = '';
+        var characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+           result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+     }
+      function makedate(date) {
+        function pad2(n) {  // always returns a string
+          return (n < 10 ? '0' : '') + n;
+      }
+
+      return date.getFullYear() +
+             pad2(date.getMonth() + 1) + 
+             pad2(date.getDate()) +
+             pad2(date.getHours()) +
+             pad2(date.getMinutes()) +
+             pad2(date.getSeconds());
+     } 
       segments.forEach(function (segment) {
           segment_type = segment.substring(0,3);
           switch (segment_type) {
                case 'MSH':
                   console.log("MSH: ");
-                  Result_Response  += "MSH|^~\\&|atom-lis||||20200801015944||ACK^R22^ACK|e2703c29-8392-48f5-b085-9664475fcfba|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-29^IHE"+"\u000d"
+                  Result_Response  += "MSH|^~\\&|atom-lis||||"+makedate(new Date())+"||ACK^R22^ACK|e2703c29-8392-48f5-b085-"+makeid(4)+"-"+makeid(12)+"|P|2.5.1|||NE|AL||UNICODE UTF-8|||LAB-29^IHE"+"\u000d"
                   console.log(segment)
                   var ack_key = segment.split("|")[9]
                   console.log(ack_key)
