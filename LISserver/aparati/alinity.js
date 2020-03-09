@@ -614,7 +614,7 @@ module.exports = {
                                         dilution = ''
                                         Order_Download += "ORC|NW||||||||"+makedate(stamp)+"\u000d"
                                         Order_Download += "TQ1|1||||||||R^Routine^HL70485"+"\u000d" //S^STAT^HL70485
-                                        Order_Download += "OBR||"+element.ordernr+"||"+element.kod.replace(/^0+/, '')+"^"+element.ime+"^99ABT|||||||A"+"\u000d"
+                                        Order_Download += "OBR||"+element.ordernr+"||"+element.kod.replace(/^0+/, '')+"^"+''+"^99ABT|||||||A"+"\u000d"
                                         Order_Download += "NTE|0||Order comment"+"\u000d"
                                       
                                     });
