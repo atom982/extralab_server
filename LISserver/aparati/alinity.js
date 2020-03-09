@@ -591,6 +591,15 @@ module.exports = {
                                     }else{
                                       spol = "F"
                                     }
+                                    var godiste = rezultat.patient.jmbg.slice(4, 7);
+
+                                    if (godiste[0] === "9") {
+                                            godiste = "1" + godiste;
+                                          }
+                                    if (godiste[0] === "0") {
+                                            godiste = "2" + godiste;
+                                          }
+                                    var starost = godiste+ rezultat.patient.jmbg.slice(2, 4)+rezultat.patient.jmbg.slice(0, 2)
                                     Order_Download += "PID|||"+rezultat.patient.jmbg+"||"+ime+"^^^^^L||19500214|"+spol+"\u000d"
                                     Order_Download += "PV1||N|^ER 2"+"\u000d"
                                     Order_Download += "SPM|1|||''|||||||P^Patient^HL70369"+"\u000d"
