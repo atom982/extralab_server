@@ -539,7 +539,8 @@ module.exports = {
                                     }
                                   })
                                 })
-
+                                uzorak.status = "U OBRADI"
+                                uzorak.save()
                                 Results.findOne({ 'id': uzorak.id }).populate('patient rezultati.labassay').exec(function (err, rezultat) {
                                   var stamp = new Date()
                                   if (testovi.length < 1) {
@@ -555,7 +556,7 @@ module.exports = {
                                   } else {
 
                                     rezultat.status = "U OBRADI"
-                                    uzorak.status = "U OBRADI"
+                                    
                                     rezultat.save(function (err) {
                                       if (err) {
                                         console.log("Greška:", err);
@@ -564,7 +565,7 @@ module.exports = {
             
                                       }
                                     });
-                                    uzorak.save()
+                                   
 
                                     console.log("Kreiram Record: ");
                                     
