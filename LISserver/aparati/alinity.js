@@ -648,6 +648,8 @@ module.exports = {
     specimen_result: function (record, callback) {
       var Result_Response = ""
       var segments = record.split("\r")
+var sid = ""
+
       function makeid(length) {
         var result           = '';
         var characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -694,8 +696,9 @@ module.exports = {
   
                       break;  
                 case 'SAC':
-                      console.log("SAC: ");
-    
+                      
+                      sid = segment.split("|")[3]
+                      console.log("SAC: "+sid);
                       break;   
                 case 'OBR':
                         console.log("OBR: ");
