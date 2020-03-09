@@ -718,34 +718,27 @@ var unit = ""
                 case 'OBX':
                       var obx = segment.split("|")
                       switch (obx[2]) {
-                        case "CE":
-                          
-                          break;
-                        case "ST":
-                               var comp = obx[3].split("^")
-                               if(!comp[0].includes('.')){
-                                 console.log('NUMERICAL')
-                                  result = obx[5]
-                                  assay = comp[0]
-                                  unit = obx[6].split("^")[0]
-                                  console.log("OBX: " + result +" "+ assay + " "+ unit);
-                                }else{
-                                  console.log("INTERPRETATION")
-                                  
-                                }
-                                
-                          break; 
-                        case "EI":
-                          
-                            break;                   
-                        default:
-                          break;
-                      }
-                      
-                      
+                          case "CE":
+                            
+                            break;
+                          case "ST":
+                                var comp = obx[3].split("^")
+                                if(!comp[0].includes('.')){
+                                    result = obx[5]
+                                    assay = comp[0]
+                                    unit = obx[6].split("^")[0]
+                                    console.log("OBX: NUMERICAL" + result +" "+ assay + " "+ unit);
+                                  }else{
+                                    console.log("OBX: INTERPRETATION")
 
-                        
-            
+                                  }
+                                  
+                            break; 
+                          case "EI":
+                            
+                              break;                   
+                      }
+                         
                       break; 
                 case 'TCD':
                         console.log("TCD: ");
