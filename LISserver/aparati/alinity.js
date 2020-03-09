@@ -536,11 +536,11 @@ module.exports = {
                                       testovi.push({ordernr:uzorak.pid,kod:anaassay.kod, ime:anaassay.test.naziv})
             
                                       test.status_t = "U OBRADI"
+                                      test.status_r  =false
                                     }
                                   })
                                 })
-                                uzorak.status = "U OBRADI"
-                                uzorak.save()
+
                                 Results.findOne({ 'id': uzorak.id }).populate('patient rezultati.labassay').exec(function (err, rezultat) {
                                   var stamp = new Date()
                                   if (testovi.length < 1) {
@@ -556,7 +556,8 @@ module.exports = {
                                   } else {
 
                                     rezultat.status = "U OBRADI"
-                                    
+                                    uzorak.status = "U OBRADI"
+                                    uzorak.save()
                                     rezultat.save(function (err) {
                                       if (err) {
                                         console.log("Greška:", err);
