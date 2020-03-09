@@ -649,7 +649,10 @@ module.exports = {
       var Result_Response = ""
       var segments = record.split("\r")
 var sid = ""
-
+var pid = ""
+var result = ""
+var assay = ""
+var unit = ""
       function makeid(length) {
         var result           = '';
         var characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -684,7 +687,8 @@ var sid = ""
                   Result_Response = "\u000b"+Result_Response+"\u001c"+"\u000d"
                   break;
                 case 'PID':
-                  console.log("PID: ");
+                    pid = segment.split("|")[3]
+                    console.log("PID: "+pid);
 
                       break;
                 case 'PV1':
@@ -695,8 +699,7 @@ var sid = ""
                     console.log("SPM: ");
   
                       break;  
-                case 'SAC':
-                      
+                case 'SAC':          
                       sid = segment.split("|")[3]
                       console.log("SAC: "+sid);
                       break;   
@@ -713,7 +716,14 @@ var sid = ""
           
                       break; 
                 case 'OBX':
-                        console.log("OBX: ");
+                      var obx = segment.split("|")
+                      var comp = obx[3].split("^")
+                      if(obx[2] === "ST" && !comp[0].includes('.')){
+                          result = obx[5]
+                          assay = comp[0]
+                          unit = obx[6].split("^")[0]
+                      }
+                        console.log("OBX: " + result +" "+ assay + " "+ unit);
             
                       break; 
                 case 'TCD':
