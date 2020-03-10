@@ -729,8 +729,10 @@ var unit = ""
                                     unit = obx[6].split("^")[0]
                                     console.log("OBX: NUMERICAL" + result +" "+ assay + " "+ unit);
                                   }else{
-                                    console.log("OBX: INTERPRETATION")
-
+                                    result = obx[5]
+                                    assay = comp[0]
+                                    unit = obx[6].split("^")[0]
+                                    console.log("OBX: INTERPRETATION" + result +"RLU  "+ assay + " "+ unit);
                                   }
                                   
                             break; 
