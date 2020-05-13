@@ -105,6 +105,38 @@ const SchemaCijenaDobavljac = mongoose.Schema({
   updated_by:{ type: String, default:"" },
   site: { type: mongoose.Schema.ObjectId, ref: "Site" }
 });
+
+const SchemaUlaz = mongoose.Schema({
+    status: {type: String, default:"ZAPRIMLJEN" },//ZAPRIMLJEN, RAZDUZEN,
+    produkt:{ type: mongoose.Schema.ObjectId, ref: "Produkt" },
+    dobavljac:{ type: mongoose.Schema.ObjectId, ref: "Dobavljac" },
+    narudzbenica:{ type: mongoose.Schema.ObjectId, ref: "Narudzbenica" },
+    //klijent:{ type: mongoose.Schema.ObjectId, ref: "Klijent" },
+    racunbr:{ type: String, required: true },
+    kolicina:{ type: String, required: true },
+    cijenad:{ type: mongoose.Schema.ObjectId, ref: "CijenaDobavljac" },
+    lot:{ type: String, required: true },
+    expDT:{ type: String, required: true },
+    izlazDT:{ type: String, required: true },
+    izlazKM:{ type: String, required: true },
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: null },
+    created_by: { type: String, default:"" },
+    updated_by:{ type: String, default:"" },
+    site: { type: mongoose.Schema.ObjectId, ref: "Site" }
+});
+const SchemaIzlaz = mongoose.Schema({
+  ulaz:{ type: mongoose.Schema.ObjectId, ref: "Ulaz" },
+  klijent:{ type: mongoose.Schema.ObjectId, ref: "Klijent" },
+  racunbr:{ type: String, required: true },
+  kolicina:{ type: String, required: true },
+  cijenak:{ type: mongoose.Schema.ObjectId, ref: "CijenaKlijent" },
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: null },
+  created_by: { type: String, default:"" },
+  updated_by:{ type: String, default:"" },
+  site: { type: mongoose.Schema.ObjectId, ref: "Site" }
+});
 const SchemaNarudzbenica = mongoose.Schema({
   ID:  { type: String, required: true, unique:true },
   dobavljac:{ type: mongoose.Schema.ObjectId, ref: "Dobavljac" },
@@ -122,24 +154,6 @@ const SchemaNarudzbenica = mongoose.Schema({
   updated_by:{ type: String, default:null },
   site: { type: mongoose.Schema.ObjectId, ref: "Site" }
 });
-const SchemaStanje = mongoose.Schema({
-    produkt:{ type: mongoose.Schema.ObjectId, ref: "Produkt" },
-    dobavljac:{ type: mongoose.Schema.ObjectId, ref: "Dobavljac" },
-    narudzbenica:{ type: mongoose.Schema.ObjectId, ref: "Narudzbenica" },
-    klijent:{ type: mongoose.Schema.ObjectId, ref: "Klijent" },
-    racunbr:{ type: String, required: true },
-    kolicina:{ type: String, required: true },
-    lot:{ type: String, required: true },
-    expDT:{ type: String, required: true },
-    izlazDT:{ type: String, required: true },
-    izlazKM:{ type: String, required: true },
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: null },
-    created_by: { type: String, default:"" },
-    updated_by:{ type: String, default:"" },
-    site: { type: mongoose.Schema.ObjectId, ref: "Site" }
-});
-
 const models = [
 
   OJ= mongoose.model("OJ", SchemaOJ),
@@ -154,8 +168,9 @@ const models = [
   Produkt = mongoose.model("Produkt", SchemaProdukt),
   CijenaKlijent  = mongoose.model("CijenaKlijent", SchemaCijenaKlijent),
   CijenaDobavljac  = mongoose.model("CijenaDobavljac", SchemaCijenaDobavljac),
+  Ulaz = mongoose.model("Ulaz", SchemaUlaz),
+  Izlaz = mongoose.model("Izlaz", SchemaIzlaz),
   Narudzbenica = mongoose.model("Narudzbenica", SchemaNarudzbenica),
-  Stanje = mongoose.model("Stanje", SchemaStanje),
 ]; 
 
 module.exports = models;

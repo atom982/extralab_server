@@ -71,4 +71,7 @@ router.post("/inventar/createcijened", inventar.CreateCijeneD);
 
 //Cijene Klijent
 router.post("/inventar/createcijenek", inventar.CreateCijeneK);
+
+//Ugovori
+router.get("/inventar/ugovori", inventar.apiUrlUgovori);
 module.exports = router;

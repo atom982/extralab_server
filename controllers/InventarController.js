@@ -2043,4 +2043,419 @@ inventarController.CreateCijeneK= function(req, res) {
     });
   }
 };
+inventarController.apiUrlUgovori = function(req, res) {
+  console.log('url ugovori')
+  console.log(req.query)
+  if (mongoose.connection.readyState != 1) {
+    res.json({
+      success: false,
+      message: err
+    });
+  } else {
+    var parametar = req.query.sort.slice(0, req.query.sort.indexOf("|")).trim();
+    var order = req.query.sort
+      .slice(req.query.sort.indexOf("|") + 1, req.query.sort.length)
+      .trim();
+
+    var limit = 50000;
+
+    if (!req.query.filter) {
+      req.query.filter = "";
+      limit = 100;
+    }
+
+    if (req.query.filter === "") {
+      req.query.filter = "";
+      limit = 100;
+    } else {
+      limit = 50000;
+    }
+
+    var uslov = { site: mongoose.Types.ObjectId(req.query.site) };
+
+    switch (parametar) {
+      case "NAZIV":
+        uslov = {
+          site: mongoose.Types.ObjectId(req.query.site),
+          klijent: { $regex: ".*" + req.query.filter.toUpperCase() + ".*" }
+        };
+        break;
+      case "LN":
+        uslov = {
+          site: mongoose.Types.ObjectId(req.query.site),
+          LN: { $regex: ".*" + req.query.filter.toUpperCase() + ".*" }
+        };
+        break;
+
+      case "OPIS":
+        uslov = {
+          site: mongoose.Types.ObjectId(req.query.site),
+          opis: {
+            $regex: ".*" + req.query.filter.toUpperCase() + ".*"
+          }
+        };
+
+        break;
+
+      case "PAKOVANJE":
+        uslov = {
+          site: mongoose.Types.ObjectId(req.query.site),
+          pakovanje: { $regex: ".*" + req.query.filter.toUpperCase() + ".*" }
+        };
+
+        break;
+
+      default:
+        uslov = {
+          site: mongoose.Types.ObjectId(req.query.site),     
+        };
+        break;
+    }
+
+    if(req.query.datum ==="KLIJENTI"){
+
+  
+    CijenaKlijent.find(uslov)
+      .sort({ _id: -1 })
+      .populate('produkt klijent')
+      .limit(limit)
+      .exec(function(err, results) {
+        if (err) {
+          console.log("Greška:", err);
+        } else {
+          switch (parametar) {
+            case "LN":
+              results = results.filter(function(result) {
+                return result.produkt.LN
+                  .toLowerCase()
+                  .includes(req.query.filter.toLowerCase());
+              });
+              break;
+            case "OPIS":
+              results = results.filter(function(result) {
+                return result.produkt.opis
+                  .toLowerCase()
+                  .includes(req.query.filter.toLowerCase());
+              });
+              break;
+            case "PAKOVANJE":
+              results = results.filter(function(result) {
+                return result.produkt.pakovanje
+                  .toLowerCase()
+                  .includes(req.query.filter.toLowerCase());
+              });
+              break;
+            default:
+              var fil = req.query.filter.split(" ");    
+              if(req.query.filter!=="" && fil.length){
+              results = results.filter(function(result) {
+                  return fil.some(word => result.produkt.LN.toLowerCase().indexOf(word.toLowerCase()) !== -1 || result.produkt.opis.toLowerCase().includes(word.toLowerCase()) )
+              });
+             }
+              break;
+          }
+
+          var json = {};
+          json.total = results.length;
+          json.per_page = req.query.per_page;
+          json.current_page = req.query.page;
+          json.last_page = Math.ceil(json.total / json.per_page);
+          json.next_page_url =
+            config.baseURL +
+            "inventar/ugovori?sort=" +
+            req.query.sort +
+            "&page=" +
+            (req.query.page + 1) +
+            "&per_page=" +
+            req.query.per_page;
+          var prev_page = null;
+          if (json.current_page - 1 !== 0) {
+            prev_page = json.current_page - 1;
+          }
+          json.prev_page_url =
+            config.baseURL +
+            "inventar/ugovori?sort=" +
+            req.query.sort +
+            "&page=" +
+            prev_page +
+            "&per_page=" +
+            req.query.per_page;
+          json.from = (json.current_page - 1) * 10 + 1;
+          json.to = (json.current_page - 1) * 10 + 10;
+          json.data = [];
+
+          switch (parametar) {
+            case "LN":
+              if (order === "asc") {
+                results.sort(function(a, b) {
+                  return a.produkt.LN == b.produkt.LN ? 0 : +(a.produkt.LN > b.produkt.LN) || -1;
+                });
+              }
+              if (order === "desc") {
+                results.sort(function(a, b) {
+                  return a.produkt.LN == b.produkt.LN ? 0 : +(a.produkt.LN < b.produkt.LN) || -1;
+                });
+              }
+              break;
+            case "opis":
+              if (order === "asc") {
+                results.sort(function(a, b) {
+                  return a.produkt.opis == b.produkt.opis
+                    ? 0
+                    : +(a.produkt.opis > b.produkt.opis) || -1;
+                });
+              }
+              if (order === "desc") {
+                results.sort(function(a, b) {
+                  return a.produkt.opis == b.produkt.opis
+                    ? 0
+                    : +(a.produkt.opis < b.produkt.opis) || -1;
+                });
+              }
+              break;
+            case "pakovanje":
+              if (order === "asc") {
+                results.sort(function(a, b) {
+                  return a.produkt.pakovanje == b.produkt.pakovanje ? 0 : +(a.produkt.pakovanje > b.produkt.pakovanje) || -1;
+                });
+              }
+              if (order === "desc") {
+                results.sort(function(a, b) {
+                  return a.produkt.pakovanje == b.produkt.pakovanje ? 0 : +(a.produkt.pakovanje < b.produkt.pakovanje) || -1;
+                });
+              }
+              break;
+            default:
+              results.sort(function(a, b) {
+                return Date.parse(a.created_at) == Date.parse(b.created_at)
+                  ? 0
+                  : +(Date.parse(a.created_at) < Date.parse(b.created_at)) ||
+                      -1;
+              });
+              break;
+          }
+
+          var niz = results.slice(json.from - 1, json.to);
+
+          niz.forEach(cijena => {
+            switch (cijena.spol) {
+              case "MUŠKI":
+                var icon =
+                  '<span style="font-size: 12px; color:#4ab2e3;" class="fa fa-mars"></span>';
+                break;
+              case "ŽENSKI":
+                var icon =
+                  '<span style="font-size: 12px; color:#db76df;" class="fa fa-venus"></span>';
+                break;
+              default:
+                var icon =
+                  '<span style="font-size: 12px; color:#f7cc36;" class="fa fa-genderless"></span>';
+                break;
+            }
+
+            var prijem =
+              "<button style='white-space: nowrap;' title='' id='" +
+              cijena.LN +
+              "' style='font-size: 11px;' class='btn btn-secondary-info btn-micro'><span id='" +
+              cijena.LN +
+              "' style='font-size: 12px;' class='fa fa-flask'></span> <span style='text-transform: none; font-size: 12px;'>Prijem</span></button>";
+
+
+
+            var izmjeni =
+              "<button style='white-space: nowrap;' title='' id='" +
+              cijena._id +
+              "' style='text-transform: none; font-size: 12px;' class='btn btn-primary btn-micro'><span id='" +
+              cijena._id +
+              "' class='fa fa-edit'></span> Uredi</button>";
+
+            json.data.push({
+              icon: icon,
+              NAZIV:cijena.klijent.naziv,
+              LN: cijena.produkt.LN,
+              OPIS: cijena.produkt.opis,
+              PAKOVANJE: cijena.produkt.pakovanje,
+              MJERA: cijena.produkt.jedinica_mjere,
+              CIJENA:cijena.cijena,
+              IZMJENI:izmjeni,
+              id: cijena._id
+            });
+          });
+          res.json(json);
+        }
+      });
+    }else{
+      // case DOBAVLJACI
+      CijenaDobavljac.find(uslov)
+      .sort({ _id: -1 })
+      .populate('produkt dobavljac')
+      .limit(limit)
+      .exec(function(err, results) {
+        if (err) {
+          console.log("Greška:", err);
+        } else {
+          switch (parametar) {
+            case "LN":
+              results = results.filter(function(result) {
+                return result.produkt.LN
+                  .toLowerCase()
+                  .includes(req.query.filter.toLowerCase());
+              });
+              break;
+            case "OPIS":
+              results = results.filter(function(result) {
+                return result.produkt.opis
+                  .toLowerCase()
+                  .includes(req.query.filter.toLowerCase());
+              });
+              break;
+            case "PAKOVANJE":
+              results = results.filter(function(result) {
+                return result.produkt.pakovanje
+                  .toLowerCase()
+                  .includes(req.query.filter.toLowerCase());
+              });
+              break;
+            default:
+              var fil = req.query.filter.split(" ");    
+              if(req.query.filter!=="" && fil.length){
+              results = results.filter(function(result) {
+                  return fil.some(word => result.produkt.LN.toLowerCase().indexOf(word.toLowerCase()) !== -1 || result.produkt.opis.toLowerCase().includes(word.toLowerCase()) )
+              });
+             }
+              break;
+          }
+
+          var json = {};
+          json.total = results.length;
+          json.per_page = req.query.per_page;
+          json.current_page = req.query.page;
+          json.last_page = Math.ceil(json.total / json.per_page);
+          json.next_page_url =
+            config.baseURL +
+            "inventar/ugovori?sort=" +
+            req.query.sort +
+            "&page=" +
+            (req.query.page + 1) +
+            "&per_page=" +
+            req.query.per_page;
+          var prev_page = null;
+          if (json.current_page - 1 !== 0) {
+            prev_page = json.current_page - 1;
+          }
+          json.prev_page_url =
+            config.baseURL +
+            "inventar/ugovori?sort=" +
+            req.query.sort +
+            "&page=" +
+            prev_page +
+            "&per_page=" +
+            req.query.per_page;
+          json.from = (json.current_page - 1) * 10 + 1;
+          json.to = (json.current_page - 1) * 10 + 10;
+          json.data = [];
+
+          switch (parametar) {
+            case "LN":
+              if (order === "asc") {
+                results.sort(function(a, b) {
+                  return a.produkt.LN == b.produkt.LN ? 0 : +(a.produkt.LN > b.produkt.LN) || -1;
+                });
+              }
+              if (order === "desc") {
+                results.sort(function(a, b) {
+                  return a.produkt.LN == b.produkt.LN ? 0 : +(a.produkt.LN < b.produkt.LN) || -1;
+                });
+              }
+              break;
+            case "opis":
+              if (order === "asc") {
+                results.sort(function(a, b) {
+                  return a.produkt.opis == b.produkt.opis
+                    ? 0
+                    : +(a.produkt.opis > b.produkt.opis) || -1;
+                });
+              }
+              if (order === "desc") {
+                results.sort(function(a, b) {
+                  return a.produkt.opis == b.produkt.opis
+                    ? 0
+                    : +(a.produkt.opis < b.produkt.opis) || -1;
+                });
+              }
+              break;
+            case "pakovanje":
+              if (order === "asc") {
+                results.sort(function(a, b) {
+                  return a.produkt.pakovanje == b.produkt.pakovanje ? 0 : +(a.produkt.pakovanje > b.produkt.pakovanje) || -1;
+                });
+              }
+              if (order === "desc") {
+                results.sort(function(a, b) {
+                  return a.produkt.pakovanje == b.produkt.pakovanje ? 0 : +(a.produkt.pakovanje < b.produkt.pakovanje) || -1;
+                });
+              }
+              break;
+            default:
+              results.sort(function(a, b) {
+                return Date.parse(a.created_at) == Date.parse(b.created_at)
+                  ? 0
+                  : +(Date.parse(a.created_at) < Date.parse(b.created_at)) ||
+                      -1;
+              });
+              break;
+          }
+
+          var niz = results.slice(json.from - 1, json.to);
+
+          niz.forEach(cijena => {
+            switch (cijena.spol) {
+              case "MUŠKI":
+                var icon =
+                  '<span style="font-size: 12px; color:#4ab2e3;" class="fa fa-mars"></span>';
+                break;
+              case "ŽENSKI":
+                var icon =
+                  '<span style="font-size: 12px; color:#db76df;" class="fa fa-venus"></span>';
+                break;
+              default:
+                var icon =
+                  '<span style="font-size: 12px; color:#f7cc36;" class="fa fa-genderless"></span>';
+                break;
+            }
+
+            var prijem =
+              "<button style='white-space: nowrap;' title='' id='" +
+              cijena.LN +
+              "' style='font-size: 11px;' class='btn btn-secondary-info btn-micro'><span id='" +
+              cijena.LN +
+              "' style='font-size: 12px;' class='fa fa-flask'></span> <span style='text-transform: none; font-size: 12px;'>Prijem</span></button>";
+
+
+
+            var izmjeni =
+              "<button style='white-space: nowrap;' title='' id='" +
+              cijena._id +
+              "' style='text-transform: none; font-size: 12px;' class='btn btn-primary btn-micro'><span id='" +
+              cijena._id +
+              "' class='fa fa-edit'></span> Uredi</button>";
+
+            json.data.push({
+              icon: icon,
+              NAZIV:cijena.dobavljac.naziv,
+              LN: cijena.produkt.LN,
+              OPIS: cijena.produkt.opis,
+              PAKOVANJE: cijena.produkt.pakovanje,
+              MJERA: cijena.produkt.jedinica_mjere,
+              CIJENA:cijena.cijena,
+              IZMJENI:izmjeni,
+              id: cijena._id
+            });
+          });
+          res.json(json);
+        }
+      });
+    }
+  }
+};
 module.exports = inventarController;

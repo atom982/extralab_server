@@ -123,28 +123,28 @@ class lisServer {
         //console.log(JSON.stringify(data))
         //---------------------Emerald blok
         // HL7
-        if (!data.includes('\u001c')) {// Check if HL7? // "\u001c" === 28 // "\r"  "\u000b"
-           HL7data += data
+        // if (!data.includes('\u001c')) {// Check if HL7? // "\u001c" === 28 // "\r"  "\u000b"
+        //    HL7data += data
 
-        }else{
-          HL7data += data
-          if (HL7data.includes('\u000b')) { 
-            console.log('HL7 data received:')
-            HL7data = HL7data.substring(HL7data.indexOf("\u000b") + 1, HL7data.indexOf("\u001c") - 1)  
-            funkcija.parsaj_hl7(HL7data, function (poruka) {
-              var orders = poruka.split("\u000f")
-              // console.log('ORDER RESPONSE XDX')
-              // console.log(JSON.stringify(orders[0]))
-              lisserver.broadcast(orders[0], client)
-              if(orders.length > 1){           
-                lisserver.broadcasthl7(orders[1], client)
-              }         
-              lisserver.poruka = [] 
-              lisserver.counter = 0;
-            });
-            HL7data = ""
-          }
-        }
+        // }else{
+        //   HL7data += data
+        //   if (HL7data.includes('\u000b')) { 
+        //     console.log('HL7 data received:')
+        //     HL7data = HL7data.substring(HL7data.indexOf("\u000b") + 1, HL7data.indexOf("\u001c") - 1)  
+        //     funkcija.parsaj_hl7(HL7data, function (poruka) {
+        //       var orders = poruka.split("\u000f")
+        //       // console.log('ORDER RESPONSE XDX')
+        //       // console.log(JSON.stringify(orders[0]))
+        //       lisserver.broadcast(orders[0], client)
+        //       if(orders.length > 1){           
+        //         lisserver.broadcasthl7(orders[1], client)
+        //       }         
+        //       lisserver.poruka = [] 
+        //       lisserver.counter = 0;
+        //     });
+        //     HL7data = ""
+        //   }
+        // }
         // HL7
         if (data.charCodeAt(data.length - 1) !== 10) { //podaci od aparata
           frame += data; //dodaj u buffer \u001a
