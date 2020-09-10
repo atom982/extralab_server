@@ -62,6 +62,7 @@ app.set("socketio", io);
 
 lisserver.start(io,9610,"DCell 60  Omega -Tuzla");//DCell Omega
 lisserver.start(io,9611,"iLAB 650 Omega-Tuzla");//ilab 650  Omega
+lisserver.start(io,9612,"Architect ci4100 Omega-Tuzla");//Architect ci4100 Omega
 //lisserver.start(io,50020,"Alinity Receiver Channel");//Alinity receiverr
 // loggerserver.start(io)
 /*
