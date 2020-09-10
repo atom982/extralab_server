@@ -247,6 +247,7 @@ module.exports = {
                     var sekc = uzorak.tests[0].labassay.sekcija
                     console.log("Uzorak pronađen");
                     if (uzorak.status != "OBRAĐEN") {
+
                       AnaAssays.findOne({ kod: sifra_p,aparat:mongoose.Types.ObjectId(serijski) }).populate('test').lean().exec(function (err, test) {
                         if (err) {
                           console.log("Greška:", err);
@@ -595,7 +596,7 @@ module.exports = {
                   var tests = '';
                   var counter = 0;
                   var uzoraklength = uzorak.tests.length;
-                  var serijski='5f5a91f17e0ee10a97c34f49'
+                  //var serijski='5f5a91f17e0ee10a97c34f49'
                   AnaAssays.find({ aparat: mongoose.Types.ObjectId(serijski)}).populate('aparat test').lean().exec(function (err, anaassays) {
                     uzorak.tests.forEach(function (test) {
                       anaassays.forEach(function (anaassay) {

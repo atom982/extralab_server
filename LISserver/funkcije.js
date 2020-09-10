@@ -220,7 +220,8 @@ parsaj_rezultat: function(record,io){
                             break;          
         case 'F3456460163':  // Extralab  Architect ci4100 imunohemija
                             console.log('parsaj  Architect ci4100')
-                            architect.parsaj_rezultat(record,io);
+                            var serijski='5f5a91f17e0ee10a97c34f49'
+                            architect.parsaj_rezultat(record,io,serijski);
                             break; 
         case 'RJ-1C110261':  // D Cell 60 Diagon hematologija
                             
@@ -269,7 +270,8 @@ parsaj_query: function(record,callback){
                         break;
    case  'F3456460163':// Extralab Architect ci4100 imunohemija
                         console.log('parsanje architect ci4100 querija')
-                        architect.parsaj_query(record,function(poruka){
+                        var serijski='5f5a91f17e0ee10a97c34f49'
+                        architect.parsaj_query(record,serijski,function(poruka){
                         console.log("Kreirano: ");
                         console.log(poruka);
                         callback(poruka);
