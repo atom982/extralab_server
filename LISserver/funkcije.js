@@ -194,6 +194,7 @@ parsaj_rezultat: function(record,io){
       var Dcell60 = require('./aparati/Dcell60');
       var ilab650 = require('./aparati/ilab650');
       var immulite1000= require('./aparati/immulite1000');
+      var architect= require('./aparati/architect');
       //-------------------------------------
 
       console.log("Parsam rezultat...");
@@ -209,15 +210,17 @@ parsaj_rezultat: function(record,io){
       if(record[0].includes('E 1394-97')){
         sn='251025'
       }
-   
+      if(record[0].includes('ARCHITECT')){
+        sn=sender[2].trim();
+      }
       switch(sn){
  
         case 'U10714300027':  // Extralab instrumentation laboratory ilab650 biohemija
                             ilab650.parsaj_rezultat(record,io);
                             break;          
-        case '27026012':  // Extralab siemens immulite 1000 imunohemija
-                            console.log('parsaj AIA-360')
-                            immulite1000.parsaj_rezultat(record,io);
+        case 'F3456460163':  // Extralab  Architect ci4100 imunohemija
+                            console.log('parsaj  Architect ci4100')
+                            architect.parsaj_rezultat(record,io);
                             break; 
         case 'RJ-1C110261':  // D Cell 60 Diagon hematologija
                             
@@ -233,6 +236,7 @@ parsaj_query: function(record,callback){
   var bcoulterAcT = require('./aparati/bcoulterAcT');
   var ilab650 = require('./aparati/ilab650');
   var immulite1000= require('./aparati/immulite1000');
+  var architect= require('./aparati/architect');
   //-------------------------------------
   
   
@@ -247,6 +251,9 @@ parsaj_query: function(record,callback){
   if(record[0].includes('E 1394-97')){
     sn='251025'
   }
+  if(record[0].includes('ARCHITECT')){
+    sn=sender[2].trim();
+  }
   //console.log('functions query fajl')
   //console.log(sn)
   switch(sn){
@@ -260,9 +267,9 @@ parsaj_query: function(record,callback){
                         callback(poruka);
                         });
                         break;
-   case  '251027':// Extralab siemens immulite 1000 imunohemija
-                        console.log('parsanje immulite 1000 querija')
-                        immulite1000.parsaj_query(record,function(poruka){
+   case  'F3456460163':// Extralab Architect ci4100 imunohemija
+                        console.log('parsanje architect ci4100 querija')
+                        architect.parsaj_query(record,function(poruka){
                         console.log("Kreirano: ");
                         console.log(poruka);
                         callback(poruka);
