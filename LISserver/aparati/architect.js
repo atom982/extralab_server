@@ -262,6 +262,9 @@ module.exports = {
                           } else {
                             uzorak.tests.forEach(elementu => {
                               console.log('test2')
+                              console.log(elementu.status_t)
+                              console.log(test.test.sifra.trim())
+                              console.log(elementu.labassay.sifra.trim())
                               if (((elementu.labassay.sifra.trim() === test.test.sifra.trim()) && elementu.status_t === "ZAPRIMLJEN") ||((elementu.labassay.sifra.trim() === test.test.sifra.trim()) && elementu.status_t === "U OBRADI") || ((elementu.labassay.sifra.trim() === test.test.sifra.trim()) && elementu.status_r)) {
                                 console.log('Match Found')
                                 // console.log(elementu)
