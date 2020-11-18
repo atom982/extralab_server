@@ -75,8 +75,6 @@ module.exports = {
           var result = element.split("|");
           var chunks = result[2].split("^");
           type_of_r = chunks[10];
-          console.log(result)
-          console.log(chunks)
           switch (type_of_r) {
             case 'F':
               console.log("Type: " + type_of_r);
@@ -250,7 +248,9 @@ module.exports = {
                     var sekc = uzorak.tests[0].labassay.sekcija
                     console.log("Uzorak pronađen");
                     if (uzorak.status != "OBRAĐEN") {
-
+                      console.log('?????????????')
+                      console.log(sifra_p)
+                      console.log(serijski)
                       AnaAssays.findOne({ kod: sifra_p,aparat:mongoose.Types.ObjectId(serijski) }).populate('test').lean().exec(function (err, test) {
                         if (err) {
                           console.log("Greška:", err);
