@@ -259,7 +259,7 @@ module.exports = {
                           } else {
                             uzorak.tests.forEach(elementu => {
 
-                              if ((elementu.labassay.sifra.trim() === test.test.sifra.trim() && elementu.status_t === "U OBRADI") || (elementu.labassay.sifra.trim() === test.test.sifra.trim() && elementu.status_r)) {
+                              if ((elementu.labassay.sifra.trim() === test.test.sifra.trim() && elementu.status_t === "ZAPRIMLJEN") ||(elementu.labassay.sifra.trim() === test.test.sifra.trim() && elementu.status_t === "U OBRADI") || (elementu.labassay.sifra.trim() === test.test.sifra.trim() && elementu.status_r)) {
                                 console.log('Match Found')
                                 // console.log(elementu)
                                 elementu.status_t = "REALIZOVAN"
@@ -603,7 +603,7 @@ module.exports = {
                         if ((anaassay.test.sifra === test.labassay.sifra) && (anaassay.test.calculated)) {
                           test.status_t = "U OBRADI"
                         }
-                        if (( (anaassay.test.sifra === test.labassay.sifra) && (test.status_r === true) ) || ( (anaassay.test.sifra === test.labassay.sifra) && (test.status_t === "ZAPRIMLJEN"))) {
+                        if (( (anaassay.test.sifra === test.labassay.sifra) && (test.status_r === true) ) || ( (anaassay.test.sifra === test.labassay.sifra) && (test.status_t === "ZAPRIMLJEN"))|| ( (anaassay.test.sifra === test.labassay.sifra) && (test.status_t === "U OBRADI"))) {
                           testovi.push(anaassay.kod)
 
                           test.status_t = "U OBRADI"
