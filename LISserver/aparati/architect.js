@@ -256,12 +256,12 @@ module.exports = {
                           console.log("Greška:", err);
                         }
                         else {
-                          // console.log(test)
+                           console.log('test1')
                           if (test === null) {
                             console.log('U LIS-u ne postoji definisan test sa sifrom:' + sifra_p + ' ni na jednom aparatu' + sn);
                           } else {
                             uzorak.tests.forEach(elementu => {
-
+                              console.log('test2')
                               if ((elementu.labassay.sifra.trim() === test.test.sifra.trim() && elementu.status_t === "ZAPRIMLJEN") ||(elementu.labassay.sifra.trim() === test.test.sifra.trim() && elementu.status_t === "U OBRADI") || (elementu.labassay.sifra.trim() === test.test.sifra.trim() && elementu.status_r)) {
                                 console.log('Match Found')
                                 // console.log(elementu)
