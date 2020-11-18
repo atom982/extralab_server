@@ -75,6 +75,8 @@ module.exports = {
           var result = element.split("|");
           var chunks = result[2].split("^");
           type_of_r = chunks[10];
+          console.log(element)
+          console.log(type_of_r)
           switch (type_of_r) {
             case 'F':
               console.log("Type: " + type_of_r);
