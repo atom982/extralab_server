@@ -667,7 +667,7 @@ module.exports = {
                         if (element === '1048') { dilution = 'STD (1:3)' } else { dilution = 'STANDARD' }
                         if (element === '256' ||element === '385' || element === '386' || element === '270' || element === '133' || element === '432' ||element === '110' || element === '621' || element === '241' || element === '221' || element === '651' || element === '371' || element === '381' || element === '601' || element === '580' || element === '281' || element === '201' || element === '523' || element === '771' || element === '161' || element === '620' || element === '131' || element === '187' || element === '851' || element === '591' || element === '191' || element === '585' || element === '628' || element === '30' || element === '107' || element === '561' || element === '121' || element === '321' || element === '896' || element === '81' || element === '901' || element === '639' || element === '641' || element === '713' || element === '3' || element === '859') { dilution = 'UNDILUTED' }
                         
-                        if (element === '530' || element === '211' || element === '341' || element === '61' || element === '41') { 
+                        if (element === '388' || element === '530' || element === '211' || element === '341' || element === '61' || element === '41') { 
                           dilution = 'SAMP/CNTRL' 
                         }
 
@@ -681,7 +681,7 @@ module.exports = {
                         if (element === '1048') { dilution = 'STD (1:3)' } else { dilution = 'STANDARD' }
                         if (element === '256' ||element === '385' || element === '386' || element === '270' || element === '133' || element === '432' || element === '110' || element === '621' || element === '241' || element === '221' || element === '651' || element === '371' || element === '381' || element === '601' || element === '580' || element === '281' || element === '201' || element === '523' || element === '771' || element === '161' || element === '620' || element === '131' || element === '187' || element === '851' || element === '591' || element === '191' || element === '585' || element === '628' || element === '30' || element === '107' || element === '561' || element === '121' || element === '321' || element === '896' || element === '81' || element === '901' || element === '639' || element === '641' || element === '713' || element === '3' || element === '859') { dilution = 'UNDILUTED' }
                         
-                        if (element === '530' || element === '211' || element === '341' || element === '61' || element === '41') { 
+                        if (element === '388' || element === '530' || element === '211' || element === '341' || element === '61' || element === '41') { 
                           dilution = 'SAMP/CNTRL' 
                         }
                         
