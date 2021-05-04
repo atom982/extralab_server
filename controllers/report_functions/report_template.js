@@ -6,6 +6,8 @@ module.exports = {
     let adresa_x = 0;
     let adresa = "";
 
+    // console.log(data.protokol)
+
     code = site_data.sifra;
     adresa_x = 110;
     adresa = "Univerzitetska 16, 75000 Tuzla, tel: +387 35 210 355, mail: extralab.tuzla@gmail.com";
@@ -76,14 +78,19 @@ module.exports = {
       doc.font("PTSansRegular").fontSize(12).text("Godište:", 50, nvisina + 16).text(data.godiste + ".", 150 - 56, nvisina + 16);
     }
 
-    doc.font("PTSansRegular").fontSize(12).text("Spol:", 50, nvisina + 32).text(data.spol[0].toUpperCase() + data.spol.slice(1).toLowerCase(), 96 - 17, nvisina + 32).text("Datum: ", 444 + 10, nvisina - 2).text(data.datum, 494 + 10, nvisina - 2);
+    doc.font("PTSansRegular").fontSize(12).text("Spol:", 50, nvisina + 32).text(data.spol[0].toUpperCase() + data.spol.slice(1).toLowerCase(), 96 - 17, nvisina + 32);
+    doc.font("PTSansRegular").fontSize(12).text("Datum: " + data.datum, 444 + 10, nvisina - 2 - 16);
 
     var uzorkovan = JSON.stringify(report.uzorkovano).substring(1, 11).split("-");
 
-    doc.font("PTSansRegular").text("Vrijeme:", 445 + 10, nvisina + 14).text(data.vrijeme, 506.5 + 10, nvisina + 14);
-    doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text("Datum i vrijeme uzorkovanja:", 444.5 + 10, nvisina + 32);
-    doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text(uzorkovan[2] + "." + uzorkovan[1] + "." + uzorkovan[0] + " " + data.uzorkovano_t, 444.5 + 10, nvisina + 42);
+    doc.font("PTSansRegular").text("Vrijeme: " + data.vrijeme, 445 + 10, nvisina + 14 - 16);
+    doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text("Datum i vrijeme uzorkovanja:", 444.5 + 10, nvisina + 32 - 16);
+    doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text(uzorkovan[2] + "." + uzorkovan[1] + "." + uzorkovan[0] + " " + data.uzorkovano_t, 444.5 + 10, nvisina + 42 - 16);
     doc.font("PTSansBold").fontSize(12).text(rowsno, 50, nvisina + 60);
+
+    doc.font("PTSansRegular").fontSize(12).text("Broj protokola:" , 444.5 + 10, nvisina + 60 - 16);
+    doc.font("PTSansBold").fontSize(12).text(data.protokol, 444.5 + 10, nvisina + 76 - 16);
+
     doc.moveDown(1);
 
     var i = 0;

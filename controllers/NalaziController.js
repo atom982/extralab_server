@@ -1236,7 +1236,8 @@ nalazController.Nalaz = function(req, res) {
           }
           var god = d.getFullYear();
 
-          Data.pid = rezultati[0].sample.pid;
+          Data.pid = rezultati[0].sample.pid
+          Data.protokol = "ET" + rezultati[0].sample.pid + "/" + rezultati[0].sample.id.substr(rezultati[0].sample.id.length - 5);
           Data.uzorkovano = rezultati[0].sample.datum;
 
           Data.uzorkovano_t = rezultati[0].sample.datum.substring(11, 16)
