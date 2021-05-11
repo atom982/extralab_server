@@ -1426,7 +1426,8 @@ odobravanjeController.Calculate = function(req, res) {
                 if (realizovano && count === formula.length) {
                   // console.log(final);
                   AnaAssays.findOne({
-                    test: req.body._id
+                    test: req.body._id,
+                    site: mongoose.Types.ObjectId(req.body.site)
                   })
                     .populate("aparat")
                     .exec(function(err, testap) {

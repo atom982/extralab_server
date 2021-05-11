@@ -80,7 +80,7 @@ nalazController.Mail = function(req, res) {
                       ".png",
                     390,
                     height,
-                    { width: 130, height: 60, keepAspectRatio: false }
+                    { width: 150, keepAspectRatio: false }
                   )
                   // .image(config.nalaz_footer + nalaz.site.sifra + eddress + ".jpg", 0, 745, { width: 615, keepAspectRatio: true })
                   // .text("Stranica " + str + " od " + page, 300, 790, { fontSize: 8, align: "center center" })
@@ -129,24 +129,77 @@ nalazController.Mail = function(req, res) {
                   nalaz.site.telefon
                 );
 
-                var smtpConfig = {
-                  pool: true,
-                  host: process.env.MAIL_HOST,
-                  port: process.env.MAIL_PORT,
-                  secure: true,
-                  auth: {
-                    user: process.env.MAIL_USER,
-                    pass: process.env.MAIL_PASSWORD // + "+"
-                  },
-                  tls: {
-                    rejectUnauthorized: false
-                  }
-                };
+                switch (req.body.site) {
+                  case "5c69f68c338fe912f99f833b":
 
-                var transporter = nodemailer.createTransport(smtpConfig);
+                    // Environment=NODE_EXTRALAB=development PORT=5006 lisPORT=9504 logPORT=9604 JWT_SECRET=limssecret DB_HOST=85.187.140.52 DB_PORT=27017 DB_USER=admin DB_PASSWORD=APsol2018 DB_NAME=extralab 
+                    // MAIL_HOST=smtp.gmail.com MAIL_PORT=465 MAIL_USER=nalazi.extralab@gmail.com MAIL_PASSWORD=laboratorija123
 
-                var cc = "extralab.tuzla@yahoo.com" // nalaz.site.email;
-                // var cc = process.env.MAIL_USER;
+                    var smtpConfig = {
+                      pool: true,
+                      host: "smtp.gmail.com",
+                      port: "465",
+                      secure: true,
+                      auth: {
+                        user: "nalazi.extralab@gmail.com",
+                        pass: "laboratorija123"
+                      },
+                      tls: {
+                        rejectUnauthorized: false
+                      }
+                    };
+    
+                    var transporter = nodemailer.createTransport(smtpConfig);
+    
+                    var cc = "extralab.tuzla@yahoo.com";
+           
+                    break;
+
+                  case "5e443de1d7ba1d21a041986c":
+
+                    var smtpConfig = {
+                      pool: true,
+                      host: "smtp.gmail.com",
+                      port: "465",
+                      secure: true,
+                      auth: {
+                        user: "demo.atom.lis@gmail.com",
+                        pass: "qlkgyeyiplhkwnzy"
+                      },
+                      tls: {
+                        rejectUnauthorized: false
+                      }
+                    };
+    
+                    var transporter = nodemailer.createTransport(smtpConfig);
+    
+                    var cc = "demo.atom.lis@gmail.com";
+
+                    break;
+                
+                  default:
+
+                    var smtpConfig = {
+                      pool: true,
+                      host: "smtp.gmail.com",
+                      port: "465",
+                      secure: true,
+                      auth: {
+                        user: "demo.atom.lis@gmail.com",
+                        pass: "qlkgyeyiplhkwnzy"
+                      },
+                      tls: {
+                        rejectUnauthorized: false
+                      }
+                    };
+    
+                    var transporter = nodemailer.createTransport(smtpConfig);
+    
+                    var cc = "demo.atom.lis@gmail.com";
+                    
+                    break;
+
+                }
 
                 var mailOptions = {
                   from:
@@ -1237,7 +1290,23 @@ nalazController.Nalaz = function(req, res) {
           var god = d.getFullYear();
 
           Data.pid = rezultati[0].sample.pid
-          Data.protokol = "ET" + rezultati[0].sample.pid + "/" + rezultati[0].sample.id.substr(rezultati[0].sample.id.length - 5);
+
+          switch (req.body.site) {
+            case "5c69f68c338fe912f99f833b":
+              Data.protokol = "ET" + rezultati[0].sample.pid + "/" + rezultati[0].sample.id.substr(rezultati[0].sample.id.length - 5);
+                        
+              break;
+            case "5e443de1d7ba1d21a041986c":
+              Data.protokol = "EŽ" + rezultati[0].sample.pid + "/" + rezultati[0].sample.id.substr(rezultati[0].sample.id.length - 5);
+                        
+              break;
+          
+            default:
+              Data.protokol = rezultati[0].sample.pid + "/" + rezultati[0].sample.id.substr(rezultati[0].sample.id.length - 5);
+                  
+              break;
+          }
+
           Data.uzorkovano = rezultati[0].sample.datum;
 
           Data.uzorkovano_t = rezultati[0].sample.datum.substring(11, 16)

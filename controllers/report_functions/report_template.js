@@ -10,7 +10,22 @@ module.exports = {
 
     code = site_data.sifra;
     adresa_x = 110;
-    adresa = "Univerzitetska 16, 75000 Tuzla, tel: +387 35 210 355, mail: extralab.tuzla@gmail.com";
+    adresa = "";
+
+    switch (code) {
+      case "S":
+        adresa = "Univerzitetska 16, 75000 Tuzla, tel: +387 35 210 355, mail: extralab.tuzla@gmail.com";
+        
+        break;
+      case "V":
+        adresa = "Nema podataka";
+        
+        break;
+    
+      default:
+        adresa = "";
+        break;
+    }
 
     var fs = require("fs");
     PDFDocument = require("pdfkit");
