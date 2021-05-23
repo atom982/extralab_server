@@ -275,7 +275,7 @@ reportController.KProtokol = function(req, res) {
                   (
                     nalaz.patient.ime +
                     " " +
-                    //nalaz.patient.prezime +
+                    nalaz.patient.prezime +
                     " | Godište: " +
                     godiste
                   ).trim().length < 33
@@ -283,14 +283,14 @@ reportController.KProtokol = function(req, res) {
                   var ime =
                     nalaz.patient.ime.trim() +
                     " " +
-                    //nalaz.patient.prezime.trim() +
+                    nalaz.patient.prezime.trim() +
                     " | Godište: " +
                     godiste;
                 } else {
                   var ime =
                     nalaz.patient.ime.trim() +
                     " " +
-                    //nalaz.patient.prezime.trim() +
+                    nalaz.patient.prezime.trim() +
                     "\n" +
                     "Godište: " +
                     godiste;
@@ -299,9 +299,9 @@ reportController.KProtokol = function(req, res) {
                 var ime =
                   nalaz.patient.ime.trim() +
                   " " +
-                  //nalaz.patient.prezime.split("-")[0].trim() +
+                  nalaz.patient.prezime.split("-")[0].trim() +
                   " -\n" +
-                  //nalaz.patient.prezime.split("-")[1].trim() +
+                  nalaz.patient.prezime.split("-")[1].trim() +
                   " | Godište: " +
                   godiste;
               }
@@ -310,29 +310,26 @@ reportController.KProtokol = function(req, res) {
               nalaz.rows.forEach(sekc => {
                 sekc.forEach(test => {
                   if (test.hasOwnProperty("multi")) {
-                    // analize += test.test + " (";
-                    // test.rezultat.forEach(analit => {
-                    //   analize +=
-                    //     analit[0].trim() +
-                    //     "=" +
-                    //     analit[1].rezultat.trim() +
-                    //     "; ";
-                    // });
-                    // analize += ") |";
+                    analize += test.test + " (";
+                    test.rezultat.forEach(analit => {
+                      analize +=
+                        analit[0].trim() +
+                        "=" +
+                        analit[1].rezultat.trim() +
+                        "; ";
+                    });
+                    analize += ") |";
                   } else {
-                    if(test.rezultat[0].includes("Vitamin D")){//novo
-                      analize += test.rezultat[0].trim() + '=' +test.rezultat[1].rezultat.trim() + ' | '
-                  }
-                    //analize += test.rezultat[0].trim() + "=" + test.rezultat[1].rezultat.trim() +" | ";
+                    analize +=
+                      test.rezultat[0].trim() +
+                      "=" +
+                      test.rezultat[1].rezultat.trim() +
+                      " | ";
                   }
                 });
               });
-              if( analize.includes("Vitamin D")){//novo
-                linerow.push(analize)
-                rows.push(linerow) 
-            }
-              // linerow.push(analize);
-              // rows.push(linerow);
+              linerow.push(analize);
+              rows.push(linerow);
             });
             doc.table(
               {
@@ -353,7 +350,7 @@ reportController.KProtokol = function(req, res) {
                 .font("PTSansRegular")
                 .fontSize(13)
                 .fillColor("#7B8186")
-                //.text(req.body.izbor.naziv, 70, 25);
+                .text(req.body.izbor.naziv, 70, 25);
               doc
                 .font("PTSansRegular")
                 .fontSize(8)
