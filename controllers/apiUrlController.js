@@ -734,6 +734,8 @@ apiUrlController.apiUrlNalaziPregled = function(req, res) {
       }
     }
 
+    console.log(uslov)
+
     Nalazi.find(uslov)
       .populate("patient")
       .exec(function(err, nalazi) {
