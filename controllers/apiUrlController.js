@@ -687,8 +687,15 @@ apiUrlController.apiUrlNalaziPregled = function(req, res) {
     var to = new Date();
     if (req.query.datum === "Svi Rezultati") {
       var doo = new Date();
-      var od = new Date();
-      od.setFullYear(od.getFullYear() - 1);
+
+      var datum190 = JSON.stringify(
+        new Date(new Date().setDate(new Date().getDate() - 190))
+      ).substring(1, 11);
+
+      var od = new Date(datum190 + "T00:00:00");
+
+      // var od = new Date();
+      // od.setFullYear(od.getFullYear() - 1);
       to = doo;
       from = od;
     } else {
