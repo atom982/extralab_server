@@ -735,6 +735,7 @@ apiUrlController.apiUrlNalaziPregled = function(req, res) {
     }
 
     console.log(uslov)
+    console.log(req.query.filter)
 
     Nalazi.find(uslov)
       .populate("patient")
