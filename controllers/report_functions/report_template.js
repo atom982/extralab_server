@@ -9,16 +9,18 @@ module.exports = {
     // console.log(data.protokol)
 
     code = site_data.sifra;
-    adresa_x = 110;
+    
     adresa = "";
 
     switch (code) {
       case "S":
         adresa = "Univerzitetska 16, 75000 Tuzla, tel: +387 35 210 355, mail: extralab.tuzla@gmail.com";
+        adresa_x = 110;
         
         break;
       case "V":
-        adresa = "Nema podataka";
+        adresa = "Magistralni put b.b. Živinice, tel: +387 35 775 015, mail: labextra.zivinice@gmail.com";
+        adresa_x = 105;
         
         break;
     
@@ -373,7 +375,7 @@ module.exports = {
     }
     memo = doc.y;
 
-    doc.font("PTSansRegular").fontSize(10).text("_______________________________", 390).text("        Nalaz verifikovao");
+    doc.font("PTSansRegular").fontSize(10).text("_______________________________", 390, doc.y + 10).text("        Nalaz verifikovao");
 
     const range = doc.bufferedPageRange();
 

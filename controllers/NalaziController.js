@@ -1293,11 +1293,11 @@ nalazController.Nalaz = function(req, res) {
 
           switch (req.body.site) {
             case "5c69f68c338fe912f99f833b":
-              Data.protokol = "ET" + rezultati[0].sample.pid + "/" + rezultati[0].sample.id.substr(rezultati[0].sample.id.length - 5);
+              Data.protokol = "EL" + rezultati[0].sample.pid + "/" + rezultati[0].sample.id.substr(rezultati[0].sample.id.length - 5);
                         
               break;
             case "5e443de1d7ba1d21a041986c":
-              Data.protokol = "EŽ" + rezultati[0].sample.pid + "/" + rezultati[0].sample.id.substr(rezultati[0].sample.id.length - 5);
+              Data.protokol = "LE" + rezultati[0].sample.pid + "/" + rezultati[0].sample.id.substr(rezultati[0].sample.id.length - 5);
                         
               break;
           
