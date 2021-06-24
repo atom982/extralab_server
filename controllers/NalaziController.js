@@ -1421,6 +1421,7 @@ nalazController.Nalaz = function(req, res) {
                     baseConfig.nalaz_ptsansbold = config.nalaz_ptsansbold;
                     baseConfig.nalaz_logo = config.nalaz_logo;
                     baseConfig.nalaz_footer = config.nalaz_footer;
+                    baseConfig.QRCodes = config.QRCodes;
 
                     report_template.create_report(
                       report,
@@ -1476,6 +1477,7 @@ nalazController.Nalaz = function(req, res) {
                     baseConfig.nalaz_ptsansbold = config.nalaz_ptsansbold;
                     baseConfig.nalaz_logo = config.nalaz_logo;
                     baseConfig.nalaz_footer = config.nalaz_footer;
+                    baseConfig.QRCodes = config.QRCodes;
 
                     report_template.create_report(
                       report,

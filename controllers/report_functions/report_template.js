@@ -1,8 +1,58 @@
+const QRCode = require("qrcode");
+
 module.exports = {
   create_report: function (report, config, data, legenda, sekcijeniz, napomena, 
     res, specificni, type, naziv, lokacija, site, site_data) {
 
-    let code = "";
+
+    // QR Code
+
+    var qrcodeText =
+    data.prezime +
+    " " +
+    data.ime +
+    ", " +
+    data.godiste +
+    "\n" +
+    data.datum +
+    " " +
+    data.vrijeme.substring(0, 5) +
+    "\n" +
+    data.protokol;
+
+    QRCode.toFile(
+      config.QRCodes + report._id + ".png",
+      qrcodeText,
+      {
+        width: 90,
+        height: 90,
+        color: {
+          dark: "#000000",
+          light: "#FFFFFF",
+        },
+      },
+      function (err) {
+
+
+        let code = "";
+        code = site_data.sifra;
+
+
+
+
+
+
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+
     let adresa_x = 0;
     let adresa = "";
 
@@ -99,6 +149,8 @@ module.exports = {
     doc.font("PTSansRegular").fontSize(12).text("Datum: " + data.datum, 444 + 10, nvisina - 2 - 16);
 
     var uzorkovan = JSON.stringify(report.uzorkovano).substring(1, 11).split("-");
+
+    doc.image(config.QRCodes + report._id + ".png", 330, nvisina - 3, { width: 90, keepAspectRatio: true });
 
     doc.font("PTSansRegular").text("Vrijeme: " + data.vrijeme, 445 + 10, nvisina + 14 - 16);
     doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text("Datum i vrijeme uzorkovanja:", 444.5 + 10, nvisina + 32 - 16);
@@ -384,5 +436,8 @@ module.exports = {
       doc.font("PTSansRegular").fontSize(10).fillColor("#7B8186").text(adresa, adresa_x, 760, { lineBreak: false }).fontSize(8).fillColor("black").text(`Stranica ${i + 1} od ${range.count}`, doc.page.width / 2 - 25, doc.page.height - 18, { lineBreak: false });
     }
     doc.end();
+
+  }
+  );
   }
 };
