@@ -150,7 +150,7 @@ module.exports = {
 
     var uzorkovan = JSON.stringify(report.uzorkovano).substring(1, 11).split("-");
 
-    doc.image(config.QRCodes + report._id + ".png", 330, nvisina - 3, { width: 90, keepAspectRatio: true });
+    doc.image(config.QRCodes + report._id + ".png", 330, nvisina - 15, { width: 90, keepAspectRatio: true });
 
     doc.font("PTSansRegular").text("Vrijeme: " + data.vrijeme, 445 + 10, nvisina + 14 - 16);
     doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text("Datum i vrijeme uzorkovanja:", 444.5 + 10, nvisina + 32 - 16);
