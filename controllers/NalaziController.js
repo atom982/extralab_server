@@ -163,8 +163,8 @@ nalazController.Mail = function(req, res) {
                       port: "465",
                       secure: true,
                       auth: {
-                        user: "demo.atom.lis@gmail.com",
-                        pass: "qlkgyeyiplhkwnzy"
+                        user: "labextra.zivinice@gmail.com",
+                        pass: "1234butkovic"
                       },
                       tls: {
                         rejectUnauthorized: false
@@ -173,7 +173,7 @@ nalazController.Mail = function(req, res) {
     
                     var transporter = nodemailer.createTransport(smtpConfig);
     
-                    var cc = "demo.atom.lis@gmail.com";
+                    var cc = "labextra.zivinice@gmail.com";
 
                     break;
                 
