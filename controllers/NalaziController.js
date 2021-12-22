@@ -1227,7 +1227,8 @@ nalazController.Nalaz = function(req, res) {
           });
 
           tempniz = [];
-          sekcijeniz = [];
+          var sekcijeniz = [];
+          
           i = 0;
           novirezultati.forEach(element => {
             // console.log(element.mikrobiologija)
