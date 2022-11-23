@@ -409,8 +409,8 @@ module.exports = {
       doc.addPage();
     }
 
-    doc.moveDown(0.3);
-    doc.font("PTSansBold").fontSize(12).text("Laboratorija pod nadzorom supervizora Butković Dr. Nusreta spec. med. biohemije");
+    // doc.moveDown(0.3);
+    // doc.font("PTSansBold").fontSize(12).text("Laboratorija pod nadzorom supervizora Butković Dr. Nusreta spec. med. biohemije");
 
     if (napomena.length) {
       doc.moveDown(0.3);
