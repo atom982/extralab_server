@@ -102,6 +102,7 @@ class PDFDocumentWithTables extends PDFDocument {
 
     table.rows.forEach((row, i) => {
       const rowHeight = 15;
+      let res = [];
 
       // Switch to next page if we cannot go any further because the space is ove
       // For safety, consider 3 rows margin instead of just one
