@@ -101,8 +101,10 @@ class PDFDocumentWithTables extends PDFDocument {
       .opacity(1); // Reset opacity after drawing the line
 
     table.rows.forEach((row, i) => {
-      const rowHeight = 15;
+      let rowHeight = 15;
+      let shadow = 0;
       let res = [];
+      var separator = 0;
 
       // Switch to next page if we cannot go any further because the space is ove
       // For safety, consider 3 rows margin instead of just one
