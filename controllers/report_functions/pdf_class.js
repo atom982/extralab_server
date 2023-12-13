@@ -228,25 +228,39 @@ class PDFDocumentWithTables extends PDFDocument {
           }
 
           if (cell.extend.trim() != "" && !cell.reference.includes("*")) {
-            if (
-              cell.extend.trim().length >= 55 &&
-              cell.extend.trim().length <= 60
-            ) {
-              this.fontSize(9);
-            } else if (
-              cell.extend.trim().length >= 60 &&
-              cell.extend.trim().length <= 65
-            ) {
-              this.fontSize(8);
-            } else if (cell.extend.trim().length >= 65) {
-              this.fontSize(7);
+            if (cell.extend.includes(";")) {
+                res = cell.extend.split(";");
+                if (res.length != undefined && res.length > 1) {
+                    rowHeight = rowHeight + 12.5 * (res.length - 1);
+                    shadow = 12.5 * (res.length - 1);
+                }
+                if (res.length) {
+                    cell.extend = "";
+                    res.forEach((element) => {
+                        cell.extend = cell.extend + element.trim() + "\n";
+                    });
+                }
+                cell.extend = cell.extend.replace(/,/g, "\n");
             } else {
-              this.fontSize(10);
+                if (
+                    cell.extend.trim().length >= 55 &&
+                    cell.extend.trim().length <= 60
+                ) {
+                    this.fontSize(9);
+                } else if (
+                    cell.extend.trim().length >= 60 &&
+                    cell.extend.trim().length <= 65
+                ) {
+                    this.fontSize(8);
+                } else if (cell.extend.trim().length >= 65) {
+                    this.fontSize(7);
+                } else {
+                    this.fontSize(10);
+                }
             }
-
             this.text(cell.extend, startX + i * columnContainerWidth, startY, {
-              width: columnWidth,
-              align: "left"
+                width: columnWidth,
+                align: "center",
             });
           } else {
             this.fontSize(10);
