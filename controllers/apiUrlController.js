@@ -392,6 +392,27 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
                     JSON.stringify(element.created_at).substring(1, 11)
               ).length > 0
             ) {
+
+
+              var godiste = element.patient.jmbg.substring(4, 7);
+              switch (godiste[0]) {
+                case "9":
+                  godiste = "1" + godiste + "";
+                  break;
+                case "0":
+                  godiste = "2" + godiste + "";
+                  break;
+                default:
+                  godiste = "";
+                  break;
+              }
+
+              if (godiste == "1920") {
+                var godisteTemp = "<span style='color: #e34a4a;'>*</span>";
+              } else {
+                var godisteTemp = godiste;
+              }
+
               Rezultati.push({
                 obrada:
                   "<button style='white-space: nowrap;' id='" +
@@ -401,6 +422,7 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
                 ime: element.patient.ime,
                 prezime: element.patient.prezime,
                 jmbg: element.patient.jmbg,
+                godiste: godisteTemp,
                 micro: false,
                 barcodes: "",
                 racun: "",
@@ -427,12 +449,17 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
             }
           });
 
+          var tmpAnaliti = []
+
           Rezultati.forEach(newrez => {
             var samples = "";
             var pac = "";
             var check = true;
             var micro = false;
             var verificiran = true;
+            var uzorci = [];
+
+            tmpAnaliti = []
 
             rezultati.forEach(rez => {
               if (
@@ -464,6 +491,29 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
                 if (rez.sample.tip.includes("Mikrobiologija")) {
                   micro = true;
                 }
+
+                uzorci.push(rez.id);
+
+                rez.rezultati.forEach(rezu => {
+
+                  if(tmpAnaliti.length < 1){
+                    tmpAnaliti.push(rezu.labassay.analit.replace(/;/g, ""))
+
+                  }else{
+                    tmpAnaliti.push(" " + rezu.labassay.analit.replace(/;/g, ""))
+
+                  }
+                  
+                  
+                  
+                });
+
+                newrez.analiti = tmpAnaliti
+                newrez.uzorci = uzorci;
+
+
+                newrez.code128 =
+                  '<i style="font-size: 14px; color:#f7cc36;" class="fa fa-user"></i>';
 
                 newrez.barcodes +=
                   "<button style='white-space: nowrap;' id='" +
