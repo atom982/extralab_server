@@ -1356,7 +1356,7 @@ odobravanjeController.Calculate = function(req, res) {
     query = req.params.id;
   }
 
-  console.log(id + " / " + query)
+  console.log(query)
 
   Results.find({
     id: {
