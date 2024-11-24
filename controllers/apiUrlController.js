@@ -1017,9 +1017,9 @@ apiUrlController.apiUrlNalaziPregled = function(req, res) {
 
                 var nalaz =
                   "<button style='white-space: nowrap;' id='" +
-                  uzorak._id +
+                  uzorak.timestamp +
                   "' class='btn btn-primary btn-micro'><span id='" +
-                  uzorak._id +
+                  uzorak.timestamp +
                   "' class='glyphicon glyphicon-search'></span> NALAZ</button>";
 
 
