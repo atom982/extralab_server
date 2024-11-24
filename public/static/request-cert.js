@@ -1,2 +1,2 @@
-const cert = "https://extralab.atom-lis.com/cert";
-const request = "https://extralab.atom-lis.com/sign-message?request=";
+const cert = "https://extralab.ilab.ba/cert";
+const request = "https://extralab.ilab.ba/sign-message?request=";
