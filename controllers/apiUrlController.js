@@ -1,4 +1,6 @@
 var mongoose = require("mongoose");
+const config = require("../config/index");
+const fs = require("fs");
 
 var apiUrlController = {};
 
@@ -269,12 +271,33 @@ apiUrlController.apiUrlPatients = function(req, res) {
               patient._id +
               "' class='fa fa-edit'></span> Uredi</button>";
 
+
+              var godiste = patient.jmbg.substring(4, 7);
+            switch (godiste[0]) {
+              case "9":
+                godiste = "1" + godiste + "";
+                break;
+              case "0":
+                godiste = "2" + godiste + "";
+                break;
+              default:
+                godiste = "";
+                break;
+            }
+
+            if (godiste == "1920") {
+              var godisteTemp = "<span style='color: #e34a4a;'>*</span>";
+            } else {
+              var godisteTemp = godiste;
+            }
+
             json.data.push({
               icon: icon,
               ime: patient.ime,
               prezime: patient.prezime,
               prijem: prijem,
               jmbg: jmbg,
+              godiste: godisteTemp,
               spol: patient.spol,
               detalji: detalji,
               id: patient._id
@@ -974,6 +997,48 @@ apiUrlController.apiUrlNalaziPregled = function(req, res) {
                   "' class='glyphicon glyphicon-search'></span> NALAZ</button>";
               }
 
+              var pdf = config.nalaz_path;
+              var exists = false;
+              var file = pdf + uzorak.timestamp + ".pdf";
+
+              // console.log(file)
+
+              try {
+                if (fs.existsSync(file)) {
+                  exists = true;
+                } else {
+                  exists = false;
+                }
+              } catch (err) {
+                console.error(err);
+              }
+
+              if (exists) {
+
+                var nalaz =
+                  "<button style='white-space: nowrap;' id='" +
+                  uzorak._id +
+                  "' class='btn btn-primary btn-micro'><span id='" +
+                  uzorak._id +
+                  "' class='glyphicon glyphicon-search'></span> NALAZ</button>";
+
+
+              }else{
+
+                var nalaz =
+                "<button style='white-space: nowrap;' id='" +
+                "ERROR" +
+                "' class='btn btn-pale btn-micro'><span id='" +
+                "ERROR" + "' class='glyphicon glyphicon-search'></span> NALAZ</button>";
+
+              }
+
+
+
+
+
+
+
               var tmp_time = new Date(
                 new Date(uzorak.updated_at).getTime() -
                   new Date(uzorak.updated_at).getTimezoneOffset() * 60000
@@ -986,26 +1051,71 @@ apiUrlController.apiUrlNalaziPregled = function(req, res) {
                 "." +
                 JSON.stringify(uzorak.created_at).slice(1, 5);
               var time = JSON.stringify(tmp_time).substring(12, 17);
+              
+              
               var uzorci = [];
-              uzorak.uzorci.forEach(element => {
-                uzorci.push(element.sid);
+              var uzorci_disabled = [];
+              
+              uzorak.uzorci.forEach((element) => {
+                var pdf2 = config.nalaz_path + "samples/";
+                var exists2 = false;
+                var file2 = pdf2 + element.sid + ".pdf";
+
+                // console.log(file2)
+
+                try {
+                  if (fs.existsSync(file2)) {
+                    exists2 = true;
+                    uzorci.push(element.sid);
+                  } else {
+                    exists2 = false;
+                    uzorci_disabled.push(element.sid);
+                  }
+                } catch (err) {
+                  console.error(err);
+                }
+
+                
               });
+
+              var godiste = uzorak.patient.jmbg.substring(4, 7);
+              switch (godiste[0]) {
+                case "9":
+                  godiste = "1" + godiste + "";
+                  break;
+                case "0":
+                  godiste = "2" + godiste + "";
+                  break;
+                default:
+                  godiste = "";
+                  break;
+              }
+
+              if (godiste == "1920") {
+                var godisteTemp = "<span style='color: #e34a4a;'>*</span>";
+              } else {
+                var godisteTemp = godiste;
+              }
 
               var pacijent = uzorak.patient.ime + " " + uzorak.patient.prezime;
 
-              if (uzorci.length > 1) {
+              if (uzorci.length + uzorci_disabled.length > 1) {
                 var partials =
                   "<i name='" +
                   pacijent +
                   "' id='" +
                   uzorci +
+                  "' title='" +
+                  uzorci_disabled +
                   "' style='color:#4ae387;' class='vuestic-icon vuestic-icon-files'></i>";
-              } else if (uzorci.length == 1) {
+              } else if (uzorci.length + uzorci_disabled.length == 1) {
                 var partials =
                   "<i name='" +
                   pacijent +
                   "' id='" +
                   uzorci +
+                  "' title='" +
+                  uzorci_disabled +
                   "' style='color:#d9d9d9;' class='vuestic-icon vuestic-icon-files'></i>";
               } else {
                 var partials = "";
@@ -1023,7 +1133,9 @@ apiUrlController.apiUrlNalaziPregled = function(req, res) {
                 prezime: uzorak.patient.prezime,
                 status: "<strong>VERIFICIRAN</strong>",
                 jmbg: uzorak.patient.jmbg,
+                godiste: godisteTemp,
                 uzorci: uzorci,
+                uzorci_disabled: uzorci_disabled,
                 partials: partials,
 
                 time: time,
@@ -1281,6 +1393,74 @@ apiUrlController.apiUrlNalaziOutbox = function(req, res) {
                     "' class='fa fa-envelope-o'></span> NALAZ</button>";
                 }
 
+
+
+
+                var pdf = config.nalaz_path + "emails/";
+                      var exists = false;
+                      var file = pdf + uzorak.naziv + ".pdf";
+        
+                      try {
+                        if (fs.existsSync(file)) {
+                          exists = true;
+                        } else {
+                          exists = false;
+                        }
+                      } catch (err) {
+                        console.error(err);
+                      }
+        
+                      if (exists) {
+        
+                        var nalaz =
+                      "<button style='text-transform: none; white-space: nowrap;' id='" +
+                      uzorak.naziv +
+                      "' class='btn btn-primary btn-micro'><span id='" +
+                      uzorak.naziv +
+                      "' class='fa fa-envelope-o'></span> NALAZ</button>";
+
+                      }else {
+                        var nalaz =
+                          "<button style='white-space: nowrap;' id='" +
+                          "ERROR" +
+                          "' class='btn btn-pale btn-micro'><span id='" +
+                          "' class='fa fa-envelope-o'></span> NALAZ</button>";
+        
+                        
+                      }
+
+
+
+
+
+
+
+
+                var godiste = uzorak.patient.jmbg.substring(4, 7);
+                switch (godiste[0]) {
+                  case "9":
+                    godiste = "1" + godiste + "";
+                    break;
+                  case "0":
+                    godiste = "2" + godiste + "";
+                    break;
+                  default:
+                    godiste = "";
+                    break;
+                }
+
+                if (godiste == "1920") {
+                  var godisteTemp = "<span style='color: #e34a4a;'>*</span>";
+                } else {
+                  var godisteTemp = godiste;
+                }
+
+
+
+
+
+
+
                 var akcija = "<strong>POSLANO</strong>";
                 var brisanje =
                   "<button style='white-space: nowrap;' title='Brisanje nalaza' uzorka' name='" +
@@ -1352,6 +1532,7 @@ apiUrlController.apiUrlNalaziOutbox = function(req, res) {
 
                 json.data.push({
                   outbox: nalaz,
+                  godiste: godisteTemp,
                   ime: uzorak.patient.ime,
                   prezime: uzorak.patient.prezime,
                   jmbg: uzorak.patient.jmbg,

@@ -60,6 +60,18 @@ app.set("socketio", io);
 
 // Starting our server
 
+// 24.11.2023. godine
+// Islamović Salko
+// Otvoreni TCP portovi:
+
+/* 
+PORT: 2030
+PORT: 2035
+PORT: 2040
+PORT: 2045
+PORT: 2050
+*/
+
 lisserver.start(io,9610,"DCell 60  Omega -Tuzla");//DCell Omega
 lisserver.start(io,9611,"iLAB 650 Omega-Tuzla");//ilab 650  Omega
 lisserver.start(io,9612,"Architect ci4100 Omega-Tuzla");//Architect ci4100 Omega

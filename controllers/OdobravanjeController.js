@@ -1524,10 +1524,10 @@ odobravanjeController.Calculate = function(req, res) {
     });
 };
 
-odobravanjeController.SacuvajRezultate = function(req, res) {
+odobravanjeController.SacuvajRezultate = function (req, res) {
   Results.findOne({
-    id: req.params.id
-  }).exec(function(err, rezultat) {
+    id: req.params.id,
+  }).exec(function (err, rezultat) {
     if (err) {
       console.log("Greška:", err);
     } else {
@@ -1539,10 +1539,10 @@ odobravanjeController.SacuvajRezultate = function(req, res) {
         var Audit_Rez = new Audit_Rezultati(audit);
         Audit_Rez.save();
 
-        rezultat.rezultati.forEach(element => {
-          req.body.rezultati.forEach(rez => {
+        rezultat.rezultati.forEach((element) => {
+          req.body.rezultati.forEach((rez) => {
             if (element._id.equals(mongoose.Types.ObjectId(rez.IDE))) {
-              element.rezultat.forEach(test => {
+              element.rezultat.forEach((test) => {
                 if (test._id.equals(mongoose.Types.ObjectId(rez.id))) {
                   test.rezultat_f = rez.rezultat;
                   // console.log(rez.rezultat_m)
@@ -1555,46 +1555,85 @@ odobravanjeController.SacuvajRezultate = function(req, res) {
         });
 
         Samples.findOne({
-          id: req.params.id
+          id: req.params.id,
         })
           .populate("tests.labassay")
-          .exec(function(err, sample) {
+          .exec(function (err, sample) {
             if (err) {
               console.log("Greška:", err);
             } else {
-              sample.tests.forEach(element => {
-                req.body.rezultati.forEach(rez => {
+              sample.tests.forEach((element) => {
+                req.body.rezultati.forEach((rez) => {
+
+                  
+                 
                   if (
-                    element.labassay.equals(
-                      mongoose.Types.ObjectId(rez.laIDE)
+                    (element.labassay._id.equals(mongoose.Types.ObjectId(rez.labassay_id))
+                      
                     ) &&
                     rez.rezultat != ""
                   ) {
                     element.status_t = "REALIZOVAN";
+                   
                   }
+
+                  if (
+                    (element.labassay._id.equals(mongoose.Types.ObjectId(rez.labassay_id))
+                      
+                    ) &&
+                    rez.rezultat.trim() === ""
+                  ) {
+                    element.status_t = "ZAPRIMLJEN";
+                   
+                  }
+
+
                 });
               });
-              sample.save();
-            }
-          });
-        rezultat.save(function(err) {
+              sample.save(function (err) {
+                if (err) {
+                  console.log("Greška:", err);
+                  res.json({
+                    success: false,
+                    message: err,
+                  });
+                } else {
+                  rezultat.save(function (err) {
           if (err) {
             console.log("Greška:", err);
             res.json({
               success: false,
-              message: err
+              message: err,
             });
           } else {
             res.json({
               success: true,
-              message: "Rezultati sačuvani."
+              message: "Rezultati sačuvani.",
             });
           }
         });
+                }
+              }
+
+
+
+
+
+
+              );
+            }
+          });
+
+
+
+        
+
+
+
       } else {
         res.json({
           success: true,
-          message: "Nije pronadjen rezultat"
+          message: "Nije pronadjen rezultat",
         });
       }
     }
