@@ -590,7 +590,73 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
             rezultati = Rezultati;
           }
 
-          switch (parametar) {
+          var Query = req.query.filter.trim();
+
+          if (
+            Query.length === 10 &&
+            isNaN(Query.charAt(0)) &&
+            isNaN(Query.charAt(4)) &&
+            (Query.charAt(4) === "S" || Query.charAt(4) === "V") &&
+            !isNaN(Query.charAt(1)) &&
+            !isNaN(Query.charAt(2)) &&
+            !isNaN(Query.charAt(3)) &&
+            !isNaN(Query.charAt(5)) &&
+            !isNaN(Query.charAt(6)) &&
+            !isNaN(Query.charAt(7)) &&
+            !isNaN(Query.charAt(8)) &&
+            !isNaN(Query.charAt(9))
+          ) {
+            console.log("Query by Sample ID: " + Query);
+
+            var filtered = [];
+
+            rezultati.forEach((element) => {
+              element.uzorci.forEach((uzorak) => {
+                if (uzorak === Query) {
+                  filtered.push(element);
+                }
+              });
+            });
+
+            rezultati = filtered;
+
+            // console.log(rezultati)
+
+            var json = {};
+
+            json.data = [];
+
+            json.data = rezultati;
+            json.total = json.data.length;
+            json.per_page = req.query.per_page;
+            json.current_page = req.query.page;
+            json.last_page = Math.ceil(json.total / json.per_page);
+            json.next_page_url =
+              config.baseURL +
+              "obrada/pregled?sort=" +
+              req.query.sort +
+              "&page=" +
+              (req.query.page + 1) +
+              "&per_page=" +
+              req.query.per_page;
+            var prev_page = null;
+            if (json.current_page - 1 !== 0) {
+              prev_page = json.current_page - 1;
+            }
+            json.prev_page_url =
+              config.baseURL +
+              "obrada/pregled?sort=" +
+              req.query.sort +
+              "&page=" +
+              prev_page +
+              "&per_page=" +
+              req.query.per_page;
+            json.from = (json.current_page - 1) * 10 + 1;
+            json.to = (json.current_page - 1) * 10 + 10;
+            json.data = json.data.slice(json.from - 1, json.to);
+            res.json(json);
+          } else {
+            switch (parametar) {
             case "ime":
               rezultati = rezultati.filter(function(rezultat) {
                 return rezultat.ime
@@ -726,6 +792,7 @@ apiUrlController.apiUrlObradaPregled = function(req, res) {
           json.to = (json.current_page - 1) * 10 + 10;
           json.data = json.data.slice(json.from - 1, json.to);
           res.json(json);
+        }
         } else {
           res.json({
             success: false,
