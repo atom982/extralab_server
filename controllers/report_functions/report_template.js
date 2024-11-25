@@ -22,10 +22,11 @@ module.exports = {
     const QRCode = require("qrcode");
 
     console.log(config.QRCodes)
+    console.log(report._id)
 
     QRCode.toFile(
       config.QRCodes + report._id + ".png",
-      qrcodeText,
+      "qrcodeText",
       {
         width: 90,
         height: 90,
