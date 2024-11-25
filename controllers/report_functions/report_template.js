@@ -8,6 +8,12 @@ module.exports = {
 
     // QR Code
 
+    if (reprint.text == "REPRINT") {
+      
+    } else {
+
+    }
+
     var qrcodeText =
     data.prezime +
     " " +
