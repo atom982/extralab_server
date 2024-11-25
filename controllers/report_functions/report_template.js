@@ -1,5 +1,6 @@
 const QRCode = require("qrcode");
 
+
 module.exports = {
   create_report: function (report, config, data, legenda, sekcijeniz, napomena, 
     res, specificni, type, naziv, lokacija, site, site_data, reprint) {
@@ -22,19 +23,9 @@ module.exports = {
     data.protokol;
 
 
-    QRCode.toFile(config.QRCodes + 'filename.png', 'Some text', {
-      color: {
-        dark: '#00F',  // Blue dots
-        light: '#0000' // Transparent background
-      }
-    }, function (err) {
-      if (err) throw err
-      console.log('done')
-    })
 
 
-
-    QRCode.toFile(
+    QRCode.toFileStream(
       config.QRCodes + report._id + ".png",
       qrcodeText,
       {
