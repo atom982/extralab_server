@@ -2,7 +2,7 @@ const QRCode = require("qrcode");
 
 module.exports = {
   create_report: function (report, config, data, legenda, sekcijeniz, napomena, 
-    res, specificni, type, naziv, lokacija, site, reprint) {
+    res, specificni, type, naziv, lokacija, site, site_data, reprint) {
 
     // console.log(reprint)
 
