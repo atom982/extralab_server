@@ -223,7 +223,9 @@ class PDFDocumentWithTables extends PDFDocument {
         }
 
         if (i === 3) {
+
           // console.log(cell)
+          
           if (cell.reference.includes("*")) {
             this.fillColor("red");
           } else {

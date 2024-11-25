@@ -937,7 +937,7 @@ odobravanjeController.GetSamples = function(req, res) {
   }
 };
 
-// Status nalaza, Salko Islamović (18.03.2019)
+// Status nalaza, Salko Islamović (25.11.2024)
 odobravanjeController.StatusNalaza = function(req, res) {
   if (mongoose.connection.readyState != 1) {
     res.json({
@@ -945,6 +945,10 @@ odobravanjeController.StatusNalaza = function(req, res) {
       message: "Greška prilikom konekcije na MongoDB."
     });
   } else {
+
+    // Audit_Nalazi
+    // Izmjena vremena izdavanja nalaza, nakon Verifikacije
+
     Nalazi.findOne({
       timestamp: req.body.timestamp,
       location: req.body.location,
@@ -955,13 +959,49 @@ odobravanjeController.StatusNalaza = function(req, res) {
       } else {
         if (nalaz) {
           nalaz.status = req.body.status;
+
+          // console.log("odobravanjeController.StatusNalaza = function(req, res) {")
+
+          var day_start = new Date(Date.now()); // Današnji datum
+          var day_end = new Date(nalaz.updated_at); // Datum izdavanja nalaza
+          var total_days = (day_start - day_end) / (1000 * 60 * 60 * 24);
+
+          // console.log(day_start)
+          // console.log(day_end)
+          // console.log(total_days)
+
+          if (total_days > 14 || nalaz.migrated === true) {
+
+            console.log("Promjena statusa nalaza - DO NOT CHANGE PARAMETER \"updated_at\"");            
+
+          }else{
+
+            console.log("Promjena statusa nalaza - DO CHANGE of PARAMETER \"updated_at\"");
+
+            nalaz.updated_at = new Date(
+              new Date().getTime() - new Date().getTimezoneOffset() * 60000
+            );
+
+          }
+
+          // console.log("End of: StatusNalaza")
+
           nalaz.updated_by = req.body.decoded.user;
-          nalaz.updated_at = Date.now();
-          nalaz.save();
-          res.json({
-            success: true,
-            message: "Status nalaza uspješno izmjenjen."
-          });
+
+          nalaz.save(function(err) {
+            if (err) {
+              console.log("Greška:", err);
+              res.json({
+                success: false,
+                message: err
+              });
+            } else {
+              res.json({
+                success: true,
+                message: "Status nalaza uspješno izmjenjen."
+              });
+            }
+          });     
         } else {
           res.json({
             success: false,

@@ -2,8 +2,9 @@ const QRCode = require("qrcode");
 
 module.exports = {
   create_report: function (report, config, data, legenda, sekcijeniz, napomena, 
-    res, specificni, type, naziv, lokacija, site, site_data) {
+    res, specificni, type, naziv, lokacija, site, reprint) {
 
+    // console.log(reprint)
 
     // QR Code
 
@@ -134,31 +135,67 @@ module.exports = {
     doc.image(config.nalaz_logo + code + ".jpg", 28, 0, { fit: [240, 80], align: "center", valign: "center" });
 
     // doc.font("PTSansRegular").fontSize(13).fillColor("#7B8186").text("RIQAS certificirana eksterna kontrola kvaliteta", 308, 40);
-    doc.font("PTSansRegular").fontSize(12).fillColor("black").text("Prezime i ime: ", 50, nvisina);
-    doc.font("PTSansBold").fontSize(14).text(" " + data.prezime.toUpperCase() + " " + data.ime.toUpperCase(), 142 - 17, nvisina - 2);
+    
+    
+    if (reprint.text == "REPRINT") {
 
-    if (datRodjenja.includes("01.01") && data.godiste == "1920") {
-      doc.font("PTSansRegular").fontSize(12).text("Datum rođenja:", 50, nvisina + 16).text("Nema podataka", 150 - 17, nvisina + 16);
-    } else if (!datRodjenja.includes("00.00")) {
-      doc.font("PTSansRegular").fontSize(12).text("Datum rođenja:", 50, nvisina + 16).text(datRodjenja + data.godiste + ".", 150 - 17, nvisina + 16);
+      doc.font("PTSansRegular").fontSize(12).fillColor("black").text("Prezime i ime: ", 50, nvisina);
+      doc.font("PTSansBold").fontSize(14).text(" " + data.prezime.toUpperCase() + " " + data.ime.toUpperCase(), 142 - 17, nvisina - 2);
+  
+      if (datRodjenja.includes("01.01") && data.godiste == "1920") {
+        doc.font("PTSansRegular").fontSize(12).text("Datum rođenja:", 50, nvisina + 16).text("Nema podataka", 150 - 17, nvisina + 16);
+      } else if (!datRodjenja.includes("00.00")) {
+        doc.font("PTSansRegular").fontSize(12).text("Datum rođenja:", 50, nvisina + 16).text(datRodjenja + data.godiste + ".", 150 - 17, nvisina + 16);
+      } else {
+        doc.font("PTSansRegular").fontSize(12).text("Godište:", 50, nvisina + 16).text(data.godiste + ".", 150 - 56, nvisina + 16);
+      }
+  
+      doc.font("PTSansRegular").fontSize(12).text("Spol:", 50, nvisina + 32).text(data.spol[0].toUpperCase() + data.spol.slice(1).toLowerCase(), 96 - 17, nvisina + 32);
+      doc.font("PTSansRegular").fontSize(12).text("Datum: " + reprint.datum, 444 + 10, nvisina - 2 - 16);
+  
+      var uzorkovan = JSON.stringify(report.uzorkovano).substring(1, 11).split("-");
+  
+      doc.image(config.QRCodes + report._id + ".png", 330, nvisina - 15, { width: 90, keepAspectRatio: true });
+  
+      
+      // doc.font("PTSansRegular").text("Vrijeme: " + data.vrijeme, 445 + 10, nvisina + 14 - 16);
+      doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text("Datum i vrijeme uzorkovanja:", 444.5 + 10, nvisina + 32 - 16);
+      doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text(uzorkovan[2] + "." + uzorkovan[1] + "." + uzorkovan[0] + " " + data.uzorkovano_t, 444.5 + 10, nvisina + 42 - 16);
+      doc.font("PTSansBold").fontSize(12).text(rowsno, 50, nvisina + 60);
+  
+      doc.font("PTSansRegular").fontSize(12).text("Broj protokola:" , 444.5 + 10, nvisina + 60 - 16);
+      doc.font("PTSansBold").fontSize(12).text(data.protokol, 444.5 + 10, nvisina + 76 - 16);
+
     } else {
-      doc.font("PTSansRegular").fontSize(12).text("Godište:", 50, nvisina + 16).text(data.godiste + ".", 150 - 56, nvisina + 16);
+
+      doc.font("PTSansRegular").fontSize(12).fillColor("black").text("Prezime i ime: ", 50, nvisina);
+      doc.font("PTSansBold").fontSize(14).text(" " + data.prezime.toUpperCase() + " " + data.ime.toUpperCase(), 142 - 17, nvisina - 2);
+  
+      if (datRodjenja.includes("01.01") && data.godiste == "1920") {
+        doc.font("PTSansRegular").fontSize(12).text("Datum rođenja:", 50, nvisina + 16).text("Nema podataka", 150 - 17, nvisina + 16);
+      } else if (!datRodjenja.includes("00.00")) {
+        doc.font("PTSansRegular").fontSize(12).text("Datum rođenja:", 50, nvisina + 16).text(datRodjenja + data.godiste + ".", 150 - 17, nvisina + 16);
+      } else {
+        doc.font("PTSansRegular").fontSize(12).text("Godište:", 50, nvisina + 16).text(data.godiste + ".", 150 - 56, nvisina + 16);
+      }
+  
+      doc.font("PTSansRegular").fontSize(12).text("Spol:", 50, nvisina + 32).text(data.spol[0].toUpperCase() + data.spol.slice(1).toLowerCase(), 96 - 17, nvisina + 32);
+      doc.font("PTSansRegular").fontSize(12).text("Datum: " + data.datum, 444 + 10, nvisina - 2 - 16);
+  
+      var uzorkovan = JSON.stringify(report.uzorkovano).substring(1, 11).split("-");
+  
+      doc.image(config.QRCodes + report._id + ".png", 330, nvisina - 15, { width: 90, keepAspectRatio: true });
+  
+      
+      doc.font("PTSansRegular").text("Vrijeme: " + data.vrijeme, 445 + 10, nvisina + 14 - 16);
+      doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text("Datum i vrijeme uzorkovanja:", 444.5 + 10, nvisina + 32 - 16);
+      doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text(uzorkovan[2] + "." + uzorkovan[1] + "." + uzorkovan[0] + " " + data.uzorkovano_t, 444.5 + 10, nvisina + 42 - 16);
+      doc.font("PTSansBold").fontSize(12).text(rowsno, 50, nvisina + 60);
+  
+      doc.font("PTSansRegular").fontSize(12).text("Broj protokola:" , 444.5 + 10, nvisina + 60 - 16);
+      doc.font("PTSansBold").fontSize(12).text(data.protokol, 444.5 + 10, nvisina + 76 - 16);
+
     }
-
-    doc.font("PTSansRegular").fontSize(12).text("Spol:", 50, nvisina + 32).text(data.spol[0].toUpperCase() + data.spol.slice(1).toLowerCase(), 96 - 17, nvisina + 32);
-    doc.font("PTSansRegular").fontSize(12).text("Datum: " + data.datum, 444 + 10, nvisina - 2 - 16);
-
-    var uzorkovan = JSON.stringify(report.uzorkovano).substring(1, 11).split("-");
-
-    doc.image(config.QRCodes + report._id + ".png", 330, nvisina - 15, { width: 90, keepAspectRatio: true });
-
-    doc.font("PTSansRegular").text("Vrijeme: " + data.vrijeme, 445 + 10, nvisina + 14 - 16);
-    doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text("Datum i vrijeme uzorkovanja:", 444.5 + 10, nvisina + 32 - 16);
-    doc.font("PTSansBold", config.nalaz_ptsansbold).fontSize(8).text(uzorkovan[2] + "." + uzorkovan[1] + "." + uzorkovan[0] + " " + data.uzorkovano_t, 444.5 + 10, nvisina + 42 - 16);
-    doc.font("PTSansBold").fontSize(12).text(rowsno, 50, nvisina + 60);
-
-    doc.font("PTSansRegular").fontSize(12).text("Broj protokola:" , 444.5 + 10, nvisina + 60 - 16);
-    doc.font("PTSansBold").fontSize(12).text(data.protokol, 444.5 + 10, nvisina + 76 - 16);
 
     doc.moveDown(1);
 
@@ -433,6 +470,26 @@ module.exports = {
 
     for (let i = range.start; i < range.start + range.count; i++) {
       doc.switchToPage(i);
+
+      // NAPOMENA: Ovaj dokument je validan u elektronskoj formi bez potpisa i pečata.
+      doc.font("PTSansRegular").fontSize(9).fillColor("#7B8186").text("Ovaj dokument je validan u elektronskoj formi bez potpisa i pečata.", 50, 740, { lineBreak: false });
+
+      if (reprint.text == "REPRINT") {
+        doc.font("PTSansBold").fontSize(9).fillColor("black").text("KOPIJA NALAZA", 470, 740, { lineBreak: false });
+      }
+
+      doc.font("PTSansRegular").fontSize(10).fillColor("#7B8186").text(adresa, 50, 740, { lineBreak: false });
+      doc.fontSize(9).fillColor("#7B8186").moveTo(0, 756)                      
+      .lineTo(650, 756)
+      .lineWidth(0.7)
+      .opacity(0.5)
+      .fillAndStroke("#7B8186", "#7B8186")
+      .opacity(1);
+
+      // doc.font("PTSansBold").fontSize(8).fillColor("#7B8186").text("ATOM Laboratory Software", 470, 760, { lineBreak: false });
+      // doc.font("PTSansRegular").fontSize(8).fillColor("#7B8186").text("by", 470, 770, { lineBreak: false });   
+      // doc.font("PTSansBold").fontSize(8).fillColor("#7B8186").text("iLab d.o.o. Sarajevo", 480, 770, { lineBreak: false });
+
       doc.font("PTSansRegular").fontSize(10).fillColor("#7B8186").text(adresa, adresa_x, 760, { lineBreak: false }).fontSize(8).fillColor("black").text(`Stranica ${i + 1} od ${range.count}`, doc.page.width / 2 - 25, doc.page.height - 18, { lineBreak: false });
     }
     doc.end();

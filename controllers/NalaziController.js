@@ -1424,6 +1424,11 @@ nalazController.Nalaz = function(req, res) {
                     baseConfig.nalaz_footer = config.nalaz_footer;
                     baseConfig.QRCodes = config.QRCodes;
 
+                    var reprint = {
+                      datum: null,
+                      text: "ORIGINAL"
+                    }
+
                     report_template.create_report(
                       report,
                       baseConfig,
@@ -1437,11 +1442,15 @@ nalazController.Nalaz = function(req, res) {
                       req.body.naziv,
                       lokacija,
                       req.body.site,
-                      site_data
+                      site_data,
+                      reprint
                     );
                   }
                 });
               } else {
+
+                // Već postoji nalaz u bazi - Moguće da se radi o korekciji greške ili kreiranju kopije nalaza
+
                 var obj = {};
                 nalaz.patient = Data.patient;
                 nalaz.komentar = komentar_za_ispis;
@@ -1460,8 +1469,31 @@ nalazController.Nalaz = function(req, res) {
                   "Referentni interval"
                 ];
                 nalaz.rows = sekcijeniz;
+
+                var day_start = new Date(Date.now()); // Današnji datum
+                var day_end = new Date(nalaz.updated_at); // Datum izdavanja nalaza
+                var total_days = (day_start - day_end) / (1000 * 60 * 60 * 24);
+
+                // console.log(day_start)
+                // console.log(day_end)
+                // console.log(total_days)
+
+                if (total_days > 14 || nalaz.migrated === true) {
+
+                  console.log("Kopija nalaza - DO NOT CHANGE PARAMETER \"updated_at\"");       
+
+                }else{
+
+                  console.log("Kopija nalaza - DO CHANGE of PARAMETER \"updated_at\"");
+
+                  nalaz.updated_at = new Date(
+                    new Date().getTime() - new Date().getTimezoneOffset() * 60000
+                  );
+
+                }
+
                 nalaz.updated_by = req.body.decoded.user;
-                nalaz.updated_at = Date.now();
+
                 nalaz.specificni = specificni;
                 nalaz.uzorkovano = Data.uzorkovano;
                 nalaz.save(function(err, report) {
@@ -1480,6 +1512,40 @@ nalazController.Nalaz = function(req, res) {
                     baseConfig.nalaz_footer = config.nalaz_footer;
                     baseConfig.QRCodes = config.QRCodes;
 
+                    if (total_days > 14 || nalaz.migrated === true) {
+                      console.log("Nalaz je stariji od 14 dana ili se radi o migriranim podatcima.")
+                      console.log(total_days)
+
+                      Data.datum =
+                        JSON.stringify(nalaz.created_at).slice(9, 11) +
+                        "." +
+                        JSON.stringify(nalaz.created_at).slice(6, 8) +
+                        "." +
+                        JSON.stringify(nalaz.created_at).slice(1, 5);
+                      Data.vrijeme = JSON.stringify(nalaz.created_at).substring(12, 17);
+
+                      var reprint = {
+                        datum: JSON.stringify(nalaz.created_at).slice(9, 11) +
+                        "." +
+                        JSON.stringify(nalaz.created_at).slice(6, 8) +
+                        "." +
+                        JSON.stringify(nalaz.created_at).slice(1, 5), // + " " + JSON.stringify(nalaz.created_at).substring(12, 17),
+                        
+                        // nalaz.created_at,
+                        text: "REPRINT"
+                      }
+
+                    } else {
+                      // console.log("Nalaz nije stariji od 30 dana.")
+                      // console.log(total_days)
+
+                      var reprint = {
+                        datum: null,
+                        text: "ORIGINAL"
+                      }
+
+                    }
+
                     report_template.create_report(
                       report,
                       baseConfig,
@@ -1493,7 +1559,8 @@ nalazController.Nalaz = function(req, res) {
                       req.body.naziv,
                       lokacija,
                       req.body.site,
-                      site_data
+                      site_data,
+                      reprint
                     );
                   }
                 });
