@@ -22,8 +22,7 @@ module.exports = {
     data.protokol;
 
     QRCode.toFile(
-      "../../../home/ilab/extralab/public/images/QRCodes/" + "report._id" + ".png",
-      // config.QRCodes + report._id + ".png",
+      config.QRCodes + report._id + ".png",
       qrcodeText,
       {
         width: 90,
