@@ -22,7 +22,7 @@ module.exports = {
     data.protokol;
 
     QRCode.toFile(
-      config.QRCodes + report._id + ".png",
+      config.QRCodes + report._id + ".jpg",
       qrcodeText,
       {
         width: 90,
@@ -155,7 +155,7 @@ module.exports = {
   
       var uzorkovan = JSON.stringify(report.uzorkovano).substring(1, 11).split("-");
   
-      doc.image(config.QRCodes + report._id + ".png", 330, nvisina - 15, { width: 90, keepAspectRatio: true });
+      doc.image(config.QRCodes + report._id + ".jpg", 330, nvisina - 15, { width: 90, keepAspectRatio: true });
   
       
       // doc.font("PTSansRegular").text("Vrijeme: " + data.vrijeme, 445 + 10, nvisina + 14 - 16);
@@ -184,7 +184,7 @@ module.exports = {
   
       var uzorkovan = JSON.stringify(report.uzorkovano).substring(1, 11).split("-");
   
-      doc.image(config.QRCodes + report._id + ".png", 330, nvisina - 15, { width: 90, keepAspectRatio: true });
+      doc.image(config.QRCodes + report._id + ".jpg", 330, nvisina - 15, { width: 90, keepAspectRatio: true });
   
       
       doc.font("PTSansRegular").text("Vrijeme: " + data.vrijeme, 445 + 10, nvisina + 14 - 16);
