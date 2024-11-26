@@ -22,8 +22,8 @@ module.exports = {
     data.godiste +
     "\n" +
     data.datum +
-    " " +
-    data.vrijeme.substring(0, 5) +
+    // " " +
+    // data.vrijeme.substring(0, 5) +
     "\n" +
     data.protokol;
 
@@ -487,7 +487,7 @@ module.exports = {
         doc.font("PTSansBold").fontSize(9).fillColor("black").text("KOPIJA NALAZA", 470, 740, { lineBreak: false });
       }
 
-      doc.font("PTSansRegular").fontSize(10).fillColor("#7B8186").text(adresa, 50, 740, { lineBreak: false });
+      // doc.font("PTSansRegular").fontSize(10).fillColor("#7B8186").text(adresa, 50, 740, { lineBreak: false });
       doc.fontSize(9).fillColor("#7B8186").moveTo(0, 756)                      
       .lineTo(650, 756)
       .lineWidth(0.7)
