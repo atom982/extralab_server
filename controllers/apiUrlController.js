@@ -1107,14 +1107,14 @@ apiUrlController.apiUrlNalaziPregled = function(req, res) {
 
                 var tmp_time = new Date(
                   new Date(uzorak.updated_at).getTime() -
-                    new Date(uzorak.updated_at).getTimezoneOffset() // * 60000
+                    new Date(uzorak.updated_at).getTimezoneOffset() * 60000
                 ).toISOString();
 
               }else{
 
                 var tmp_time = new Date(
                   new Date(uzorak.updated_at).getTime() -
-                    new Date(uzorak.updated_at).getTimezoneOffset() * 60000
+                    new Date(uzorak.updated_at).getTimezoneOffset() // * 60000
                 ).toISOString();
 
               }
