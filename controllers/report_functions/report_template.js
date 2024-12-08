@@ -97,6 +97,8 @@ module.exports = {
     var rows = [];
     var temp = [];
 
+    var fib4score = false
+
     var datRodjenja = data.jmbg.substring(0, 2) + "." + data.jmbg.substring(2, 4) + ".";
 
     if (type != undefined && naziv != undefined && type === "single") {
@@ -251,6 +253,13 @@ module.exports = {
           });
           multi = [];
         } else {
+
+          if(test.rezultat[0].toUpperCase().includes("Fibrosis-4 (FIB-4)")){
+            console.log(test.rezultat[0])
+            fib4score = true 
+          } 
+
+
           if (multi.length) {
             multi.forEach(mul => {
               if (doc.y > 650) {
@@ -458,6 +467,16 @@ module.exports = {
     // doc.moveDown(0.3);
     // doc.font("PTSansBold").fontSize(12).text("Laboratorija pod nadzorom supervizora Butković Dr. Nusreta spec. med. biohemije");
 
+
+    if (fib4score) {
+      doc.font("PTSansRegular");
+      doc.moveDown(0.5);
+      doc.fontSize(11).text("FIB-4-Score (Aproksimativna procjena stupnja fibroze jetre):", 75);
+      console.log("FIB-4-Score (Aproksimativna procjena stupnja fibroze jetre):")
+      doc.image(config.nalaz_logo + "FIB4Score.jpg", 75, doc.y, { width: 400, keepAspectRatio: true });
+      doc.moveDown(0.5);
+    }
+    
     if (napomena.length) {
       doc.moveDown(0.3);
       doc.fontSize(12).text("Komentar:", 50);
