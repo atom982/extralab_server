@@ -243,7 +243,7 @@ module.exports = {
            
 
             if(test.rezultat[0].includes("Fibrosis-4 (FIB-4)")){
-              console.log(test.rezultat)
+              // console.log(test.rezultat)
               fib4score = true 
             } 
 
@@ -473,7 +473,7 @@ module.exports = {
     if (fib4score) {
       doc.font("PTSansRegular");
       doc.moveDown(0.5);
-      doc.fontSize(11).text("FIB-4-Score (Aproksimativna procjena stupnja fibroze jetre):", 75);
+      doc.fontSize(11).text("Fibrosis-4 (FIB-4): Aproksimativna procjena stupnja fibroze jetre", 75);
       console.log("FIB-4-Score (Aproksimativna procjena stupnja fibroze jetre):")
       doc.image(config.nalaz_logo + "FIB4Score.jpg", 75, doc.y, { width: 400, keepAspectRatio: true });
       doc.moveDown(0.5);
