@@ -239,6 +239,12 @@ module.exports = {
               rows: test.rezultat
             });
           } else {
+
+            if(test.rezultat[0].toUpperCase().includes("Fibrosis-4 (FIB-4)")){
+              console.warn(test.rezultat)
+              fib4score = true 
+            } 
+
             rows.push(test.rezultat);
             analit = true;
           }
@@ -253,12 +259,6 @@ module.exports = {
           });
           multi = [];
         } else {
-
-          if(test.rezultat[0].toUpperCase().includes("Fibrosis-4 (FIB-4)")){
-            console.log(test.rezultat[0])
-            fib4score = true 
-          } 
-
 
           if (multi.length) {
             multi.forEach(mul => {
