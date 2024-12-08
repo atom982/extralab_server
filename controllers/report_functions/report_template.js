@@ -240,8 +240,10 @@ module.exports = {
             });
           } else {
 
+            console.log(test)
+
             if(test.rezultat[0].toUpperCase().includes("Fibrosis-4 (FIB-4)")){
-              console.warn(test.rezultat)
+              console.log(test.rezultat)
               fib4score = true 
             } 
 
