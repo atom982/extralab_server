@@ -9,23 +9,38 @@ module.exports = {
     // QR Code
 
     if (reprint.text == "REPRINT") {
+
+      var qrcodeText =
+      data.prezime +
+      " " +
+      data.ime +
+      ", " +
+      data.godiste +
+      "\n" +
+      reprint.datum +
+      // " " +
+      // data.vrijeme.substring(0, 5) +
+      "\n" +
+      data.protokol;
       
     } else {
 
+      var qrcodeText =
+      data.prezime +
+      " " +
+      data.ime +
+      ", " +
+      data.godiste +
+      "\n" +
+      data.datum +
+      " " +
+      data.vrijeme.substring(0, 5) +
+      "\n" +
+      data.protokol;
+
     }
 
-    var qrcodeText =
-    data.prezime +
-    " " +
-    data.ime +
-    ", " +
-    data.godiste +
-    "\n" +
-    data.datum +
-    // " " +
-    // data.vrijeme.substring(0, 5) +
-    "\n" +
-    data.protokol;
+
 
 
 
