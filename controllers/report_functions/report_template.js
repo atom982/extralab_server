@@ -206,6 +206,8 @@ module.exports = {
       } else {
         doc.font("PTSansRegular").fontSize(12).text("Godište:", 50, nvisina + 16).text(data.godiste + ".", 150 - 56, nvisina + 16);
       }
+
+      var pacijent = data.prezime.toUpperCase() + " " + data.ime.toUpperCase() + " (" + data.godiste + ")"
   
       doc.font("PTSansRegular").fontSize(12).text("Spol:", 50, nvisina + 32).text(data.spol[0].toUpperCase() + data.spol.slice(1).toLowerCase(), 96 - 17, nvisina + 32);
       doc.font("PTSansRegular").fontSize(12).text("Datum: " + data.datum, 444 + 10, nvisina - 2 - 16);
@@ -533,7 +535,7 @@ module.exports = {
       .fillAndStroke("#7B8186", "#7B8186")
       .opacity(1);
 
-      doc.font("PTSansRegular").fontSize(9).fillColor("black").text("Pacijent: " + pacijent, 470, 740, {
+      doc.font("PTSansRegular").fontSize(9).fillColor("black").text("Pacijent: " + pacijent, 460, 740, {
         lineBreak: false
       });
 
