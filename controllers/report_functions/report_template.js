@@ -535,7 +535,7 @@ module.exports = {
       .fillAndStroke("#7B8186", "#7B8186")
       .opacity(1);
 
-      doc.font("PTSansRegular").fontSize(9).fillColor("black").text("Pacijent: " + pacijent, 445, 740, {
+      doc.font("PTSansRegular").fontSize(9).fillColor("black").text("Pacijent: " + pacijent, 430, 740, {
         lineBreak: false
       });
 
