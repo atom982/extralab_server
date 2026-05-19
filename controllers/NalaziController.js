@@ -153,7 +153,7 @@ nalazController.Mail = function(req, res) {
                       // pool: true,
                       host: "smtp.ilab.ba",
                       port: "587",
-                      secure: true,
+                      secure: false,
                       auth: {
                         user: "nalazi@ilab.ba",
                         pass: "Ilab2026_!"
