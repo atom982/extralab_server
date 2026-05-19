@@ -150,7 +150,7 @@ nalazController.Mail = function(req, res) {
                     // };
 
                     var smtpConfig = {
-                      // pool: true,
+                      pool: true,
                       host: "ilab.ba",
                       port: "587",
                       secure: false,
