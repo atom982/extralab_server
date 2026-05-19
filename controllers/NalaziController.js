@@ -151,7 +151,7 @@ nalazController.Mail = function(req, res) {
 
                     var smtpConfig = {
                       pool: true,
-                      host: "ilab.ba",
+                      host: "smtp.ilab.ba",
                       port: "587",
                       secure: false,
                       auth: {
