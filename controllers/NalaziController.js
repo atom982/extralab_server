@@ -150,8 +150,8 @@ nalazController.Mail = function(req, res) {
                     // };
 
                     var smtpConfig = {
-                      pool: true,
-                      host: "smt.ilab.ba",
+                      // pool: true,
+                      host: "smtp.ilab.ba",
                       port: "587",
                       secure: false,
                       auth: {
@@ -159,7 +159,7 @@ nalazController.Mail = function(req, res) {
                         pass: "Ilab2026_!"
                       },
                       tls: {
-                        rejectUnauthorized: true
+                        rejectUnauthorized: false
                       }
                     };
     
