@@ -159,7 +159,7 @@ nalazController.Mail = function(req, res) {
                         pass: "Ilab2026_!"
                       },
                       tls: {
-                        rejectUnauthorized: false
+                        rejectUnauthorized: true
                       }
                     };
     
