@@ -135,33 +135,33 @@ nalazController.Mail = function(req, res) {
                     // Environment=NODE_EXTRALAB=development PORT=5006 lisPORT=9504 logPORT=9604 JWT_SECRET=limssecret DB_HOST=85.187.140.52 DB_PORT=27017 DB_USER=admin DB_PASSWORD=APsol2018 DB_NAME=extralab 
                     // MAIL_HOST=smtp.gmail.com MAIL_PORT=465 MAIL_USER=nalazi.extralab@gmail.com MAIL_PASSWORD=laboratorija123
 
-                    // var smtpConfig = {
-                    //   pool: true,
-                    //   host: "smtp.gmail.com",
-                    //   port: "465",
-                    //   secure: true,
-                    //   auth: {
-                    //     user: "extralab.nalazi@gmail.com",
-                    //     pass: "cbpwsapyymjhxtzm"
-                    //   },
-                    //   tls: {
-                    //     rejectUnauthorized: false
-                    //   }
-                    // };
-
                     var smtpConfig = {
-                      // pool: true,
-                      host: "smtp.ilab.ba",
-                      port: "587",
-                      secure: false,
+                      pool: true,
+                      host: "smtp.gmail.com",
+                      port: "465",
+                      secure: true,
                       auth: {
-                        user: "nalazi@ilab.ba",
-                        pass: "Ilab2026_!"
+                        user: "extralab.nalazi@gmail.com",
+                        pass: "cbpwsapyymjhxtzm"
                       },
                       tls: {
                         rejectUnauthorized: false
                       }
                     };
+
+                    // var smtpConfig = {
+                    //   // pool: true,
+                    //   host: "smtp.ilab.ba",
+                    //   port: "587",
+                    //   secure: false,
+                    //   auth: {
+                    //     user: "nalazi@ilab.ba",
+                    //     pass: "Ilab2026_!"
+                    //   },
+                    //   tls: {
+                    //     rejectUnauthorized: false
+                    //   }
+                    // };
     
                     var transporter = nodemailer.createTransport(smtpConfig);
     
